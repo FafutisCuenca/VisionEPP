@@ -428,7 +428,8 @@ async function runTest() {
         );
       }
 
-      allDetections.push(...decodeScale(output, scale));
+channelDiagnostics[scaleNames[i]] = inspectChannels(output);
+allDetections.push(...decodeScale(output, scale));
     }
 
     const filtered = nms(allDetections)
