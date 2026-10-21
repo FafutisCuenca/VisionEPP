@@ -440,8 +440,11 @@ body {
   flex: 0 1 auto;
   min-width: 0;
   min-height: 0;
-  max-width: 100%;
-  max-height: 100%;
+
+  /* Tamaño máximo de la imagen dentro del recuadro */
+  max-width: 80%;
+  max-height: 80%;
+
   width: auto;
   height: auto;
   object-fit: contain;
