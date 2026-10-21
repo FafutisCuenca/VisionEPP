@@ -1,0 +1,342 @@
+```html
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta
+    name="description"
+    content="VisionEPP: prototipo web para revisar evidencia de equipo de protección personal en obras."
+  >
+  <meta name="theme-color" content="#102a43">
+
+  <title>VisionEPP | Piloto de seguridad en obra</title>
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="header-content">
+      <a class="brand" href="./" aria-label="VisionEPP, página principal">
+        <span class="brand-mark" aria-hidden="true">V</span>
+        <span>VisionEPP</span>
+      </a>
+
+      <span class="header-label">Piloto de seguridad en obra</span>
+    </div>
+  </header>
+
+  <main class="page-container">
+
+    <!-- PRESENTACIÓN -->
+    <section class="hero">
+      <p class="eyebrow">SEGURIDAD · EVIDENCIA · CONTEXTO</p>
+
+      <h1>Inspección visual de equipo de protección personal</h1>
+
+      <p class="hero-description">
+        Organiza evidencias de obra y define el contexto de trabajo para
+        preparar una evaluación de equipo de protección personal (EPP).
+      </p>
+
+      <div class="status-note" role="status">
+        <strong>Prototipo en desarrollo.</strong>
+        La integración del detector de inteligencia artificial está pendiente.
+        Esta versión no genera detecciones automáticas ni dictámenes de cumplimiento.
+      </div>
+    </section>
+
+    <!-- ÁREA PRINCIPAL -->
+    <div class="main-grid">
+
+      <!-- 01. CARGA DE EVIDENCIA -->
+      <section class="panel upload-panel" aria-labelledby="uploadHeading">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">01 / EVIDENCIA</p>
+            <h2 id="uploadHeading">Carga de archivo</h2>
+          </div>
+          <span class="step-icon" aria-hidden="true">↥</span>
+        </div>
+
+        <p class="panel-description">
+          Selecciona una fotografía o un video de prueba almacenado en tu equipo.
+        </p>
+
+        <label class="drop-zone" id="dropZone" for="fileInput">
+          <span class="upload-icon" aria-hidden="true">＋</span>
+          <strong>Selecciona o arrastra un archivo</strong>
+          <span>Fotografías y videos compatibles</span>
+          <span class="field-help">
+            Tamaño máximo configurado: 250 MB.
+          </span>
+        </label>
+
+        <input
+          id="fileInput"
+          type="file"
+          accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"
+          hidden
+        >
+
+        <div class="file-information" id="fileInfo" aria-live="polite">
+          <p>No hay archivos seleccionados.</p>
+        </div>
+
+        <div class="button-row">
+          <button class="button button-secondary" id="clearBtn" type="button">
+            Limpiar evidencia
+          </button>
+        </div>
+
+        <p class="field-help">
+          Utiliza archivos de prueba autorizados. Evita publicar evidencias
+          con rostros, identificadores u otra información personal.
+        </p>
+      </section>
+
+      <!-- 02. VISUALIZACIÓN -->
+      <section class="panel viewer-panel" aria-labelledby="viewerHeading">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">02 / VISUALIZACIÓN</p>
+            <h2 id="viewerHeading">Evidencia seleccionada</h2>
+          </div>
+          <span class="step-icon" aria-hidden="true">▧</span>
+        </div>
+
+        <div class="preview-container" id="preview">
+          <div class="preview-placeholder">
+            <span class="preview-placeholder-icon" aria-hidden="true">▧</span>
+            <strong>Vista previa</strong>
+            <p>La imagen o el video aparecerá aquí.</p>
+          </div>
+        </div>
+
+        <div class="media-metadata">
+          <p>
+            <strong>Tipo de archivo:</strong>
+            <span id="mediaType">Sin archivo</span>
+          </p>
+
+          <p>
+            <strong>Dimensiones:</strong>
+            <span id="mediaDimensions">No disponibles</span>
+          </p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- 03. EVALUACIÓN -->
+    <section class="panel analysis-panel" aria-labelledby="analysisHeading">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">03 / EVALUACIÓN</p>
+          <h2 id="analysisHeading">Revisión de EPP</h2>
+        </div>
+        <span class="step-icon" aria-hidden="true">⌕</span>
+      </div>
+
+      <p class="panel-description">
+        Consulta los elementos de protección contemplados en el catálogo
+        inicial. La presencia o ausencia de cada elemento todavía no se
+        determina automáticamente.
+      </p>
+
+      <div class="ppe-grid" id="ppeGrid">
+        <!-- js/app.js incorpora aquí los elementos del catálogo. -->
+      </div>
+
+      <div class="analysis-notice" id="analysisNotice" role="status">
+        <strong>Detector no integrado.</strong>
+        No hay un modelo de IA activo. No se mostrarán detecciones simuladas.
+      </div>
+
+      <div class="button-row">
+        <button class="button button-primary" id="analyzeBtn" type="button">
+          Analizar evidencia
+        </button>
+
+        <button class="button button-secondary" id="exportBtn" type="button">
+          Exportar sesión JSON
+        </button>
+      </div>
+
+      <p class="field-help">
+        La inspección visual por sí sola no confirma que un equipo esté
+        correctamente colocado, en buen estado o que proporcione el nivel
+        de protección requerido.
+      </p>
+    </section>
+
+    <!-- 04. CONFIGURACIÓN Y CONTEXTO -->
+    <section class="panel rules-panel" aria-labelledby="configurationHeading">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">04 / CONFIGURACIÓN</p>
+          <h2 id="configurationHeading">Contexto de evaluación</h2>
+        </div>
+        <span class="step-icon" aria-hidden="true">⚙</span>
+      </div>
+
+      <!-- PERFIL ORIENTATIVO EXISTENTE -->
+      <section class="configuration-section" aria-labelledby="profileHeading">
+        <h3 id="profileHeading">Perfil orientativo</h3>
+
+        <label class="field-label" for="areaSelect">
+          Selecciona un perfil de prueba
+        </label>
+
+        <select id="areaSelect" class="select-field">
+          <option value="general">Obra general</option>
+          <option value="altura">Trabajo en altura</option>
+          <option value="corte">Corte o esmerilado</option>
+          <option value="soldadura">Soldadura</option>
+        </select>
+
+        <p class="field-help">
+          Este perfil se conserva para mantener la configuración existente.
+          Sus requisitos deben validarse con el análisis de riesgos de la obra.
+        </p>
+
+        <div class="rule-summary" id="ruleSummary">
+          <p>Selecciona un perfil para consultar su descripción.</p>
+        </div>
+      </section>
+
+      <div class="section-divider" aria-hidden="true"></div>
+
+      <!-- SELECTORES EN CASCADA -->
+      <section class="configuration-section" aria-labelledby="contextHeading">
+        <h3 id="contextHeading">Zona, actividad y función del personal</h3>
+
+        <p class="field-help">
+          Define el entorno y la actividad para consultar los requisitos
+          orientativos aplicables al contexto seleccionado.
+        </p>
+
+        <!-- ZONA -->
+        <div class="field-group">
+          <label class="field-label" for="zoneSelect">
+            1. Zona de trabajo
+          </label>
+
+          <select
+            id="zoneSelect"
+            class="select-field"
+            aria-describedby="zoneHelp"
+          >
+            <option value="">Selecciona una zona...</option>
+          </select>
+
+          <p class="field-help" id="zoneHelp">
+            Selecciona la zona en la que se desarrolla el trabajo.
+          </p>
+        </div>
+
+        <!-- ACTIVIDAD -->
+        <div class="field-group">
+          <label class="field-label" for="activitySelect">
+            2. Actividad realizada
+          </label>
+
+          <select
+            id="activitySelect"
+            class="select-field"
+            disabled
+            aria-describedby="activityHelp"
+          >
+            <option value="">Primero selecciona una zona...</option>
+          </select>
+
+          <p class="field-help" id="activityHelp">
+            Las actividades se cargarán de acuerdo con la zona seleccionada.
+          </p>
+        </div>
+
+        <!-- FUNCIÓN -->
+        <div class="field-group">
+          <label class="field-label" for="roleSelect">
+            3. Función del personal
+          </label>
+
+          <select
+            id="roleSelect"
+            class="select-field"
+            disabled
+            aria-describedby="roleHelp"
+          >
+            <option value="">Primero selecciona una actividad...</option>
+          </select>
+
+          <p class="field-help" id="roleHelp">
+            Las funciones disponibles dependerán de la actividad seleccionada.
+          </p>
+        </div>
+
+        <!-- RESUMEN DINÁMICO: CONECTADO CON app.js -->
+        <div
+          class="rule-summary context-summary"
+          id="contextSummary"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <strong>Contexto pendiente</strong>
+          <p>
+            Selecciona una zona, una actividad y una función para consultar
+            el contexto de evaluación.
+          </p>
+        </div>
+      </section>
+
+      <p class="field-help">
+        <strong>Nota de seguridad:</strong>
+        la configuración es orientativa y no constituye una certificación
+        normativa. Los requisitos deben revisarse y aprobarse por el personal
+        responsable de Seguridad y Salud en el Trabajo (SST).
+      </p>
+    </section>
+
+    <!-- 05. REGISTRO -->
+    <section class="panel activity-panel" aria-labelledby="activityHeading">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">05 / REGISTRO</p>
+          <h2 id="activityHeading">Actividad de la sesión</h2>
+        </div>
+        <span class="step-icon" aria-hidden="true">≡</span>
+      </div>
+
+      <p class="panel-description">
+        Consulta los eventos registrados durante la sesión actual.
+      </p>
+
+      <div
+        class="activity-log"
+        id="activityLog"
+        aria-live="polite"
+      >
+        <p>La sesión está lista. No hay actividad registrada todavía.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      <strong>VisionEPP</strong> · Prototipo de evaluación visual de EPP.
+    </p>
+    <p>
+      Herramienta experimental. La decisión final de seguridad requiere
+      revisión humana y validación de los procedimientos aplicables.
+    </p>
+  </footer>
+
+  <!-- Punto de entrada de la aplicación -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
+```
