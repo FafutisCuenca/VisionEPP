@@ -266,9 +266,16 @@ const tc1 = at(data, base + 6, y, x, h, w);
             y2: cy + bh / 2
           };
 
-          if (Object.values(box).every(Number.isFinite)) {
-            detections.push(box);
-          }
+if (
+  Number.isFinite(box.x1) &&
+  Number.isFinite(box.y1) &&
+  Number.isFinite(box.x2) &&
+  Number.isFinite(box.y2) &&
+  Number.isFinite(box.score) &&
+  Number.isFinite(box.classId)
+) {
+  detections.push(box);
+}
         }
       }
     }
