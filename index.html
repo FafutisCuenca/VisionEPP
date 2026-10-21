@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="VisionEPP: prototipo web para revisar evidencia de equipo de protección personal en obras.">
+  <meta name="theme-color" content="#102a43">
+  <title>VisionEPP | Piloto de seguridad en obra</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="VisionEPP inicio"><span class="brand-mark">V</span><span><strong>VisionEPP</strong><small>Seguridad inteligente en obra</small></span></a>
+    <span class="status-pill"><span class="status-dot"></span> Piloto local · Etapa 1</span>
+  </header>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">VISIÓN ARTIFICIAL · EQUIPO DE PROTECCIÓN PERSONAL</p>
+        <h1>La seguridad empieza con una mejor observación.</h1>
+        <p class="hero-description">Carga imágenes o videos de prueba, revisa la evidencia y prepara el flujo de análisis de EPP. Los archivos se procesan en tu navegador y no se envían a un servidor.</p>
+        <div class="hero-tags"><span>Sin base de datos</span><span>Sin reconocimiento facial</span><span>Sin costo de licencia en esta etapa</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="art-ring ring-one"></div><div class="art-ring ring-two"></div><div class="helmet"><div class="helmet-top"></div><div class="helmet-brim"></div></div><div class="art-caption">PREVENCIÓN<br><b>EN OBRA</b></div></div>
+    </section>
+
+    <section class="workspace-grid" aria-label="Área de trabajo VisionEPP">
+      <div class="panel upload-panel">
+        <div class="panel-heading"><div><p class="eyebrow">01 / EVIDENCIA</p><h2>Seleccionar archivo</h2></div><span class="step-icon">↑</span></div>
+        <label class="drop-zone" id="dropZone" for="fileInput">
+          <span class="upload-icon" aria-hidden="true">↥</span>
+          <strong>Arrastra el archivo aquí</strong>
+          <span>o haz clic para buscarlo en tu equipo</span>
+          <span class="file-types">IMÁGENES JPG, PNG, WEBP · VIDEO MP4, WEBM</span>
+        </label>
+        <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" hidden>
+        <div class="file-info" id="fileInfo" aria-live="polite"><span class="file-info-icon">i</span><span>Elige un archivo de prueba para comenzar. No uses grabaciones sensibles en el repositorio público.</span></div>
+        <div class="button-row"><button class="button button-secondary" id="clearBtn" type="button" disabled>Limpiar archivo</button><button class="button button-primary" id="analyzeBtn" type="button" disabled>Preparar análisis <span aria-hidden="true">→</span></button></div>
+        <p class="privacy-note"><span aria-hidden="true">🔒</span> Privacidad: el visor utiliza una URL temporal local. No subas videos reales a GitHub.</p>
+      </div>
+
+      <div class="panel viewer-panel">
+        <div class="panel-heading"><div><p class="eyebrow">02 / VISOR</p><h2>Evidencia seleccionada</h2></div><span class="live-label"><span></span> VISTA PREVIA</span></div>
+        <div class="preview" id="preview" aria-live="polite">
+          <div class="preview-empty"><div class="empty-illustration"><span class="empty-sun"></span><span class="empty-hill hill-a"></span><span class="empty-hill hill-b"></span><span class="empty-worker"><i></i></span></div><strong>Tu evidencia aparecerá aquí</strong><span>Selecciona una imagen o un video de prueba.</span></div>
+        </div>
+        <div class="viewer-footer"><span id="mediaType">Sin archivo cargado</span><span id="mediaDimensions">—</span></div>
+      </div>
+    </section>
+
+    <section class="panel analysis-panel">
+      <div class="panel-heading"><div><p class="eyebrow">03 / ANÁLISIS</p><h2>Revisión de EPP</h2></div><span class="planned-badge">IA pendiente de integrar</span></div>
+      <div class="analysis-message"><div class="analysis-symbol">◎</div><div><strong>El detector de EPP aún no está conectado</strong><p>Esta etapa valida la carga y visualización de evidencia. En la siguiente etapa integraremos un modelo de visión artificial ejecutado en el navegador. No se generarán detecciones simuladas.</p></div></div>
+      <div class="ppe-grid" id="ppeGrid" aria-label="Elementos de EPP por evaluar"></div>
+      <div class="disclaimer">Una zona sin visibilidad suficiente se reportará como <b>no verificable</b>, no como incumplimiento. Las alertas serán indicativas y requerirán revisión humana.</div>
+    </section>
+
+    <section class="bottom-grid">
+      <div class="panel rules-panel"><div class="panel-heading"><div><p class="eyebrow">04 / CONFIGURACIÓN</p><h2>Área de trabajo</h2></div><span class="step-icon">⚙</span></div><label class="field-label" for="areaSelect">Selecciona un perfil de prueba</label><select id="areaSelect" class="select-field"><option value="general">Obra general</option><option value="altura">Trabajo en altura</option><option value="corte">Corte o esmerilado</option><option value="soldadura">Soldadura</option></select><p class="field-help">Perfiles demostrativos; todavía no sustituyen una evaluación de riesgos ni la matriz normativa de la obra.</p><div class="rule-summary" id="ruleSummary"></div></div>
+      <div class="panel log-panel"><div class="panel-heading"><div><p class="eyebrow">05 / ACTIVIDAD</p><h2>Registro de sesión</h2></div><button class="text-button" id="exportBtn" type="button" disabled>Exportar resumen ↗</button></div><div id="activityLog" class="activity-log" aria-live="polite"><div class="log-empty"><span>◷</span><p>Aún no hay actividad.<br>Selecciona una evidencia para iniciar.</p></div></div></div>
+    </section>
+    <footer class="footer"><span><b>VisionEPP</b> · Prototipo de evaluación</span><span>Etapa 1 · Sin base de datos · Sin reconocimiento facial</span></footer>
+  </main>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
