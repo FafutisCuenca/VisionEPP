@@ -1,0 +1,1083 @@
+```html
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta
+    name="description"
+    content="Prueba aislada del modelo ONNX PPE-Detection para VisionEPP."
+  >
+
+  <title>VisionEPP | Prueba del decodificador ONNX</title>
+
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #243447;
+      background: #f3f6fa;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+    }
+
+    main {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin-top: 0;
+      color: #102a43;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 18px;
+    }
+
+    p {
+      line-height: 1.5;
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid #d9e2ec;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    button {
+      padding: 11px 17px;
+      border: 0;
+      border-radius: 6px;
+      background: #145da0;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #829ab1;
+      cursor: wait;
+    }
+
+    button.secondary {
+      background: #486581;
+    }
+
+    #status {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 6px;
+      background: #edf2f7;
+      overflow-wrap: anywhere;
+    }
+
+    #status.error {
+      color: #8a1c1c;
+      background: #fff0f0;
+    }
+
+    #status.success {
+      color: #155724;
+      background: #e8f5e9;
+    }
+
+    .warning {
+      padding: 12px;
+      border-left: 4px solid #d69e2e;
+      background: #fffaf0;
+      line-height: 1.5;
+    }
+
+    .image-container {
+      width: 100%;
+      min-height: 100px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      overflow: auto;
+      background: #edf2f7;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    #resultCanvas {
+      display: block;
+      max-width: 100%;
+      max-height: 780px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      background: white;
+    }
+
+    pre {
+      padding: 15px;
+      overflow: auto;
+      max-height: 600px;
+      background: #102a43;
+      color: #e6edf3;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      background: #f0f4f8;
+      padding: 13px;
+      border-radius: 7px;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 22px;
+      color: #102a43;
+    }
+
+    .small {
+      color: #52667a;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+<main>
+  <h1>VisionEPP — Prueba del decodificador</h1>
+
+  <p>
+    Prueba independiente de inferencia local con el modelo
+    <code>PPE-Detection.onnx</code>. Esta página no modifica
+    <code>js/app.js</code> ni integra el detector en la aplicación principal.
+  </p>
+
+  <div class="panel">
+    <h2>1. Ejecutar la prueba</h2>
+
+    <p>
+      Verifica que los archivos estén publicados en las rutas indicadas.
+      La página utiliza ONNX Runtime Web desde una CDN para esta prueba.
+    </p>
+
+    <div class="actions">
+      <button id="runButton" type="button">
+        Ejecutar inferencia y decodificación
+      </button>
+
+      <button id="downloadButton" class="secondary" type="button" disabled>
+        Descargar reporte JSON
+      </button>
+    </div>
+
+    <div id="status" role="status" aria-live="polite">
+      Preparado. Todavía no se ha ejecutado la prueba.
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>2. Resultados</h2>
+
+    <div class="metrics">
+      <div class="metric">
+        Candidatos sobre umbral
+        <strong id="candidateCount">—</strong>
+      </div>
+
+      <div class="metric">
+        Centros dentro de la imagen
+        <strong id="contentCount">—</strong>
+      </div>
+
+      <div class="metric">
+        Cajas después de NMS
+        <strong id="nmsCount">—</strong>
+      </div>
+
+      <div class="metric">
+        Confianza máxima preliminar
+        <strong id="maxScore">—</strong>
+      </div>
+    </div>
+
+    <p class="small">
+      La confianza máxima es una lectura preliminar de la salida decodificada;
+      no demuestra por sí sola que el decodificador sea correcto.
+    </p>
+
+    <div class="image-container">
+      <canvas id="resultCanvas" aria-label="Imagen con detecciones"></canvas>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>3. Reporte técnico JSON</h2>
+    <pre id="report">El reporte aparecerá aquí después de ejecutar la prueba.</pre>
+  </div>
+
+  <div class="panel">
+    <h2>4. Alcance y limitaciones</h2>
+
+    <div class="warning">
+      Este modelo se está probando únicamente para <strong>casco</strong> y
+      <strong>chaleco</strong>. No se deben atribuir detecciones de lentes,
+      guantes o botas a este modelo.
+    </div>
+
+    <p>
+      La interpretación de los canales, las anclas, el preprocesamiento y las
+      fórmulas de decodificación siguen siendo hipótesis de diagnóstico hasta
+      contrastarlas con el código de referencia del modelo.
+    </p>
+
+    <p>
+      Los resultados de esta página no representan todavía una validación
+      operativa de seguridad laboral. Se requiere revisar visualmente las
+      detecciones y contrastarlas con evidencia etiquetada.
+    </p>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.min.js"></script>
+
+<script>
+'use strict';
+
+/*
+ * VisionEPP: prueba aislada del decodificador.
+ *
+ * Modelo:
+ *   ./models/PPE-Detection.onnx
+ *
+ * Imagen:
+ *   ./prueba-epp.jpg
+ *
+ * Entrada conocida:
+ *   float32 [1, 3, 320, 192]
+ *
+ * Salidas observadas:
+ *   bbox_8x  [1, 21, 40, 24]
+ *   bbox_16x [1, 21, 20, 12]
+ *   bbox_32x [1, 21, 10, 6]
+ *
+ * IMPORTANTE:
+ * El orden de canales por ancla y las fórmulas de decodificación
+ * de este archivo son experimentales, no una implementación
+ * oficial verificada de Qualcomm.
+ */
+
+const MODEL_URL = './models/PPE-Detection.onnx';
+const IMAGE_URL = './prueba-epp.jpg';
+
+const INPUT_W = 192;
+const INPUT_H = 320;
+
+const SCORE_THRESHOLD = 0.05;
+const IOU_THRESHOLD = 0.70;
+
+const LABELS = ['Casco', 'Chaleco'];
+
+const SCALES = [
+  {
+    name: 'bbox_8x',
+    stride: 8,
+    anchors: [
+      [10, 13],
+      [16, 30],
+      [33, 23]
+    ],
+    h: 40,
+    w: 24
+  },
+  {
+    name: 'bbox_16x',
+    stride: 16,
+    anchors: [
+      [30, 61],
+      [62, 45],
+      [59, 119]
+    ],
+    h: 20,
+    w: 12
+  },
+  {
+    name: 'bbox_32x',
+    stride: 32,
+    anchors: [
+      [116, 90],
+      [156, 198],
+      [373, 326]
+    ],
+    h: 10,
+    w: 6
+  }
+];
+
+const runButton = document.getElementById('runButton');
+const downloadButton = document.getElementById('downloadButton');
+const statusElement = document.getElementById('status');
+const reportElement = document.getElementById('report');
+const resultCanvas = document.getElementById('resultCanvas');
+
+let latestReport = null;
+let running = false;
+
+function setStatus(message, type = '') {
+  statusElement.textContent = message;
+  statusElement.className = type;
+}
+
+function setMetric(id, value) {
+  document.getElementById(id).textContent = String(value);
+}
+
+function sigmoid(x) {
+  if (x >= 0) {
+    return 1 / (1 + Math.exp(-x));
+  }
+
+  const e = Math.exp(x);
+  return e / (1 + e);
+}
+
+function loadImage(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+
+    img.onload = () => {
+      if (!img.naturalWidth || !img.naturalHeight) {
+        reject(new Error('La imagen no tiene dimensiones válidas.'));
+        return;
+      }
+
+      resolve(img);
+    };
+
+    img.onerror = () => {
+      reject(new Error(
+        'No se pudo cargar ' + url +
+        '. Verifica la ruta, el nombre y la publicación del archivo.'
+      ));
+    };
+
+    img.src = url;
+  });
+}
+
+async function createSession() {
+  if (typeof ort === 'undefined') {
+    throw new Error(
+      'ONNX Runtime Web no está disponible. ' +
+      'Verifica la conexión a Internet y la carga de la biblioteca.'
+    );
+  }
+
+  return ort.InferenceSession.create(MODEL_URL, {
+    executionProviders: ['wasm'],
+    graphOptimizationLevel: 'all'
+  });
+}
+
+/*
+ * Preprocesamiento experimental:
+ * - Redimensiona conservando proporción.
+ * - Completa con negro.
+ * - Convierte a RGB planar NCHW.
+ * - Normaliza a [0,1].
+ *
+ * No está confirmado que el relleno negro ni esta normalización
+ * sean exactamente los utilizados durante el entrenamiento.
+ */
+function preprocess(img) {
+  const canvas = document.createElement('canvas');
+  canvas.width = INPUT_W;
+  canvas.height = INPUT_H;
+
+  const ctx = canvas.getContext('2d', {
+    willReadFrequently: true
+  });
+
+  if (!ctx) {
+    throw new Error('No se pudo crear el contexto 2D del canvas.');
+  }
+
+  ctx.fillStyle = 'rgb(0,0,0)';
+  ctx.fillRect(0, 0, INPUT_W, INPUT_H);
+
+  const scale = Math.min(
+    INPUT_W / img.naturalWidth,
+    INPUT_H / img.naturalHeight
+  );
+
+  const resizedW = Math.max(
+    1,
+    Math.round(img.naturalWidth * scale)
+  );
+
+  const resizedH = Math.max(
+    1,
+    Math.round(img.naturalHeight * scale)
+  );
+
+  const padX = Math.floor((INPUT_W - resizedW) / 2);
+  const padY = Math.floor((INPUT_H - resizedH) / 2);
+
+  ctx.drawImage(img, padX, padY, resizedW, resizedH);
+
+  const rgba = ctx.getImageData(
+    0,
+    0,
+    INPUT_W,
+    INPUT_H
+  ).data;
+
+  const planeSize = INPUT_W * INPUT_H;
+  const tensorData = new Float32Array(3 * planeSize);
+
+  for (let i = 0; i < planeSize; i++) {
+    tensorData[i] = rgba[i * 4] / 255;
+    tensorData[planeSize + i] = rgba[i * 4 + 1] / 255;
+    tensorData[2 * planeSize + i] = rgba[i * 4 + 2] / 255;
+  }
+
+  return {
+    tensor: new ort.Tensor(
+      'float32',
+      tensorData,
+      [1, 3, INPUT_H, INPUT_W]
+    ),
+    scale,
+    padX,
+    padY,
+    resizedW,
+    resizedH,
+    fillRGB: [0, 0, 0],
+    tensorLayout: 'NCHW',
+    channelOrder: 'RGB',
+    normalization: 'pixel / 255'
+  };
+}
+
+/*
+ * Lectura NCHW de una salida [1, C, H, W].
+ */
+function at(data, channel, y, x, h, w) {
+  return data[channel * h * w + y * w + x];
+}
+
+/*
+ * Decodificador experimental.
+ *
+ * Hipótesis actual:
+ * Los 21 canales se interpretan como 3 grupos de 7 valores:
+ * tx, ty, tw, th, objectness, class0, class1.
+ *
+ * Esta disposición debe verificarse contra la implementación
+ * de referencia del modelo antes de integrarla en VisionEPP.
+ */
+function decodeScale(outputTensor, scaleInfo) {
+  const data = outputTensor.data;
+  const { h, w, stride, anchors, name } = scaleInfo;
+
+  const detections = [];
+
+  if (data.length !== 21 * h * w) {
+    throw new Error(
+      'Dimensiones inesperadas en ' + name +
+      ': se esperaban ' + (21 * h * w) +
+      ' valores y se recibieron ' + data.length + '.'
+    );
+  }
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      for (let a = 0; a < 3; a++) {
+        const base = a * 7;
+
+        const tx = at(data, base,     y, x, h, w);
+        const ty = at(data, base + 1, y, x, h, w);
+        const tw = at(data, base + 2, y, x, h, w);
+        const th = at(data, base + 3, y, x, h, w);
+        const to = at(data, base + 4, y, x, h, w);
+        const tc0 = at(data, base + 5, y, x, h, w);
+        const tc1 = at(data, base + 6, y, x, h, w);
+
+        if (
+          !Number.isFinite(tx) ||
+          !Number.isFinite(ty) ||
+          !Number.isFinite(tw) ||
+          !Number.isFinite(th) ||
+          !Number.isFinite(to) ||
+          !Number.isFinite(tc0) ||
+          !Number.isFinite(tc1)
+        ) {
+          continue;
+        }
+
+        const objectness = sigmoid(to);
+
+        const classScores = [
+          objectness * sigmoid(tc0),
+          objectness * sigmoid(tc1)
+        ];
+
+        const cx = (
+          sigmoid(tx) * 2 - 0.5 + x
+        ) * stride;
+
+        const cy = (
+          sigmoid(ty) * 2 - 0.5 + y
+        ) * stride;
+
+        const bw =
+          4 * Math.pow(sigmoid(tw), 2) * anchors[a][0];
+
+        const bh =
+          4 * Math.pow(sigmoid(th), 2) * anchors[a][1];
+
+        /*
+         * Cambio diagnóstico:
+         * una sola clase por ancla, la de mayor puntuación.
+         *
+         * No se afirma que esta regla sea la oficial del modelo.
+         */
+        const classId =
+          classScores[0] >= classScores[1] ? 0 : 1;
+
+        const score = classScores[classId];
+
+        if (score > window._visionEppMaxScore) {
+          window._visionEppMaxScore = score;
+        }
+
+        if (score < SCORE_THRESHOLD) {
+          continue;
+        }
+
+        const box = {
+          classId,
+          label: LABELS[classId],
+          score,
+          x1: cx - bw / 2,
+          y1: cy - bh / 2,
+          x2: cx + bw / 2,
+          y2: cy + bh / 2,
+          scale: name,
+          anchor: a
+        };
+
+        if (
+          Number.isFinite(box.x1) &&
+          Number.isFinite(box.y1) &&
+          Number.isFinite(box.x2) &&
+          Number.isFinite(box.y2) &&
+          Number.isFinite(box.score) &&
+          box.x2 > box.x1 &&
+          box.y2 > box.y1
+        ) {
+          detections.push(box);
+        }
+      }
+    }
+  }
+
+  return detections;
+}
+
+function intersectionOverUnion(a, b) {
+  const x1 = Math.max(a.x1, b.x1);
+  const y1 = Math.max(a.y1, b.y1);
+  const x2 = Math.min(a.x2, b.x2);
+  const y2 = Math.min(a.y2, b.y2);
+
+  const intersectionW = Math.max(0, x2 - x1);
+  const intersectionH = Math.max(0, y2 - y1);
+  const intersection = intersectionW * intersectionH;
+
+  const areaA =
+    Math.max(0, a.x2 - a.x1) *
+    Math.max(0, a.y2 - a.y1);
+
+  const areaB =
+    Math.max(0, b.x2 - b.x1) *
+    Math.max(0, b.y2 - b.y1);
+
+  const union = areaA + areaB - intersection;
+
+  return union > 0 ? intersection / union : 0;
+}
+
+/*
+ * NMS por clase: suprime cajas muy solapadas de la misma clase.
+ * No suprime entre clases distintas.
+ */
+function nms(detections) {
+  const results = [];
+
+  for (let classId = 0; classId < LABELS.length; classId++) {
+    const candidates = detections
+      .filter(d => d.classId === classId)
+      .sort((a, b) => b.score - a.score);
+
+    while (candidates.length > 0) {
+      const best = candidates.shift();
+      results.push(best);
+
+      for (let i = candidates.length - 1; i >= 0; i--) {
+        const overlap = intersectionOverUnion(
+          best,
+          candidates[i]
+        );
+
+        if (overlap > IOU_THRESHOLD) {
+          candidates.splice(i, 1);
+        }
+      }
+    }
+  }
+
+  return results.sort((a, b) => b.score - a.score);
+}
+
+/*
+ * Convierte coordenadas del tensor a coordenadas de la imagen.
+ */
+function mapToOriginal(d, prep, img) {
+  const x1 = (d.x1 - prep.padX) / prep.scale;
+  const y1 = (d.y1 - prep.padY) / prep.scale;
+  const x2 = (d.x2 - prep.padX) / prep.scale;
+  const y2 = (d.y2 - prep.padY) / prep.scale;
+
+  return {
+    ...d,
+    x1: Math.max(0, Math.min(img.naturalWidth, x1)),
+    y1: Math.max(0, Math.min(img.naturalHeight, y1)),
+    x2: Math.max(0, Math.min(img.naturalWidth, x2)),
+    y2: Math.max(0, Math.min(img.naturalHeight, y2))
+  };
+}
+
+/*
+ * Dibuja sobre un canvas cuyo tamaño interno coincide con el original.
+ */
+function drawResults(img, detections) {
+  resultCanvas.width = img.naturalWidth;
+  resultCanvas.height = img.naturalHeight;
+
+  const ctx = resultCanvas.getContext('2d');
+
+  if (!ctx) {
+    throw new Error('No se pudo dibujar el resultado.');
+  }
+
+  ctx.drawImage(img, 0, 0);
+
+  const fontSize = Math.max(
+    14,
+    Math.min(24, img.naturalWidth / 40)
+  );
+
+  ctx.lineWidth = Math.max(2, img.naturalWidth / 500);
+  ctx.font = 'bold ' + fontSize + 'px Arial';
+
+  for (const d of detections) {
+    const width = d.x2 - d.x1;
+    const height = d.y2 - d.y1;
+
+    if (width <= 0 || height <= 0) {
+      continue;
+    }
+
+    /*
+     * Solo distinguimos visualmente las dos clases.
+     * Los colores no indican certeza ni nivel de riesgo.
+     */
+    ctx.strokeStyle =
+      d.classId === 0 ? '#e53935' : '#1565c0';
+
+    ctx.strokeRect(d.x1, d.y1, width, height);
+
+    const label =
+      d.label + ' ' + (d.score * 100).toFixed(1) + '%';
+
+    const textWidth = ctx.measureText(label).width;
+    const labelY = Math.max(fontSize + 4, d.y1);
+
+    ctx.fillStyle = ctx.strokeStyle;
+    ctx.fillRect(
+      d.x1,
+      labelY - fontSize - 5,
+      textWidth + 10,
+      fontSize + 8
+    );
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(label, d.x1 + 5, labelY - 3);
+  }
+}
+
+function summarizeOutputs(outputs, outputNames) {
+  return outputNames.map(name => {
+    const tensor = outputs[name];
+
+    if (!tensor) {
+      return {
+        name,
+        found: false
+      };
+    }
+
+    const data = tensor.data;
+
+    let min = Infinity;
+    let max = -Infinity;
+    let finiteCount = 0;
+
+    for (let i = 0; i < data.length; i++) {
+      const value = data[i];
+
+      if (!Number.isFinite(value)) {
+        continue;
+      }
+
+      finiteCount++;
+      min = Math.min(min, value);
+      max = Math.max(max, value);
+    }
+
+    return {
+      name,
+      found: true,
+      type: tensor.type,
+      dimensions: tensor.dims,
+      values: data.length,
+      finiteValues: finiteCount,
+      min: finiteCount ? min : null,
+      max: finiteCount ? max : null
+    };
+  });
+}
+
+function validateModelOutputs(session) {
+  const expected = [
+    { name: 'bbox_8x', dims: [1, 21, 40, 24] },
+    { name: 'bbox_16x', dims: [1, 21, 20, 12] },
+    { name: 'bbox_32x', dims: [1, 21, 10, 6] }
+  ];
+
+  const inputNames = session.inputNames;
+  const outputNames = session.outputNames;
+
+  if (!inputNames.includes('image')) {
+    throw new Error(
+      'No se encontró la entrada esperada "image". Entradas: ' +
+      inputNames.join(', ')
+    );
+  }
+
+  for (const item of expected) {
+    if (!outputNames.includes(item.name)) {
+      throw new Error(
+        'No se encontró la salida esperada "' + item.name +
+        '". Salidas reales: ' + outputNames.join(', ')
+      );
+    }
+  }
+
+  return {
+    inputNames,
+    outputNames,
+    expectedOutputs: expected
+  };
+}
+
+async function runTest() {
+  if (running) {
+    return;
+  }
+
+  running = true;
+  runButton.disabled = true;
+  downloadButton.disabled = true;
+  latestReport = null;
+
+  window._visionEppMaxScore = 0;
+
+  setStatus('Cargando modelo e imagen…');
+  reportElement.textContent = 'Ejecutando prueba…';
+
+  setMetric('candidateCount', '—');
+  setMetric('contentCount', '—');
+  setMetric('nmsCount', '—');
+  setMetric('maxScore', '—');
+
+  try {
+    const img = await loadImage(IMAGE_URL);
+
+    setStatus('Inicializando ONNX Runtime Web y cargando modelo…');
+
+    const session = await createSession();
+    const modelInfo = validateModelOutputs(session);
+
+    setStatus('Preparando la imagen y ejecutando inferencia…');
+
+    const prep = preprocess(img);
+
+    const feeds = {
+      image: prep.tensor
+    };
+
+    const outputs = await session.run(feeds);
+
+    const allDetections = [];
+
+    for (const scaleInfo of SCALES) {
+      const output = outputs[scaleInfo.name];
+
+      if (!output) {
+        throw new Error(
+          'Falta el tensor de salida ' + scaleInfo.name + '.'
+        );
+      }
+
+      const detections = decodeScale(output, scaleInfo);
+      allDetections.push(...detections);
+    }
+
+    /*
+     * Diagnóstico de padding:
+     * elimina las cajas cuyo centro cae fuera del rectángulo
+     * ocupado por la imagen redimensionada dentro del tensor.
+     */
+    const contentDetections = allDetections.filter(d => {
+      const centerX = (d.x1 + d.x2) / 2;
+      const centerY = (d.y1 + d.y2) / 2;
+
+      return (
+        centerX >= prep.padX &&
+        centerX <= prep.padX + prep.resizedW &&
+        centerY >= prep.padY &&
+        centerY <= prep.padY + prep.resizedH
+      );
+    });
+
+    const afterNms = nms(contentDetections);
+
+    const filtered = afterNms
+      .map(d => mapToOriginal(d, prep, img))
+      .filter(d =>
+        Number.isFinite(d.x1) &&
+        Number.isFinite(d.y1) &&
+        Number.isFinite(d.x2) &&
+        Number.isFinite(d.y2) &&
+        d.x2 > d.x1 &&
+        d.y2 > d.y1
+      );
+
+    drawResults(img, filtered);
+
+    setMetric('candidateCount', allDetections.length);
+    setMetric('contentCount', contentDetections.length);
+    setMetric('nmsCount', filtered.length);
+    setMetric(
+      'maxScore',
+      Number(window._visionEppMaxScore).toFixed(6)
+    );
+
+    const report = {
+      status: 'INFERENCE_EXECUTED_PRELIMINARY_DECODER',
+      timestamp: new Date().toISOString(),
+
+      runtime: 'ONNX Runtime Web',
+      runtimeVersion: '1.22.0',
+      providerRequested: 'wasm',
+
+      model: {
+        source: MODEL_URL,
+        inputNames: modelInfo.inputNames,
+        outputNames: modelInfo.outputNames,
+        expectedOutputs: modelInfo.expectedOutputs
+      },
+
+      image: {
+        source: IMAGE_URL,
+        width: img.naturalWidth,
+        height: img.naturalHeight
+      },
+
+      preprocessing: {
+        inputWidth: INPUT_W,
+        inputHeight: INPUT_H,
+        tensorShape: [1, 3, INPUT_H, INPUT_W],
+        tensorLayout: prep.tensorLayout,
+        channelOrder: prep.channelOrder,
+        normalization: prep.normalization,
+        fillRGB: prep.fillRGB,
+        scale: prep.scale,
+        resizedWidth: prep.resizedW,
+        resizedHeight: prep.resizedH,
+        padX: prep.padX,
+        padY: prep.padY
+      },
+
+      decoder: {
+        status: 'EXPERIMENTAL_NOT_REFERENCE_VERIFIED',
+        assumedLayout: '3 anchors x 7 values',
+        assumedValues: [
+          'tx',
+          'ty',
+          'tw',
+          'th',
+          'objectness',
+          'class0',
+          'class1'
+        ],
+        formula: {
+          center: '(sigmoid(t) * 2 - 0.5 + grid) * stride',
+          size: '4 * sigmoid(t)^2 * anchor',
+          score: 'sigmoid(objectness) * sigmoid(classLogit)'
+        },
+        classSelection: 'highest score per anchor',
+        scoreThreshold: SCORE_THRESHOLD,
+        nmsIouThreshold: IOU_THRESHOLD,
+        nmsMode: 'per class',
+        paddingCenterFilter: true
+      },
+
+      outputs: summarizeOutputs(
+        outputs,
+        modelInfo.outputNames
+      ),
+
+      counts: {
+        candidatesAfterScoreFilter: allDetections.length,
+        candidatesWithCenterInsideImage: contentDetections.length,
+        detectionsAfterNMS: afterNms.length,
+        detectionsWithValidOriginalCoordinates: filtered.length
+      },
+
+      maxScoreBeforeFiltering: window._visionEppMaxScore,
+
+      detections: filtered.map(d => ({
+        label: d.label,
+        classId: d.classId,
+        score: Number(d.score.toFixed(6)),
+        box: {
+          x1: Number(d.x1.toFixed(2)),
+          y1: Number(d.y1.toFixed(2)),
+          x2: Number(d.x2.toFixed(2)),
+          y2: Number(d.y2.toFixed(2)),
+          width: Number((d.x2 - d.x1).toFixed(2)),
+          height: Number((d.y2 - d.y1).toFixed(2))
+        },
+        sourceScale: d.scale,
+        anchor: d.anchor
+      })),
+
+      validation: {
+        inferenceExecuted: true,
+        outputsFound: true,
+        decoderVerifiedAgainstOfficialReference: false,
+        preprocessingVerifiedAgainstOfficialReference: false,
+        detectionsSemanticallyValidated: false,
+        suitableForOperationalSafetyDecisions: false
+      }
+    };
+
+    latestReport = report;
+    reportElement.textContent = JSON.stringify(report, null, 2);
+    downloadButton.disabled = false;
+
+    setStatus(
+      'La inferencia terminó. El decodificador continúa en fase experimental; revisa las cajas y el reporte JSON.',
+      'success'
+    );
+  } catch (error) {
+    console.error('Error en prueba VisionEPP:', error);
+
+    const errorReport = {
+      status: 'ERROR',
+      timestamp: new Date().toISOString(),
+      message: error && error.message
+        ? error.message
+        : String(error),
+      stack: error && error.stack
+        ? error.stack
+        : null
+    };
+
+    latestReport = errorReport;
+    reportElement.textContent = JSON.stringify(
+      errorReport,
+      null,
+      2
+    );
+
+    downloadButton.disabled = false;
+
+    setStatus(
+      'La prueba falló: ' + errorReport.message,
+      'error'
+    );
+  } finally {
+    running = false;
+    runButton.disabled = false;
+  }
+}
+
+function downloadReport() {
+  if (!latestReport) {
+    return;
+  }
+
+  const blob = new Blob(
+    [JSON.stringify(latestReport, null, 2)],
+    { type: 'application/json;charset=utf-8' }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+
+  link.href = url;
+  link.download = 'visionepp-reporte-decodificador.json';
+
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  URL.revokeObjectURL(url);
+}
+
+runButton.addEventListener('click', runTest);
+downloadButton.addEventListener('click', downloadReport);
+</script>
+</body>
+</html>
+```
