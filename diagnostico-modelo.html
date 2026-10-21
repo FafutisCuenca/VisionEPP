@@ -1,0 +1,227 @@
+
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prueba de inferencia | VisionEPP</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 900px;
+      margin: 32px auto;
+      padding: 0 16px;
+      line-height: 1.5;
+    }
+    button { padding: 10px 16px; cursor: pointer; }
+    button:disabled { cursor: wait; }
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      background: #f2f5f8;
+      color: #172b3a;
+      padding: 16px;
+      border-radius: 8px;
+    }
+    img { max-width: 320px; max-height: 320px; }
+  </style>
+</head>
+<body>
+  <h1>VisionEPP: prueba de inferencia ONNX</h1>
+  <p>
+    Ejecuta el modelo sobre una imagen de prueba.
+    Esta página no determina cumplimiento ni ausencia de EPP.
+  </p>
+
+  <button id="run">Ejecutar inferencia</button>
+  <pre id="output">Pendiente de prueba.</pre>
+  <img id="sample" alt="Imagen de prueba" hidden>
+
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.min.js"></script>
+  <script>
+    const output = document.getElementById('output');
+    const button = document.getElementById('run');
+    const sample = document.getElementById('sample');
+
+    function summarizeTensor(name, tensor) {
+      const values = tensor.data;
+      let min = Infinity;
+      let max = -Infinity;
+      let finiteCount = 0;
+      let nonFiniteCount = 0;
+
+      for (let i = 0; i < values.length; i++) {
+        const value = values[i];
+
+        if (Number.isFinite(value)) {
+          finiteCount++;
+          if (value < min) min = value;
+          if (value > max) max = value;
+        } else {
+          nonFiniteCount++;
+        }
+      }
+
+      return {
+        name,
+        dimensions: Array.from(tensor.dims),
+        type: tensor.type,
+        valueCount: values.length,
+        finiteCount,
+        nonFiniteCount,
+        min: finiteCount ? min : null,
+        max: finiteCount ? max : null,
+        sampleValues: Array.from(values.slice(0, 12))
+          .map(value => Number.isFinite(value) ? value : String(value))
+      };
+    }
+
+    async function loadImage(url) {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(
+          new Error('No se pudo cargar prueba-epp.jpg desde el sitio.')
+        );
+
+        image.src = url;
+      });
+    }
+
+    function prepareInput(image) {
+      // El modelo declara [1, 3, 320, 192]:
+      // lote, canales RGB, alto, ancho.
+      const height = 320;
+      const width = 192;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+
+      const context = canvas.getContext('2d', {
+        willReadFrequently: true
+      });
+
+      if (!context) {
+        throw new Error('No se pudo crear el contexto Canvas 2D.');
+      }
+
+      // Redimensionamiento directo solo para diagnóstico.
+      // No representa todavía el preprocesamiento oficial validado.
+      context.drawImage(image, 0, 0, width, height);
+
+      const pixels = context.getImageData(
+        0, 0, width, height
+      ).data;
+
+      const input = new Float32Array(3 * height * width);
+      const planeSize = height * width;
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const pixel = (y * width + x) * 4;
+          const position = y * width + x;
+
+          input[position] = pixels[pixel] / 255;
+          input[planeSize + position] = pixels[pixel + 1] / 255;
+          input[2 * planeSize + position] = pixels[pixel + 2] / 255;
+        }
+      }
+
+      return new ort.Tensor(
+        'float32',
+        input,
+        [1, 3, height, width]
+      );
+    }
+
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      output.textContent = 'Cargando imagen y modelo…';
+
+      let session;
+
+      try {
+        if (!window.ort) {
+          throw new Error('ONNX Runtime Web no está disponible.');
+        }
+
+        ort.env.wasm.wasmPaths =
+          'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/';
+
+        const image = await loadImage('./prueba-epp.jpg');
+        sample.src = image.src;
+        sample.hidden = false;
+
+        const response = await fetch('./models/PPE-Detection.onnx');
+
+        if (!response.ok) {
+          throw new Error(
+            `No se pudo descargar el modelo: HTTP ${response.status}.`
+          );
+        }
+
+        const modelBuffer = await response.arrayBuffer();
+
+        session = await ort.InferenceSession.create(
+          modelBuffer,
+          { executionProviders: ['wasm'] }
+        );
+
+        const inputTensor = prepareInput(image);
+
+        output.textContent =
+          'Ejecutando inferencia real. Espera un momento…';
+
+        const results = await session.run({
+          [session.inputNames[0]]: inputTensor
+        });
+
+        const outputSummaries = session.outputNames.map(name =>
+          summarizeTensor(name, results[name])
+        );
+
+        const report = {
+          status: 'INFERENCE_EXECUTED',
+          runtime: 'ONNX Runtime Web',
+          providerRequested: 'wasm',
+          modelBytes: modelBuffer.byteLength,
+          image: {
+            width: image.naturalWidth,
+            height: image.naturalHeight,
+            source: './prueba-epp.jpg'
+          },
+          input: {
+            name: session.inputNames[0],
+            dimensions: Array.from(inputTensor.dims),
+            type: inputTensor.type,
+            preprocessing:
+              'RGB, valores entre 0 y 1, redimensionamiento directo para diagnóstico'
+          },
+          outputs: outputSummaries,
+          note:
+            'Inferencia ejecutada. Los valores aún no están decodificados en detecciones.'
+        };
+
+        output.textContent = JSON.stringify(report, null, 2);
+
+      } catch (error) {
+        output.textContent =
+          'ERROR DE INFERENCIA\n' +
+          (error?.stack || error?.message || String(error));
+      } finally {
+        if (session) {
+          try {
+            await session.release();
+          } catch (error) {
+            console.warn('Error al liberar la sesión:', error);
+          }
+        }
+
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
