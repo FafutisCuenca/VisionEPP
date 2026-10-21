@@ -469,9 +469,21 @@ function loadFile(file) {
     mediaDimensions.textContent = 'Leyendo dimensiones…';
   }
 
-  setFileInfo(
+setFileInfo(
     `${file.name} · ${formatBytes(file.size)} · archivo local; no se ha enviado a ningún servidor.`
   );
+
+  // Habilitar las acciones para la evidencia cargada.
+  if (clearBtn) clearBtn.disabled = false;
+  if (analyzeBtn) analyzeBtn.disabled = false;
+
+  // Registrar la carga de evidencia.
+  logActivity(
+    'Evidencia cargada',
+    `${file.name} · ${formatBytes(file.size)} · ${isImage ? 'Imagen' : 'Video'}`
+  );
+}
+  
 // ---------------------------------------------------------
 // 7. PERFILES ORIGINALES
 // ---------------------------------------------------------
