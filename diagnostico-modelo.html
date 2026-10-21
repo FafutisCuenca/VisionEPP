@@ -14,6 +14,7 @@
       line-height: 1.5;
     }
     button { padding: 10px 16px; cursor: pointer; }
+    button:disabled { cursor: wait; }
     pre {
       white-space: pre-wrap;
       overflow-wrap: anywhere;
@@ -26,10 +27,7 @@
 </head>
 <body>
   <h1>Diagnóstico del modelo ONNX</h1>
-  <p>
-    Comprueba la carga del modelo y sus tensores.
-    Esta prueba no analiza imágenes.
-  </p>
+  <p>Esta prueba carga el modelo, pero no analiza imágenes.</p>
   <button id="run">Comprobar modelo</button>
   <pre id="output">Pendiente de comprobación.</pre>
 
@@ -38,9 +36,26 @@
     const output = document.getElementById('output');
     const button = document.getElementById('run');
 
+    function describeMetadata(names, metadata) {
+      return names.map((name, index) => {
+        const item = metadata?.[index];
+
+        return {
+          name,
+          metadataAvailable: Boolean(item),
+          type: item?.type ?? null,
+          shape: item?.shape ?? null,
+          isTensor: item?.isTensor ?? null,
+          rawMetadata: item ?? null
+        };
+      });
+    }
+
     button.addEventListener('click', async () => {
       button.disabled = true;
       output.textContent = 'Comprobando biblioteca y modelo…';
+
+      let session;
 
       try {
         if (!window.ort) {
@@ -52,9 +67,7 @@
         ort.env.wasm.wasmPaths =
           'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/';
 
-        const modelPath = './models/PPE-Detection.onnx';
-
-        const response = await fetch(modelPath);
+        const response = await fetch('./models/PPE-Detection.onnx');
 
         if (!response.ok) {
           throw new Error(
@@ -64,34 +77,50 @@
 
         const modelBuffer = await response.arrayBuffer();
 
-        const session = await ort.InferenceSession.create(
+        output.textContent =
+          `Modelo descargado: ${modelBuffer.byteLength} bytes.\n` +
+          'Creando sesión ONNX…';
+
+        session = await ort.InferenceSession.create(
           modelBuffer,
           { executionProviders: ['wasm'] }
         );
 
-        const describe = (name, info) => ({
-          name,
-          type: info.type,
-          dimensions: info.dimensions
-        });
-
-        output.textContent = JSON.stringify({
-          resultado: 'MODELO CARGADO',
-          runtime: 'ONNX Runtime Web',
-          proveedor: 'wasm',
-          entradas: session.inputNames.map(name =>
-            describe(name, session.inputMetadata[name])
+        const result = {
+          status: 'SESSION_CREATED',
+          runtimeVersion: ort.env.versions?.common ?? 'No disponible',
+          providerRequested: 'wasm',
+          modelBytes: modelBuffer.byteLength,
+          inputs: describeMetadata(
+            session.inputNames,
+            session.inputMetadata
           ),
-          salidas: session.outputNames.map(name =>
-            describe(name, session.outputMetadata[name])
-          )
-        }, null, 2);
+          outputs: describeMetadata(
+            session.outputNames,
+            session.outputMetadata
+          ),
+          note:
+            'La sesión se creó; todavía no se ha ejecutado inferencia.'
+        };
+
+        output.textContent = JSON.stringify(result, null, 2);
 
       } catch (error) {
         output.textContent =
           'ERROR DE DIAGNÓSTICO\n' +
           (error?.stack || error?.message || String(error));
       } finally {
+        if (session) {
+          try {
+            await session.release();
+          } catch (releaseError) {
+            console.warn(
+              'No se pudo liberar la sesión de diagnóstico:',
+              releaseError
+            );
+          }
+        }
+
         button.disabled = false;
       }
     });
