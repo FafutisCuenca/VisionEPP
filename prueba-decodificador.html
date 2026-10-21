@@ -226,15 +226,15 @@ function decodeScale(tensor, scale) {
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
       for (let a = 0; a < 3; a++) {
-        const base = a * 7;
-
-        const tx = at(data, base,     y, x, h, w);
-        const ty = at(data, base + 1, y, x, h, w);
-        const tw = at(data, base + 2, y, x, h, w);
-        const th = at(data, base + 3, y, x, h, w);
-        const to = at(data, base + 4, y, x, h, w);
-        const tc0 = at(data, base + 5, y, x, h, w);
-        const tc1 = at(data, base + 6, y, x, h, w);
+        // El tensor original es NCHW: los canales están separados
+        // en planos. Cada atributo contiene 3 canales, uno por ancla.
+        const tx  = at(data, a,      y, x, h, w);
+        const ty  = at(data, 3 + a,  y, x, h, w);
+        const tw  = at(data, 6 + a,  y, x, h, w);
+        const th  = at(data, 9 + a,  y, x, h, w);
+        const to  = at(data, 12 + a, y, x, h, w);
+        const tc0 = at(data, 15 + a, y, x, h, w);
+        const tc1 = at(data, 18 + a, y, x, h, w);
 
         const objectness = sigmoid(to);
         const classScores = [
@@ -271,7 +271,6 @@ function decodeScale(tensor, scale) {
 
   return detections;
 }
-
 function intersectionOverUnion(a, b) {
   const x1 = Math.max(a.x1, b.x1);
   const y1 = Math.max(a.y1, b.y1);
