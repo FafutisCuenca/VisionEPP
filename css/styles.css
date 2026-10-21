@@ -917,3 +917,131 @@ select:focus-visible,
     padding: 12px;
   }
 }
+
+
+/* =========================================================
+   VISIONEPP - AJUSTE DE CARGA Y VISTA PREVIA
+   Carga compacta a la izquierda y evidencia a la derecha
+   ========================================================= */
+
+/* Distribución principal de carga y visualización */
+.main-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.75fr) minmax(0, 1.25fr);
+  gap: 20px;
+  align-items: start;
+}
+
+/* Evitar que los paneles fuercen el ancho de la cuadrícula */
+.upload-panel,
+.viewer-panel {
+  min-width: 0;
+}
+
+/* Zona de selección más compacta */
+.upload-panel .drop-zone {
+  min-height: 150px;
+  padding: 18px 12px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+/* Ventana fija para mostrar imágenes y videos */
+.preview-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 640px;
+  height: 360px;
+  min-height: 0;
+  margin: 0 auto;
+  padding: 8px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #152737;
+}
+
+/* La imagen completa debe caber dentro de la ventana */
+.preview-container img {
+  display: block;
+  width: auto !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  flex: 0 1 auto;
+  object-fit: contain;
+  object-position: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+/* El video también queda limitado al recuadro */
+.preview-container video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+  object-position: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  background: #152737;
+}
+
+/* Mensaje mostrado antes de seleccionar un archivo */
+.preview-placeholder,
+.preview-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  color: #d7e3ee;
+  text-align: center;
+}
+
+.preview-placeholder p {
+  margin: 0;
+}
+
+.preview-placeholder-icon {
+  font-size: 32px;
+  opacity: 0.8;
+}
+
+/* Información del archivo sin desbordamientos */
+.file-information {
+  overflow-wrap: anywhere;
+}
+
+/* Adaptación a pantallas pequeñas */
+@media (max-width: 700px) {
+  .main-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .preview-container {
+    max-width: 100%;
+    height: 280px;
+  }
+
+  .upload-panel .drop-zone {
+    min-height: 130px;
+  }
+}
