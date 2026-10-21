@@ -1,20 +1,17 @@
-
+```javascript
 /**
  * VisionEPP - Aplicación principal.
  *
- * Funciones:
  * - Carga y vista previa local de imágenes y videos.
- * - Validación de archivos.
- * - Limpieza de evidencia.
+ * - Validación y limpieza de evidencia.
  * - Registro de actividad y exportación JSON.
- * - Perfiles originales de evaluación.
- * - Selectores contextuales de zona, actividad y función.
- * - Consulta de requisitos de EPP configurados.
+ * - Perfiles orientativos y selectores contextuales.
+ * - Validación de zona, actividad y función.
  *
  * IMPORTANTE:
  * - No ejecuta detecciones simuladas.
- * - El detector real todavía debe integrarse.
- * - Los requisitos de EPP son orientativos hasta su validación.
+ * - El detector real todavía no está integrado.
+ * - Los requisitos de EPP requieren validación por SST.
  */
 
 import { APP_CONFIG } from './config.js';
@@ -28,13 +25,17 @@ import {
 import {
   renderProfileSummary,
   getZones,
+  getZone,
   getActivitiesByZone,
+  getActivity,
   getRolesByActivity,
-  getContextSummary
+  getRole,
+  getContextSummary,
+  validateContext
 } from './rules.js';
 
 // ---------------------------------------------------------
-// 1. REFERENCIAS A LOS ELEMENTOS DE LA INTERFAZ
+// 1. ELEMENTOS DE LA INTERFAZ
 // ---------------------------------------------------------
 
 const $ = (id) => document.getElementById(id);
@@ -50,28 +51,34 @@ const activityLog = $('activityLog');
 const ppeGrid = $('ppeGrid');
 
 const areaSelect = $('areaSelect');
-
-// Los tres selectores nuevos se activarán cuando existan
-// sus respectivos elementos en index.html.
 const zoneSelect = $('zoneSelect');
 const activitySelect = $('activitySelect');
 const roleSelect = $('roleSelect');
 
-// El HTML puede incluir contextSummary para separar el
-// contexto de los cuatro perfiles originales.
 const contextSummary = $('contextSummary');
-
-// Si no existe contextSummary, podemos utilizar
-// ruleSummary cuando no esté ocupado por el perfil original.
 const ruleSummary = $('ruleSummary');
+
+// ---------------------------------------------------------
+// 2. ESTADO DE LA SESIÓN
+// ---------------------------------------------------------
 
 let currentFile = null;
 let currentUrl = null;
 let currentKind = null;
+
 let activity = [];
 
+// Controla los intentos de análisis de la evidencia actual.
+// El detector no se ejecuta en esta versión.
+let analysisAttempted = false;
+
+// Evita registrar repetidamente el mismo evento en una
+// secuencia inmediata de cambios o clics.
+let lastLoggedEventKey = '';
+let lastLoggedEventTime = 0;
+
 // ---------------------------------------------------------
-// 2. UTILIDADES DE INTERFAZ
+// 3. UTILIDADES DE INTERFAZ
 // ---------------------------------------------------------
 
 function setFileInfo(message, isError = false) {
@@ -113,7 +120,13 @@ function addPlaceholder(select, label) {
   select.append(option);
 }
 
-function populateSelect(select, items, placeholder, getValue, getLabel) {
+function populateSelect(
+  select,
+  items,
+  placeholder,
+  getValue,
+  getLabel
+) {
   if (!select) return;
 
   addPlaceholder(select, placeholder);
@@ -128,8 +141,59 @@ function populateSelect(select, items, placeholder, getValue, getLabel) {
   });
 }
 
+function getSelectedContext() {
+  return {
+    zoneId: zoneSelect?.value ?? '',
+    activityId: activitySelect?.value ?? '',
+    roleId: roleSelect?.value ?? ''
+  };
+}
+
+function getSelectedContextLabels() {
+  const { zoneId, activityId, roleId } = getSelectedContext();
+
+  return {
+    zone: zoneId ? getZone(zoneId)?.name ?? null : null,
+    activity: activityId ? getActivity(activityId)?.name ?? null : null,
+    role: roleId ? getRole(roleId)?.name ?? null : null,
+    profile: areaSelect?.value
+      ? APP_CONFIG.profiles[areaSelect.value]?.title ?? null
+      : null
+  };
+}
+
+function hasContextSelectors() {
+  return Boolean(zoneSelect && activitySelect && roleSelect);
+}
+
+function validateSelectedContext() {
+  if (!hasContextSelectors()) {
+    return {
+      valid: true,
+      errors: []
+    };
+  }
+
+  const { zoneId, activityId, roleId } = getSelectedContext();
+
+  if (!zoneId || !activityId || !roleId) {
+    return {
+      valid: false,
+      errors: [
+        'Completa la zona, la actividad y la función del personal.'
+      ]
+    };
+  }
+
+  return validateContext({
+    zoneId,
+    activityId,
+    roleId
+  });
+}
+
 // ---------------------------------------------------------
-// 3. CATÁLOGO VISUAL DE EPP
+// 4. CATÁLOGO VISUAL DE EPP
 // ---------------------------------------------------------
 
 function renderPpeItems() {
@@ -157,16 +221,36 @@ function renderPpeItems() {
 }
 
 // ---------------------------------------------------------
-// 4. REGISTRO DE ACTIVIDAD
+// 5. REGISTRO DE ACTIVIDAD
 // ---------------------------------------------------------
 
-function logActivity(title, detail) {
+function logActivity(title, detail, options = {}) {
+  const { force = false } = options;
+  const now = Date.now();
+  const eventKey = `${title}::${detail}`;
+
+  // Evita duplicar el mismo evento cuando se produce
+  // varias veces en un intervalo muy corto.
+  if (
+    !force &&
+    eventKey === lastLoggedEventKey &&
+    now - lastLoggedEventTime < 2000
+  ) {
+    return;
+  }
+
+  lastLoggedEventKey = eventKey;
+  lastLoggedEventTime = now;
+
   activity.unshift({
     time: new Date().toLocaleString('es-MX'),
+    timestamp: new Date().toISOString(),
     title,
     detail
   });
 
+  // Conserva un máximo de 30 eventos, del más reciente
+  // al más antiguo en la interfaz.
   activity = activity.slice(0, 30);
 
   renderActivity();
@@ -223,7 +307,7 @@ function renderActivity() {
 }
 
 // ---------------------------------------------------------
-// 5. CARGA Y VISTA PREVIA DE EVIDENCIA
+// 6. CARGA Y VISTA PREVIA DE EVIDENCIA
 // ---------------------------------------------------------
 
 function clearEvidence(addLog = true) {
@@ -233,6 +317,7 @@ function clearEvidence(addLog = true) {
 
   currentFile = null;
   currentKind = null;
+  analysisAttempted = false;
 
   if (fileInput) {
     fileInput.value = '';
@@ -290,18 +375,25 @@ function loadFile(file) {
     return;
   }
 
+  // Se libera la URL anterior antes de sustituir la evidencia.
   revokeCurrentUrl();
 
   currentFile = file;
   currentKind = result.kind;
   currentUrl = createEvidenceUrl(file);
 
+  // Una evidencia nueva permite una nueva prueba de interfaz.
+  analysisAttempted = false;
+
+  if (analyzeBtn) {
+    analyzeBtn.disabled = false;
+  }
+
   if (!preview) return;
 
   preview.replaceChildren();
 
   const isImage = result.kind === 'image';
-
   const media = document.createElement(isImage ? 'img' : 'video');
 
   media.src = currentUrl;
@@ -328,13 +420,25 @@ function loadFile(file) {
 
   if (isImage) {
     media.addEventListener('load', updateDimensions, { once: true });
+
     media.addEventListener('error', () => {
-      setFileInfo('No fue posible mostrar la imagen seleccionada.', true);
+      setFileInfo(
+        'No fue posible mostrar la imagen seleccionada.',
+        true
+      );
     }, { once: true });
   } else {
-    media.addEventListener('loadedmetadata', updateDimensions, { once: true });
+    media.addEventListener(
+      'loadedmetadata',
+      updateDimensions,
+      { once: true }
+    );
+
     media.addEventListener('error', () => {
-      setFileInfo('No fue posible leer los metadatos del video.', true);
+      setFileInfo(
+        'No fue posible leer los metadatos del video.',
+        true
+      );
     }, { once: true });
   }
 
@@ -366,14 +470,12 @@ function loadFile(file) {
 }
 
 // ---------------------------------------------------------
-// 6. PERFILES ORIGINALES
+// 7. PERFILES ORIGINALES
 // ---------------------------------------------------------
 
 function updateProfileSummary() {
   if (!areaSelect || !ruleSummary) return;
 
-  // Cuando existe un resumen contextual independiente,
-  // ruleSummary sigue reservado para el perfil original.
   if (contextSummary && contextSummary === ruleSummary) {
     return;
   }
@@ -395,7 +497,7 @@ function handleProfileChange() {
 }
 
 // ---------------------------------------------------------
-// 7. SELECTORES CONTEXTUALES EN CASCADA
+// 8. SELECTORES CONTEXTUALES
 // ---------------------------------------------------------
 
 function resetActivitySelect() {
@@ -446,25 +548,30 @@ function handleZoneChange() {
     return;
   }
 
+  const zone = getZone(zoneId);
+
+  if (!zone) {
+    renderContextSummary();
+    return;
+  }
+
   const activities = getActivitiesByZone(zoneId);
 
   populateSelect(
     activitySelect,
     activities,
     'Selecciona una actividad',
-    (activityItem) => activityItem.id,
-    (activityItem) => activityItem.name
+    (item) => item.id,
+    (item) => item.name
   );
 
   if (activitySelect) {
     activitySelect.disabled = activities.length === 0;
   }
 
-  const zone = getZones().find((item) => item.id === zoneId);
-
   logActivity(
     'Zona seleccionada',
-    zone?.name ?? zoneId
+    zone.name
   );
 
   renderContextSummary();
@@ -476,6 +583,13 @@ function handleActivityChange() {
   resetRoleSelect();
 
   if (!activityId) {
+    renderContextSummary();
+    return;
+  }
+
+  const selectedActivity = getActivity(activityId);
+
+  if (!selectedActivity) {
     renderContextSummary();
     return;
   }
@@ -494,11 +608,9 @@ function handleActivityChange() {
     roleSelect.disabled = roles.length === 0;
   }
 
-  const activityItem = APP_CONFIG.activities[activityId];
-
   logActivity(
     'Actividad seleccionada',
-    activityItem?.name ?? activityId
+    selectedActivity.name
   );
 
   renderContextSummary();
@@ -508,19 +620,21 @@ function handleRoleChange() {
   const roleId = roleSelect?.value ?? '';
 
   if (roleId) {
-    const role = APP_CONFIG.roles[roleId];
+    const role = getRole(roleId);
 
-    logActivity(
-      'Función seleccionada',
-      role?.name ?? roleId
-    );
+    if (role) {
+      logActivity(
+        'Función seleccionada',
+        role.name
+      );
+    }
   }
 
   renderContextSummary();
 }
 
 // ---------------------------------------------------------
-// 8. RESUMEN DE CONTEXTO Y REQUISITOS ORIENTATIVOS
+// 9. RESUMEN DEL CONTEXTO
 // ---------------------------------------------------------
 
 function getContextTarget() {
@@ -528,9 +642,7 @@ function getContextTarget() {
     return contextSummary;
   }
 
-  // Compatibilidad con la interfaz original:
-  // no sobrescribir el resumen del perfil si ambos selectores
-  // comparten el mismo contenedor.
+  // Evita sobrescribir el resumen del perfil existente.
   if (!areaSelect && ruleSummary) {
     return ruleSummary;
   }
@@ -541,34 +653,53 @@ function getContextTarget() {
 function renderContextSummary() {
   const target = getContextTarget();
 
-  if (!target || !zoneSelect || !activitySelect || !roleSelect) {
+  if (!target || !hasContextSelectors()) {
     return;
   }
 
   target.replaceChildren();
 
-  const zoneId = zoneSelect.value;
-  const activityId = activitySelect.value;
-  const roleId = roleSelect.value;
+  const { zoneId, activityId, roleId } = getSelectedContext();
 
   if (!zoneId) {
     const message = document.createElement('p');
-    message.textContent = 'Selecciona una zona para comenzar la configuración contextual.';
+    message.textContent =
+      'Selecciona una zona para comenzar la configuración contextual.';
+
     target.append(message);
     return;
   }
 
   if (!activityId) {
     const message = document.createElement('p');
-    message.textContent = 'Selecciona una actividad correspondiente a la zona elegida.';
+    message.textContent =
+      'Selecciona una actividad correspondiente a la zona elegida.';
+
     target.append(message);
     return;
   }
 
   if (!roleId) {
     const message = document.createElement('p');
-    message.textContent = 'Selecciona la función del personal para consultar el contexto completo.';
+    message.textContent =
+      'Selecciona la función del personal para completar el contexto.';
+
     target.append(message);
+    return;
+  }
+
+  const validation = validateSelectedContext();
+
+  if (!validation.valid) {
+    const heading = document.createElement('strong');
+    heading.textContent = 'Contexto por revisar';
+
+    const message = document.createElement('p');
+    message.textContent = Array.isArray(validation.errors)
+      ? validation.errors.join(' ')
+      : 'La combinación seleccionada no ha sido validada.';
+
+    target.append(heading, message);
     return;
   }
 
@@ -578,9 +709,13 @@ function renderContextSummary() {
     roleId
   });
 
-  if (!summary.valid) {
+  if (!summary || !summary.valid) {
     const message = document.createElement('p');
-    message.textContent = summary.errors.join(' ');
+
+    message.textContent = Array.isArray(summary?.errors)
+      ? summary.errors.join(' ')
+      : 'No fue posible validar el contexto seleccionado.';
+
     target.append(message);
     return;
   }
@@ -601,11 +736,11 @@ function renderContextSummary() {
   });
 
   const requirementsHeading = document.createElement('strong');
-  requirementsHeading.textContent = 'Requisitos de EPP por evaluar';
+  requirementsHeading.textContent = 'Requisitos orientativos de EPP';
 
   const requirementsList = document.createElement('ul');
 
-  summary.requirements.forEach((requirement) => {
+  (summary.requirements ?? []).forEach((requirement) => {
     const li = document.createElement('li');
 
     const name = document.createElement('strong');
@@ -622,7 +757,9 @@ function renderContextSummary() {
   });
 
   const disclaimer = document.createElement('p');
-  disclaimer.textContent = summary.disclaimer;
+  disclaimer.textContent =
+    summary.disclaimer ??
+    'Los requisitos deben validarse con el responsable de SST.';
 
   target.append(
     heading,
@@ -634,44 +771,70 @@ function renderContextSummary() {
 }
 
 // ---------------------------------------------------------
-// 9. PREPARACIÓN DE ANÁLISIS
+// 10. CONTROL DEL BOTÓN DE ANÁLISIS
 //
-// No se invoca el detector ni se inventan resultados.
+// No se llama al detector ni se generan detecciones.
+// Se permite un solo intento de interfaz por evidencia.
 // ---------------------------------------------------------
 
 function handleAnalyzeClick() {
-  if (!currentFile) return;
+  if (!currentFile) {
+    setFileInfo(
+      'Primero selecciona una imagen o un video.',
+      true
+    );
+    return;
+  }
 
-  setFileInfo(
-    'La evidencia está preparada. El detector real de IA todavía no está integrado; no se han evaluado elementos de EPP.'
-  );
+  if (analysisAttempted) {
+    setFileInfo(
+      'Este archivo ya fue revisado en la interfaz. Para iniciar otra prueba, carga nuevamente la evidencia o selecciona otro archivo.'
+    );
+    return;
+  }
+
+  const validation = validateSelectedContext();
+
+  if (!validation.valid) {
+    const message = Array.isArray(validation.errors)
+      ? validation.errors.join(' ')
+      : 'Completa y valida el contexto antes de continuar.';
+
+    setFileInfo(message, true);
+
+    logActivity(
+      'Contexto incompleto',
+      message
+    );
+
+    return;
+  }
+
+  // Se marca el intento antes de actualizar la interfaz,
+  // para impedir un segundo clic mientras se procesa el evento.
+  analysisAttempted = true;
+
+  if (analyzeBtn) {
+    analyzeBtn.disabled = true;
+  }
+
+  const message =
+    'El detector real de IA todavía no está integrado. No se ejecutó un análisis ni se generaron detecciones.';
+
+  setFileInfo(message);
 
   logActivity(
     'Análisis no ejecutado',
-    'La evidencia está preparada, pero el modelo de IA aún no está integrado. No se generaron detecciones.'
+    'La evidencia y el contexto están preparados, pero el modelo de IA aún no está integrado. No se generaron detecciones.'
   );
 }
 
 // ---------------------------------------------------------
-// 10. EXPORTACIÓN DEL REGISTRO
+// 11. EXPORTACIÓN JSON
 // ---------------------------------------------------------
 
 function exportSession() {
-  const selectedZone = zoneSelect?.value
-    ? APP_CONFIG.zones[zoneSelect.value]?.name ?? null
-    : null;
-
-  const selectedActivity = activitySelect?.value
-    ? APP_CONFIG.activities[activitySelect.value]?.name ?? null
-    : null;
-
-  const selectedRole = roleSelect?.value
-    ? APP_CONFIG.roles[roleSelect.value]?.name ?? null
-    : null;
-
-  const selectedProfile = areaSelect?.value
-    ? APP_CONFIG.profiles[areaSelect.value]?.title ?? null
-    : null;
+  const context = getSelectedContextLabels();
 
   const payload = {
     application: APP_CONFIG.name,
@@ -681,14 +844,20 @@ function exportSession() {
     note:
       'Registro de actividad de la interfaz. No contiene detecciones de IA ni dictámenes de cumplimiento.',
 
-    detectorIntegrated: APP_CONFIG.evaluation.detectorIntegrated,
-    simulatedDetections: APP_CONFIG.evaluation.simulatedDetections,
+    detectorIntegrated:
+      APP_CONFIG.evaluation.detectorIntegrated,
+
+    simulatedDetections:
+      APP_CONFIG.evaluation.simulatedDetections,
 
     context: {
-      zone: selectedZone,
-      activity: selectedActivity,
-      role: selectedRole,
-      profile: selectedProfile
+      ...context,
+      validation: hasContextSelectors()
+        ? validateSelectedContext()
+        : {
+            valid: false,
+            errors: ['Los selectores contextuales no están disponibles.']
+          }
     },
 
     evidence: currentFile
@@ -701,7 +870,7 @@ function exportSession() {
         }
       : null,
 
-    activity
+    activity: [...activity].reverse()
   };
 
   const blob = new Blob(
@@ -719,11 +888,12 @@ function exportSession() {
   link.click();
   link.remove();
 
-  URL.revokeObjectURL(url);
+  // Se libera la URL temporal tras iniciar la descarga.
+  setTimeout(() => URL.revokeObjectURL(url), 0);
 }
 
 // ---------------------------------------------------------
-// 11. EVENTOS
+// 12. EVENTOS DE ARCHIVOS
 // ---------------------------------------------------------
 
 if (fileInput) {
@@ -758,6 +928,10 @@ if (dropZone) {
   });
 }
 
+// ---------------------------------------------------------
+// 13. EVENTOS DE LA APLICACIÓN
+// ---------------------------------------------------------
+
 if (clearBtn) {
   clearBtn.addEventListener('click', () => clearEvidence());
 }
@@ -789,7 +963,7 @@ if (exportBtn) {
 window.addEventListener('beforeunload', revokeCurrentUrl);
 
 // ---------------------------------------------------------
-// 12. INICIALIZACIÓN
+// 14. INICIALIZACIÓN
 // ---------------------------------------------------------
 
 renderPpeItems();
@@ -800,6 +974,9 @@ initializeZoneSelect();
 
 renderContextSummary();
 
+clearEvidence(false);
+
 if (exportBtn) {
-  exportBtn.disabled = activity.length === 0;
+  exportBtn.disabled = true;
 }
+```
