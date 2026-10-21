@@ -375,19 +375,13 @@ function loadFile(file) {
     return;
   }
 
-  // Se libera la URL anterior antes de sustituir la evidencia.
+  // Liberar la URL de la evidencia anterior.
   revokeCurrentUrl();
 
   currentFile = file;
   currentKind = result.kind;
   currentUrl = createEvidenceUrl(file);
-
-  // Una evidencia nueva permite una nueva prueba de interfaz.
   analysisAttempted = false;
-
-  if (analyzeBtn) {
-    analyzeBtn.disabled = false;
-  }
 
   if (!preview) return;
 
@@ -395,6 +389,25 @@ function loadFile(file) {
 
   const isImage = result.kind === 'image';
   const media = document.createElement(isImage ? 'img' : 'video');
+
+  // Mantener la evidencia dentro de la ventana de vista previa.
+  media.style.display = 'block';
+  media.style.maxWidth = '100%';
+  media.style.maxHeight = '100%';
+  media.style.objectFit = 'contain';
+  media.style.objectPosition = 'center';
+  media.style.boxSizing = 'border-box';
+
+  if (isImage) {
+    // Respetar las dimensiones originales sin ampliar ni recortar.
+    media.style.width = 'auto';
+    media.style.height = 'auto';
+    media.style.flex = '0 1 auto';
+  } else {
+    // El video ocupa el espacio disponible sin deformarse.
+    media.style.width = '100%';
+    media.style.height = '100%';
+  }
 
   media.src = currentUrl;
 
@@ -459,16 +472,6 @@ function loadFile(file) {
   setFileInfo(
     `${file.name} · ${formatBytes(file.size)} · archivo local; no se ha enviado a ningún servidor.`
   );
-
-  if (clearBtn) clearBtn.disabled = false;
-  if (analyzeBtn) analyzeBtn.disabled = false;
-
-  logActivity(
-    'Evidencia cargada',
-    `${file.name} (${isImage ? 'imagen' : 'video'}, ${formatBytes(file.size)}).`
-  );
-}
-
 // ---------------------------------------------------------
 // 7. PERFILES ORIGINALES
 // ---------------------------------------------------------
