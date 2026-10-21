@@ -251,6 +251,9 @@ const tc1 = at(data, base + 6, y, x, h, w);
 
         for (let classId = 0; classId < 2; classId++) {
           const score = classScores[classId];
+          if (score > window._visionEppMaxScore) {
+              window._visionEppMaxScore = score;
+              }
           if (score < SCORE_THRESHOLD) continue;
 
           const box = {
@@ -398,6 +401,8 @@ async function runTest() {
     const prep = preprocess(img);
     const inputName = session.inputNames[0];
 
+    window._visionEppMaxScore = 0;
+    
     const outputMap = await session.run({
       [inputName]: prep.tensor
     });
@@ -453,7 +458,7 @@ allDetections.push(...decodeScale(output, scale));
         inputWidth: INPUT_W,
         inputHeight: INPUT_H,
         method: 'letterbox con conservación de proporciones',
-        fillRGB: [114, 114, 114],
+        fillRGB: [0, 0, 0],
         scale: prep.scale,
         padX: prep.padX,
         padY: prep.padY,
