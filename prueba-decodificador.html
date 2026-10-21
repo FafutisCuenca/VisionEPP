@@ -466,6 +466,18 @@ allDetections.push(...decodeScale(output, scale));
         candidatesAfterScoreFilter: allDetections.length,
         detectionsAfterNMS: filtered.length
       },
+      channelDiagnostics,
+detections: filtered.map(d => ({
+  classId: d.classId,
+  class: d.label,
+  confidence: Number(d.score.toFixed(5)),
+  boxOriginalPixels: {
+    x1: Number(d.x1.toFixed(2)),
+    y1: Number(d.y1.toFixed(2)),
+    x2: Number(d.x2.toFixed(2)),
+    y2: Number(d.y2.toFixed(2))
+  }
+})),
       detections: filtered.map(d => ({
         classId: d.classId,
         class: d.label,
