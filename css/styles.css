@@ -877,3 +877,61 @@ select:focus-visible,
     padding: 12px;
   }
 }
+
+/* =========================================
+   VISIONEPP — VENTANA FIJA DE VISTA PREVIA
+   ========================================= */
+
+.preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Ventana limitada y centrada */
+  width: 100%;
+  max-width: 640px;
+  height: 420px;
+  max-height: 60vh;
+  min-width: 0;
+  min-height: 0;
+
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  border-radius: 12px;
+  background: #152737;
+  position: relative;
+}
+
+/* La imagen y el video nunca rebasan la ventana */
+.preview img,
+.preview video {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 0;
+  min-height: 0;
+
+  object-fit: contain;
+  object-position: center;
+
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 600px) {
+  .preview {
+    max-width: 100%;
+    height: 300px;
+    max-height: 55vh;
+  }
+}
