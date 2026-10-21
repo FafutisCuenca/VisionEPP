@@ -1,0 +1,100 @@
+
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagnóstico ONNX | VisionEPP</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 900px;
+      margin: 32px auto;
+      padding: 0 16px;
+      line-height: 1.5;
+    }
+    button { padding: 10px 16px; cursor: pointer; }
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      background: #f2f5f8;
+      color: #172b3a;
+      padding: 16px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Diagnóstico del modelo ONNX</h1>
+  <p>
+    Comprueba la carga del modelo y sus tensores.
+    Esta prueba no analiza imágenes.
+  </p>
+  <button id="run">Comprobar modelo</button>
+  <pre id="output">Pendiente de comprobación.</pre>
+
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.min.js"></script>
+  <script>
+    const output = document.getElementById('output');
+    const button = document.getElementById('run');
+
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      output.textContent = 'Comprobando biblioteca y modelo…';
+
+      try {
+        if (!window.ort) {
+          throw new Error(
+            'No se pudo cargar ONNX Runtime Web desde el CDN.'
+          );
+        }
+
+        ort.env.wasm.wasmPaths =
+          'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/';
+
+        const modelPath = './models/PPE-Detection.onnx';
+
+        const response = await fetch(modelPath);
+
+        if (!response.ok) {
+          throw new Error(
+            `No se encontró el modelo: HTTP ${response.status}.`
+          );
+        }
+
+        const modelBuffer = await response.arrayBuffer();
+
+        const session = await ort.InferenceSession.create(
+          modelBuffer,
+          { executionProviders: ['wasm'] }
+        );
+
+        const describe = (name, info) => ({
+          name,
+          type: info.type,
+          dimensions: info.dimensions
+        });
+
+        output.textContent = JSON.stringify({
+          resultado: 'MODELO CARGADO',
+          runtime: 'ONNX Runtime Web',
+          proveedor: 'wasm',
+          entradas: session.inputNames.map(name =>
+            describe(name, session.inputMetadata[name])
+          ),
+          salidas: session.outputNames.map(name =>
+            describe(name, session.outputMetadata[name])
+          )
+        }, null, 2);
+
+      } catch (error) {
+        output.textContent =
+          'ERROR DE DIAGNÓSTICO\n' +
+          (error?.stack || error?.message || String(error));
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
