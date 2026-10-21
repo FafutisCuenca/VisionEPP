@@ -1,4 +1,4 @@
-```javascript
+
 /**
  * VisionEPP - Aplicación principal.
  *
@@ -979,4 +979,3 @@ clearEvidence(false);
 if (exportBtn) {
   exportBtn.disabled = true;
 }
-```
