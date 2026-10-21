@@ -403,7 +403,8 @@ async function runTest() {
 
     const scaleNames = ['bbox_8x', 'bbox_16x', 'bbox_32x'];
     const allDetections = [];
-
+    const channelDiagnostics = {};
+    
     for (let i = 0; i < SCALES.length; i++) {
       const scale = SCALES[i];
       const output = outputMap[scaleNames[i]];
