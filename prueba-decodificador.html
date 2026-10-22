@@ -130,6 +130,17 @@
       background: white;
     }
 
+    #inputCanvas,
+#rawCanvas {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 780px;
+  object-fit: contain;
+  background: #fff;
+}
+    
     pre {
       padding: 15px;
       overflow: auto;
@@ -202,6 +213,32 @@
     </div>
   </div>
 
+  
+  <div class="panel">
+    <h2>2. Entrada exacta del modelo</h2>
+    <p class="small">
+      Imagen preprocesada a 192 × 320. El relleno negro es el usado
+      actualmente por esta prueba; todavía debe compararse con la referencia.
+    </p>
+    <div class="image-container">
+      <canvas id="inputCanvas" aria-label="Entrada preprocesada del modelo"></canvas>
+    </div>
+    <p id="inputInfo" class="small">Pendiente de ejecutar.</p>
+  </div>
+
+  <div class="panel">
+    <h2>3. Predicciones antes del filtrado</h2>
+    <p class="small">
+      Muestra las cajas decodificadas antes del filtro de relleno y de NMS.
+      Estas cajas todavía pueden ser falsos positivos.
+    </p>
+    <div class="image-container">
+      <canvas id="rawCanvas" aria-label="Predicciones preliminares del modelo"></canvas>
+    </div>
+    <p id="rawInfo" class="small">Pendiente de ejecutar.</p>
+  </div>
+
+  
   <div class="panel">
     <h2>2. Resultados</h2>
 
@@ -468,6 +505,7 @@ function preprocess(img) {
   }
 
   return {
+    canvas,
     tensor: new ort.Tensor(
       'float32',
       tensorData,
@@ -743,6 +781,61 @@ function drawResults(img, detections) {
   }
 }
 
+function drawRawPredictions(prep, detections) {
+  const inputCanvas = document.getElementById('inputCanvas');
+  const rawCanvas = document.getElementById('rawCanvas');
+
+  // Mostrar la entrada exacta creada por preprocess().
+  inputCanvas.width = INPUT_W;
+  inputCanvas.height = INPUT_H;
+
+  const inputCtx = inputCanvas.getContext('2d');
+  inputCtx.drawImage(prep.canvas, 0, 0);
+
+  // Dibujar las predicciones en coordenadas del tensor,
+  // antes del filtro de relleno y de NMS.
+  rawCanvas.width = INPUT_W;
+  rawCanvas.height = INPUT_H;
+
+  const ctx = rawCanvas.getContext('2d');
+  ctx.drawImage(prep.canvas, 0, 0);
+
+  ctx.lineWidth = 1;
+  ctx.font = '9px Arial';
+
+  for (const d of detections) {
+    const x = d.x1;
+    const y = d.y1;
+    const w = d.x2 - d.x1;
+    const h = d.y2 - d.y1;
+
+    if (![x, y, w, h].every(Number.isFinite) || w <= 0 || h <= 0) {
+      continue;
+    }
+
+    ctx.strokeStyle = d.classId === 0 ? '#e53935' : '#1565c0';
+    ctx.strokeRect(x, y, w, h);
+
+    const label = `${d.label} ${(d.score * 100).toFixed(1)}%`;
+    const labelY = Math.max(10, y);
+
+    ctx.fillStyle = ctx.strokeStyle;
+    ctx.fillRect(x, labelY - 10, ctx.measureText(label).width + 4, 11);
+
+    ctx.fillStyle = '#fff';
+    ctx.fillText(label, x + 2, labelY - 2);
+  }
+
+  document.getElementById('inputInfo').textContent =
+    `Entrada: ${INPUT_W} × ${INPUT_H}; ` +
+    `imagen redimensionada: ${prep.resizedW} × ${prep.resizedH}; ` +
+    `relleno X=${prep.padX}, Y=${prep.padY}.`;
+
+  document.getElementById('rawInfo').textContent =
+    `${detections.length} predicciones tras el umbral de puntuación, ` +
+    'antes del filtro de relleno y de NMS.';
+}
+  
 function summarizeOutputs(outputs, outputNames) {
   return outputNames.map(name => {
     const tensor = outputs[name];
@@ -870,7 +963,7 @@ async function runTest() {
       const detections = decodeScale(output, scaleInfo);
       allDetections.push(...detections);
     }
-
+    drawRawPredictions(prep, allDetections);
     /*
      * Diagnóstico de padding:
      * elimina las cajas cuyo centro cae fuera del rectángulo
