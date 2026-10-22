@@ -1,0 +1,1119 @@
+
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a43">
+  <meta name="description" content="Prueba independiente de análisis por lotes de imágenes con VisionEPP.">
+  <title>VisionEPP | Análisis por lotes</title>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --navy: #102a43;
+      --blue: #1769aa;
+      --bg: #f2f5f8;
+      --border: #d8e0e8;
+      --text: #243746;
+      --muted: #607586;
+      --green: #176b45;
+      --red: #a32d35;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+
+    header {
+      padding: 22px clamp(16px, 4vw, 44px);
+      color: white;
+      background: var(--navy);
+    }
+
+    header h1 { margin: 0 0 5px; font-size: 1.65rem; }
+    header p { margin: 0; color: #d8e7f2; }
+
+    main {
+      width: min(1500px, 100%);
+      margin: auto;
+      padding: 20px;
+    }
+
+    .panel {
+      padding: 18px;
+      margin-bottom: 18px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    h2 { margin: 0 0 12px; font-size: 1.2rem; }
+    h3 { margin: 0 0 10px; font-size: 1rem; }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      align-items: end;
+    }
+
+    label { display: block; font-weight: 650; margin-bottom: 5px; }
+
+    input[type="file"], select, input[type="number"] {
+      width: 100%;
+      padding: 9px;
+      border: 1px solid #b9c7d4;
+      border-radius: 7px;
+      background: white;
+    }
+
+    input[type="range"] { width: 100%; }
+
+    button, .button {
+      display: inline-block;
+      padding: 10px 15px;
+      color: white;
+      background: var(--blue);
+      border: 0;
+      border-radius: 7px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    button.secondary { background: #455d70; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+
+    .actions { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 17px; }
+    .muted { color: var(--muted); font-size: .92rem; }
+    .status { margin-top: 14px; padding: 12px; background: #edf3f8; border-radius: 7px; }
+    .status.error { color: var(--red); background: #fff0f0; }
+    .status.success { color: var(--green); background: #eaf7ef; }
+
+    .warning {
+      padding: 12px;
+      border-left: 4px solid #c58b22;
+      background: #fff8e7;
+      border-radius: 5px;
+      margin-top: 12px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 13px;
+      background: #fbfcfd;
+    }
+
+    .metric strong { display: block; font-size: 1.6rem; color: var(--navy); }
+    .metric span { font-size: .9rem; color: var(--muted); }
+
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+    th, td { padding: 9px; border-bottom: 1px solid var(--border); text-align: left; }
+    th { background: #edf2f6; }
+
+    .results { display: grid; gap: 18px; }
+    .result-card {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: white;
+    }
+
+    .result-heading {
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .image-pair {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .image-frame {
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px;
+      background: #f8fafc;
+    }
+
+    .image-frame img, .image-frame canvas {
+      display: block;
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      background: #e8edf2;
+      border-radius: 5px;
+    }
+
+    .image-label { margin: 0 0 7px; font-weight: 650; }
+    .class-table { margin-top: 14px; }
+
+    .empty {
+      text-align: center;
+      padding: 35px 12px;
+      color: var(--muted);
+      border: 1px dashed #aab8c5;
+      border-radius: 9px;
+    }
+
+    footer {
+      padding: 22px;
+      text-align: center;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    @media (max-width: 700px) {
+      main { padding: 12px; }
+      .image-pair { grid-template-columns: 1fr; }
+      .image-frame img, .image-frame canvas { height: 280px; }
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <h1>VisionEPP | Análisis de imágenes por lotes</h1>
+  <p>Prueba independiente del modelo YOLO candidato en el navegador.</p>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>1. Configuración de la prueba</h2>
+
+    <div class="controls">
+      <div>
+        <label for="imageFiles">Seleccionar fotografías</label>
+        <input id="imageFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+        <p class="muted">Puedes seleccionar varias imágenes a la vez.</p>
+      </div>
+
+      <div>
+        <label for="folderFiles">Seleccionar una carpeta</label>
+        <input id="folderFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple webkitdirectory>
+        <p class="muted">Se procesarán las imágenes compatibles encontradas en la carpeta.</p>
+      </div>
+
+      <div>
+        <label for="threshold">Confianza mínima: <span id="thresholdLabel">0.25</span></label>
+        <input id="threshold" type="range" min="0.10" max="0.90" step="0.05" value="0.25">
+        <p class="muted">Un umbral menor puede detectar más objetos, pero también más falsos positivos.</p>
+      </div>
+
+      <div>
+        <label for="nmsThreshold">Umbral NMS (IoU)</label>
+        <select id="nmsThreshold">
+          <option value="0.50">0.50</option>
+          <option value="0.60">0.60</option>
+          <option value="0.70" selected>0.70</option>
+          <option value="0.80">0.80</option>
+        </select>
+        <p class="muted">Controla la eliminación de cajas superpuestas de la misma clase.</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="loadModelBtn">Cargar modelo</button>
+      <button id="analyzeBtn" disabled>Analizar fotografías</button>
+      <button id="clearBtn" class="secondary">Limpiar resultados</button>
+    </div>
+
+    <div id="status" class="status" role="status" aria-live="polite">
+      Selecciona fotografías y carga el modelo para comenzar.
+    </div>
+
+    <div class="warning">
+      <strong>Uso experimental:</strong> las detecciones requieren validación humana.
+      Un resultado de cero detecciones no confirma que el EPP esté ausente.
+      Esta página no debe utilizarse como único mecanismo para decidir si una zona
+      o un trabajador cumple con las medidas de seguridad.
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>2. Resumen general</h2>
+    <div class="metrics">
+      <div class="metric"><strong id="totalImages">0</strong><span>Imágenes procesadas</span></div>
+      <div class="metric"><strong id="totalDetections">0</strong><span>Cajas detectadas</span></div>
+      <div class="metric"><strong id="totalErrors">0</strong><span>Errores de procesamiento</span></div>
+      <div class="metric"><strong id="modelStatus">No cargado</strong><span>Estado del modelo</span></div>
+    </div>
+
+    <h3 style="margin-top:20px">Conteo global por clase</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Clase</th><th>Detecciones</th></tr></thead>
+        <tbody id="globalCounts">
+          <tr><td colspan="2">Sin resultados.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>3. Reporte por fotografía</h2>
+    <p class="muted">
+      Cada fotografía tendrá su imagen original, la imagen anotada y los conteos
+      devueltos por el modelo. Los archivos originales no se modifican.
+    </p>
+
+    <div class="actions">
+      <button id="jsonBtn" disabled>Exportar JSON</button>
+      <button id="csvBtn" disabled>Exportar CSV</button>
+    </div>
+
+    <div id="results" class="results" style="margin-top:18px">
+      <div class="empty">Todavía no hay fotografías procesadas.</div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  VisionEPP · Prototipo experimental · Revisión humana obligatoria
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.min.js"></script>
+<script>
+"use strict";
+
+/*
+ * VisionEPP - Prueba independiente de análisis por lotes.
+ *
+ * Modelo esperado:
+ *   ./models/best.onnx
+ *
+ * Suposiciones que deben validarse contra el pipeline de entrenamiento:
+ *   - Entrada RGB NCHW, 640 x 640, normalizada a [0, 1].
+ *   - Letterbox con relleno RGB 114.
+ *   - Salida [1, 14, 8400].
+ *   - 4 valores de caja xywh + 10 puntuaciones de clase.
+ *
+ * Esta página no inventa detecciones. Si la inferencia falla, registra el error.
+ */
+
+const MODEL_URL = "./models/best.onnx";
+const INPUT_SIZE = 640;
+
+const CLASSES = [
+  "Botas",
+  "Guantes",
+  "Lentes de seguridad",
+  "Casco",
+  "Sin botas",
+  "Sin guantes",
+  "Sin lentes",
+  "Sin casco",
+  "Sin chaleco",
+  "Chaleco"
+];
+
+const $ = id => document.getElementById(id);
+
+let session = null;
+let modelInputName = null;
+let modelOutputName = null;
+let selectedFiles = [];
+let reports = [];
+let isRunning = false;
+
+$("threshold").addEventListener("input", () => {
+  $("thresholdLabel").textContent =
+    Number($("threshold").value).toFixed(2);
+});
+
+$("imageFiles").addEventListener("change", event => {
+  acceptFiles(event.target.files);
+  $("folderFiles").value = "";
+});
+
+$("folderFiles").addEventListener("change", event => {
+  acceptFiles(event.target.files);
+  $("imageFiles").value = "";
+});
+
+function setStatus(message, type = "") {
+  const element = $("status");
+  element.textContent = message;
+  element.className = "status" + (type ? " " + type : "");
+}
+
+function supportedImage(file) {
+  return file &&
+    ["image/jpeg", "image/png", "image/webp"].includes(file.type);
+}
+
+function acceptFiles(fileList) {
+  selectedFiles = Array.from(fileList || []).filter(supportedImage);
+
+  reports = [];
+  renderReports();
+  updateSummary();
+
+  if (!selectedFiles.length) {
+    setStatus("No se encontraron archivos JPEG, PNG o WebP compatibles.", "error");
+    updateExportButtons();
+    return;
+  }
+
+  setStatus(
+    `Se seleccionaron ${selectedFiles.length} fotografía(s). ` +
+    "Carga el modelo y después inicia el análisis."
+  );
+
+  $("analyzeBtn").disabled = !session || isRunning;
+  updateExportButtons();
+}
+
+$("loadModelBtn").addEventListener("click", loadModel);
+$("analyzeBtn").addEventListener("click", analyzeBatch);
+$("clearBtn").addEventListener("click", clearResults);
+$("jsonBtn").addEventListener("click", exportJSON);
+$("csvBtn").addEventListener("click", exportCSV);
+
+async function loadModel() {
+  if (isRunning) return;
+
+  $("loadModelBtn").disabled = true;
+  setStatus("Cargando modelo ONNX local. Esto puede tardar...");
+  $("modelStatus").textContent = "Cargando";
+
+  try {
+    if (typeof ort === "undefined") {
+      throw new Error("No se pudo cargar ONNX Runtime Web desde el CDN.");
+    }
+
+    ort.env.wasm.wasmPaths =
+      "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/";
+
+    session = await ort.InferenceSession.create(MODEL_URL, {
+      executionProviders: ["wasm"],
+      graphOptimizationLevel: "all"
+    });
+
+    modelInputName = session.inputNames[0];
+    modelOutputName = session.outputNames[0];
+
+    if (!modelInputName || !modelOutputName) {
+      throw new Error("El modelo no declara una entrada o salida válida.");
+    }
+
+    console.info("VisionEPP: entrada del modelo", modelInputName);
+    console.info("VisionEPP: salida del modelo", modelOutputName);
+    console.info("VisionEPP: metadatos de entrada", session.inputMetadata);
+    console.info("VisionEPP: metadatos de salida", session.outputMetadata);
+
+    $("modelStatus").textContent = "Cargado";
+    $("analyzeBtn").disabled = selectedFiles.length === 0;
+    setStatus(
+      "Modelo cargado. Revisa la consola del navegador para confirmar " +
+      "los nombres y dimensiones de entrada y salida.",
+      "success"
+    );
+  } catch (error) {
+    session = null;
+    $("modelStatus").textContent = "Error";
+    setStatus(
+      "No fue posible cargar el modelo: " + error.message +
+      ". Verifica la ruta ./models/best.onnx y que el archivo esté publicado.",
+      "error"
+    );
+    console.error(error);
+  } finally {
+    $("loadModelBtn").disabled = false;
+  }
+}
+
+function loadImage(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const image = new Image();
+
+    image.onload = () => resolve({ image, url });
+    image.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("No se pudo decodificar la imagen."));
+    };
+
+    image.src = url;
+  });
+}
+
+/*
+ * Redimensiona proporcionalmente y centra la imagen sobre un lienzo cuadrado.
+ * El relleno 114 es una suposición habitual de YOLO; hay que confirmar que
+ * coincide con el preprocesamiento usado para entrenar/exportar este modelo.
+ */
+function preprocessImage(image) {
+  const canvas = document.createElement("canvas");
+  canvas.width = INPUT_SIZE;
+  canvas.height = INPUT_SIZE;
+
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  ctx.fillStyle = "rgb(114,114,114)";
+  ctx.fillRect(0, 0, INPUT_SIZE, INPUT_SIZE);
+
+  const scale = Math.min(
+    INPUT_SIZE / image.naturalWidth,
+    INPUT_SIZE / image.naturalHeight
+  );
+
+  const resizedWidth = Math.round(image.naturalWidth * scale);
+  const resizedHeight = Math.round(image.naturalHeight * scale);
+
+  const padX = (INPUT_SIZE - resizedWidth) / 2;
+  const padY = (INPUT_SIZE - resizedHeight) / 2;
+
+  ctx.drawImage(image, padX, padY, resizedWidth, resizedHeight);
+
+  const pixels = ctx.getImageData(0, 0, INPUT_SIZE, INPUT_SIZE).data;
+  const planeSize = INPUT_SIZE * INPUT_SIZE;
+  const tensorData = new Float32Array(3 * planeSize);
+
+  for (let i = 0; i < planeSize; i++) {
+    tensorData[i] = pixels[i * 4] / 255;
+    tensorData[planeSize + i] = pixels[i * 4 + 1] / 255;
+    tensorData[2 * planeSize + i] = pixels[i * 4 + 2] / 255;
+  }
+
+  return {
+    tensor: new ort.Tensor("float32", tensorData, [1, 3, INPUT_SIZE, INPUT_SIZE]),
+    scale,
+    padX,
+    padY,
+    originalWidth: image.naturalWidth,
+    originalHeight: image.naturalHeight
+  };
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function boxIoU(a, b) {
+  const left = Math.max(a.x1, b.x1);
+  const top = Math.max(a.y1, b.y1);
+  const right = Math.min(a.x2, b.x2);
+  const bottom = Math.min(a.y2, b.y2);
+
+  const intersection =
+    Math.max(0, right - left) * Math.max(0, bottom - top);
+
+  const areaA = Math.max(0, a.x2 - a.x1) * Math.max(0, a.y2 - a.y1);
+  const areaB = Math.max(0, b.x2 - b.x1) * Math.max(0, b.y2 - b.y1);
+  const union = areaA + areaB - intersection;
+
+  return union > 0 ? intersection / union : 0;
+}
+
+/*
+ * Decodificador para salida YOLO [1, 14, 8400]:
+ * 4 canales de caja y 10 canales de clase.
+ * No aplica sigmoid automáticamente: se asume que los valores de clase
+ * de la salida exportada ya son puntuaciones comparables con el umbral.
+ */
+function decodeOutput(outputTensor, transform, confidenceThreshold, iouThreshold) {
+  const dims = outputTensor.dims;
+  const data = outputTensor.data;
+
+  if (!dims || dims.length !== 3 || dims[0] !== 1) {
+    throw new Error(
+      "Forma de salida inesperada: " + JSON.stringify(dims) +
+      ". Se esperaba [1,14,8400]."
+    );
+  }
+
+  let channels, candidateCount, channelFirst;
+
+  if (dims[1] === 4 + CLASSES.length) {
+    channels = dims[1];
+    candidateCount = dims[2];
+    channelFirst = true;
+  } else if (dims[2] === 4 + CLASSES.length) {
+    candidateCount = dims[1];
+    channels = dims[2];
+    channelFirst = false;
+  } else {
+    throw new Error(
+      "Salida incompatible con 10 clases: " + JSON.stringify(dims)
+    );
+  }
+
+  const at = (channel, candidate) =>
+    channelFirst
+      ? data[channel * candidateCount + candidate]
+      : data[candidate * channels + channel];
+
+  const candidates = [];
+
+  for (let i = 0; i < candidateCount; i++) {
+    const cx = at(0, i);
+    const cy = at(1, i);
+    const width = at(2, i);
+    const height = at(3, i);
+
+    if (![cx, cy, width, height].every(Number.isFinite)) continue;
+    if (width <= 0 || height <= 0) continue;
+
+    let classId = -1;
+    let score = -Infinity;
+
+    for (let c = 0; c < CLASSES.length; c++) {
+      const value = at(4 + c, i);
+      if (Number.isFinite(value) && value > score) {
+        score = value;
+        classId = c;
+      }
+    }
+
+    if (classId < 0 || score < confidenceThreshold) continue;
+
+    /*
+     * El modelo devuelve cajas en coordenadas de la entrada 640x640.
+     * Quitamos el padding y revertimos el escalado del letterbox.
+     */
+    const x1Input = cx - width / 2;
+    const y1Input = cy - height / 2;
+    const x2Input = cx + width / 2;
+    const y2Input = cy + height / 2;
+
+    const x1 = clamp(
+      (x1Input - transform.padX) / transform.scale,
+      0, transform.originalWidth
+    );
+    const y1 = clamp(
+      (y1Input - transform.padY) / transform.scale,
+      0, transform.originalHeight
+    );
+    const x2 = clamp(
+      (x2Input - transform.padX) / transform.scale,
+      0, transform.originalWidth
+    );
+    const y2 = clamp(
+      (y2Input - transform.padY) / transform.scale,
+      0, transform.originalHeight
+    );
+
+    if (x2 <= x1 || y2 <= y1) continue;
+
+    candidates.push({
+      classId,
+      className: CLASSES[classId],
+      confidence: score,
+      x1, y1, x2, y2
+    });
+  }
+
+  // NMS independiente por clase.
+  const kept = [];
+
+  for (let classId = 0; classId < CLASSES.length; classId++) {
+    const group = candidates
+      .filter(item => item.classId === classId)
+      .sort((a, b) => b.confidence - a.confidence);
+
+    while (group.length) {
+      const best = group.shift();
+      kept.push(best);
+
+      for (let i = group.length - 1; i >= 0; i--) {
+        if (boxIoU(best, group[i]) > iouThreshold) {
+          group.splice(i, 1);
+        }
+      }
+    }
+  }
+
+  return kept.sort((a, b) => b.confidence - a.confidence);
+}
+
+function makeCounts(detections) {
+  const counts = {};
+  for (const name of CLASSES) counts[name] = 0;
+  for (const detection of detections) counts[detection.className]++;
+  return counts;
+}
+
+function annotateImage(image, detections) {
+  const canvas = document.createElement("canvas");
+  canvas.width = image.naturalWidth;
+  canvas.height = image.naturalHeight;
+
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(image, 0, 0);
+
+  const lineWidth = Math.max(
+    2,
+    Math.min(canvas.width, canvas.height) / 350
+  );
+
+  ctx.lineWidth = lineWidth;
+  ctx.font = `bold ${Math.max(14, Math.min(canvas.width, canvas.height) / 45)}px sans-serif`;
+  ctx.textBaseline = "top";
+
+  for (const detection of detections) {
+    const { x1, y1, x2, y2, className, confidence } = detection;
+    const width = x2 - x1;
+    const height = y2 - y1;
+    const label = `${className} ${(confidence * 100).toFixed(1)}%`;
+
+    // Colores distintos para clases de presencia y ausencia.
+    const isAbsence = className.startsWith("Sin ");
+    const color = isAbsence ? "#e53935" : "#00a86b";
+
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.strokeRect(x1, y1, width, height);
+
+    const textWidth = ctx.measureText(label).width;
+    const textHeight = Math.max(20, parseInt(ctx.font, 10) + 6);
+    const labelY = Math.max(0, y1 - textHeight);
+
+    ctx.fillRect(x1, labelY, textWidth + 10, textHeight);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(label, x1 + 5, labelY + 2);
+  }
+
+  return canvas;
+}
+
+async function analyzeOne(file, index, total) {
+  let objectUrl = null;
+
+  try {
+    setStatus(`Procesando fotografía ${index + 1} de ${total}: ${file.name}`);
+
+    const loaded = await loadImage(file);
+    const image = loaded.image;
+    objectUrl = loaded.url;
+
+    const transform = preprocessImage(image);
+    const feeds = {
+      [modelInputName]: transform.tensor
+    };
+
+    const outputMap = await session.run(feeds);
+    const outputTensor = outputMap[modelOutputName];
+
+    if (!outputTensor) {
+      throw new Error("No se encontró la salida esperada del modelo.");
+    }
+
+    const detections = decodeOutput(
+      outputTensor,
+      transform,
+      Number($("threshold").value),
+      Number($("nmsThreshold").value)
+    );
+
+    const counts = makeCounts(detections);
+    const annotatedCanvas = annotateImage(image, detections);
+    const annotatedDataUrl = annotatedCanvas.toDataURL("image/png");
+
+    const report = {
+      fileName: file.name,
+      relativePath: file.webkitRelativePath || file.name,
+      fileSizeBytes: file.size,
+      mimeType: file.type,
+      imageWidth: image.naturalWidth,
+      imageHeight: image.naturalHeight,
+      status: "COMPLETED_PRELIMINARY",
+      detector: "YOLO ONNX candidate",
+      modelPath: MODEL_URL,
+      inputSize: INPUT_SIZE,
+      confidenceThreshold: Number($("threshold").value),
+      nmsIouThreshold: Number($("nmsThreshold").value),
+      detectionsCount: detections.length,
+      counts,
+      detections: detections.map(d => ({
+        classId: d.classId,
+        className: d.className,
+        confidence: d.confidence,
+        box: {
+          x1: d.x1,
+          y1: d.y1,
+          x2: d.x2,
+          y2: d.y2
+        }
+      })),
+      reviewRequired: true,
+      safetyDecisionReady: false,
+      error: null,
+      _originalDataUrl: objectUrl,
+      _annotatedDataUrl: annotatedDataUrl
+    };
+
+    // La imagen original y la anotada se mantienen en la página, no en la exportación.
+    reports.push(report);
+    objectUrl = null; // Se conserva mientras la página muestra el resultado.
+    renderReports();
+  } catch (error) {
+    console.error("Error en imagen", file.name, error);
+
+    reports.push({
+      fileName: file.name,
+      relativePath: file.webkitRelativePath || file.name,
+      fileSizeBytes: file.size,
+      mimeType: file.type,
+      status: "ERROR",
+      detectionsCount: 0,
+      counts: null,
+      detections: [],
+      reviewRequired: true,
+      safetyDecisionReady: false,
+      error: error.message,
+      _originalDataUrl: null,
+      _annotatedDataUrl: null
+    });
+
+    renderReports();
+  } finally {
+    // Si no se incorporó a un reporte, liberar la URL temporal.
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+  }
+
+  updateSummary();
+  updateExportButtons();
+}
+
+async function analyzeBatch() {
+  if (!session || !selectedFiles.length || isRunning) return;
+
+  isRunning = true;
+  $("analyzeBtn").disabled = true;
+  $("loadModelBtn").disabled = true;
+  $("imageFiles").disabled = true;
+  $("folderFiles").disabled = true;
+
+  reports = [];
+  renderReports();
+  updateSummary();
+
+  try {
+    for (let i = 0; i < selectedFiles.length; i++) {
+      await analyzeOne(selectedFiles[i], i, selectedFiles.length);
+    }
+
+    const failures = reports.filter(r => r.status === "ERROR").length;
+    setStatus(
+      `Lote terminado. ${reports.length - failures} fotografía(s) procesadas; ` +
+      `${failures} error(es). Revisa cada resultado visualmente.`,
+      failures ? "error" : "success"
+    );
+  } catch (error) {
+    setStatus("Error durante el lote: " + error.message, "error");
+  } finally {
+    isRunning = false;
+    $("loadModelBtn").disabled = false;
+    $("imageFiles").disabled = false;
+    $("folderFiles").disabled = false;
+    $("analyzeBtn").disabled = !session || selectedFiles.length === 0;
+    updateSummary();
+    updateExportButtons();
+  }
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function renderReports() {
+  const container = $("results");
+
+  if (!reports.length) {
+    container.innerHTML =
+      '<div class="empty">Todavía no hay fotografías procesadas.</div>';
+    return;
+  }
+
+  container.innerHTML = "";
+
+  for (const report of reports) {
+    const card = document.createElement("article");
+    card.className = "result-card";
+
+    const heading = document.createElement("div");
+    heading.className = "result-heading";
+
+    const title = document.createElement("h3");
+    title.textContent = report.fileName;
+
+    const status = document.createElement("span");
+    status.className = "muted";
+    status.textContent = report.status === "ERROR"
+      ? "Error de procesamiento"
+      : `${report.detectionsCount} detección(es) · Revisión pendiente`;
+
+    heading.append(title, status);
+    card.appendChild(heading);
+
+    if (report.status === "ERROR") {
+      const error = document.createElement("p");
+      error.className = "status error";
+      error.textContent = report.error || "Error no especificado.";
+      card.appendChild(error);
+      container.appendChild(card);
+      continue;
+    }
+
+    const pair = document.createElement("div");
+    pair.className = "image-pair";
+
+    const originalFrame = document.createElement("div");
+    originalFrame.className = "image-frame";
+    const originalLabel = document.createElement("p");
+    originalLabel.className = "image-label";
+    originalLabel.textContent = "Imagen original";
+    const original = document.createElement("img");
+    original.src = report._originalDataUrl;
+    original.alt = "Fotografía original " + report.fileName;
+    original.loading = "lazy";
+    originalFrame.append(originalLabel, original);
+
+    const annotatedFrame = document.createElement("div");
+    annotatedFrame.className = "image-frame";
+    const annotatedLabel = document.createElement("p");
+    annotatedLabel.className = "image-label";
+    annotatedLabel.textContent = "Imagen analizada con detecciones";
+    const annotated = document.createElement("img");
+    annotated.src = report._annotatedDataUrl;
+    annotated.alt = "Detecciones preliminares " + report.fileName;
+    annotated.loading = "lazy";
+    annotatedFrame.append(annotatedLabel, annotated);
+
+    pair.append(originalFrame, annotatedFrame);
+    card.appendChild(pair);
+
+    const tableTitle = document.createElement("h3");
+    tableTitle.className = "class-table";
+    tableTitle.textContent = "Conteo por clase";
+    card.appendChild(tableTitle);
+
+    const wrap = document.createElement("div");
+    wrap.className = "table-wrap";
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    thead.innerHTML = "<tr><th>Clase</th><th>Detecciones</th></tr>";
+    const tbody = document.createElement("tbody");
+
+    for (const className of CLASSES) {
+      const tr = document.createElement("tr");
+      const tdName = document.createElement("td");
+      tdName.textContent = className;
+      const tdCount = document.createElement("td");
+      tdCount.textContent = String(report.counts[className] || 0);
+      tr.append(tdName, tdCount);
+      tbody.appendChild(tr);
+    }
+
+    table.append(thead, tbody);
+    wrap.appendChild(table);
+    card.appendChild(wrap);
+
+    const metadata = document.createElement("p");
+    metadata.className = "muted";
+    metadata.textContent =
+      `${report.imageWidth} × ${report.imageHeight}px · ` +
+      `${(report.fileSizeBytes / 1024).toFixed(1)} KB · ` +
+      `${report.relativePath}`;
+    card.appendChild(metadata);
+
+    const warning = document.createElement("p");
+    warning.className = "warning";
+    warning.textContent =
+      "Resultado preliminar. Confirma las cajas, las clases y los objetos omitidos.";
+    card.appendChild(warning);
+
+    container.appendChild(card);
+  }
+}
+
+function updateSummary() {
+  $("totalImages").textContent =
+    reports.filter(r => r.status === "COMPLETED_PRELIMINARY").length;
+
+  $("totalErrors").textContent =
+    reports.filter(r => r.status === "ERROR").length;
+
+  const successful = reports.filter(r => r.status === "COMPLETED_PRELIMINARY");
+  $("totalDetections").textContent =
+    successful.reduce((sum, report) => sum + report.detectionsCount, 0);
+
+  const totals = Object.fromEntries(CLASSES.map(name => [name, 0]));
+  for (const report of successful) {
+    for (const name of CLASSES) {
+      totals[name] += report.counts?.[name] || 0;
+    }
+  }
+
+  const tbody = $("globalCounts");
+  tbody.innerHTML = "";
+
+  if (!successful.length) {
+    tbody.innerHTML = '<tr><td colspan="2">Sin resultados.</td></tr>';
+    return;
+  }
+
+  for (const name of CLASSES) {
+    const row = document.createElement("tr");
+    const label = document.createElement("td");
+    label.textContent = name;
+    const count = document.createElement("td");
+    count.textContent = String(totals[name]);
+    row.append(label, count);
+    tbody.appendChild(row);
+  }
+}
+
+function updateExportButtons() {
+  const hasReports = reports.length > 0;
+  $("jsonBtn").disabled = !hasReports || isRunning;
+  $("csvBtn").disabled = !hasReports || isRunning;
+}
+
+function exportJSON() {
+  if (!reports.length) return;
+
+  const exportData = {
+    application: "VisionEPP",
+    reportType: "BATCH_IMAGE_ANALYSIS",
+    generatedAt: new Date().toISOString(),
+    modelPath: MODEL_URL,
+    modelInputSize: INPUT_SIZE,
+    confidenceThreshold: Number($("threshold").value),
+    nmsIouThreshold: Number($("nmsThreshold").value),
+    classNames: CLASSES,
+    totalReports: reports.length,
+    successfulImages: reports.filter(r => r.status === "COMPLETED_PRELIMINARY").length,
+    errors: reports.filter(r => r.status === "ERROR").length,
+    reviewRequired: true,
+    safetyDecisionReady: false,
+    note: "Conteos de detecciones del modelo; cero detecciones no confirma ausencia de EPP.",
+    reports: reports.map(report => {
+      const clean = { ...report };
+      delete clean._originalDataUrl;
+      delete clean._annotatedDataUrl;
+      return clean;
+    })
+  };
+
+  downloadBlob(
+    JSON.stringify(exportData, null, 2),
+    "visionepp-lote-" + dateStamp() + ".json",
+    "application/json;charset=utf-8"
+  );
+}
+
+function exportCSV() {
+  if (!reports.length) return;
+
+  const rows = [[
+    "archivo", "ruta_relativa", "estado", "ancho", "alto",
+    "clase", "cantidad", "confianza_minima", "error"
+  ]];
+
+  for (const report of reports) {
+    if (report.status === "ERROR") {
+      rows.push([
+        report.fileName,
+        report.relativePath,
+        report.status,
+        "", "", "", "",
+        $("threshold").value,
+        report.error || ""
+      ]);
+      continue;
+    }
+
+    for (const className of CLASSES) {
+      rows.push([
+        report.fileName,
+        report.relativePath,
+        report.status,
+        report.imageWidth,
+        report.imageHeight,
+        className,
+        report.counts[className] || 0,
+        report.confidenceThreshold,
+        ""
+      ]);
+    }
+  }
+
+  const csv = rows.map(row => row.map(csvEscape).join(",")).join("\r\n");
+  downloadBlob(
+    "\uFEFF" + csv,
+    "visionepp-lote-" + dateStamp() + ".csv",
+    "text/csv;charset=utf-8"
+  );
+}
+
+function csvEscape(value) {
+  const text = String(value ?? "");
+  return '"' + text.replace(/"/g, '""') + '"';
+}
+
+function dateStamp() {
+  return new Date().toISOString().replace(/[:.]/g, "-");
+}
+
+function downloadBlob(content, filename, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function clearResults() {
+  if (isRunning) return;
+
+  for (const report of reports) {
+    if (report._originalDataUrl) {
+      URL.revokeObjectURL(report._originalDataUrl);
+    }
+  }
+
+  reports = [];
+  renderReports();
+  updateSummary();
+  updateExportButtons();
+  setStatus("Resultados limpiados. Puedes seleccionar otro lote.");
+}
+</script>
+</body>
+</html>
