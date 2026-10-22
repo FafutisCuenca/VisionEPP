@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Comparación experimental de umbrales del modelo YOLO ONNX para VisionEPP.">
+  <title>VisionEPP | Comparación de umbrales YOLOv11</title>
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.min.js"></script>
+  <style>
+    :root { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color:#172b3a; background:#f2f5f8; }
+    * { box-sizing:border-box; }
+    body { max-width:1200px; margin:0 auto; padding:20px; }
+    h1 { margin-bottom:5px; } h2 { margin-top:0; font-size:1.15rem; }
+    .subtitle,.note { color:#526575; line-height:1.5; }
+    .panel { background:#fff; border:1px solid #d7e0e8; border-radius:10px; padding:18px; margin:16px 0; }
+    button,input,select { font:inherit; margin:5px 5px 5px 0; }
+    button { padding:10px 15px; border:0; border-radius:6px; background:#145c91; color:#fff; cursor:pointer; }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    input[type=file] { max-width:100%; }
+    img { display:block; max-width:100%; max-height:300px; object-fit:contain; margin-top:12px; }
+    .status { padding:12px; border-radius:6px; background:#eaf0f5; overflow-wrap:anywhere; }
+    .ok { color:#176b3a; } .error { color:#b42318; }
+    .comparison { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .result-card { min-width:0; border:1px solid #d7e0e8; border-radius:8px; padding:12px; }
+    .canvas-wrap { width:100%; overflow:auto; background:#eef2f6; border-radius:6px; padding:6px; }
+    canvas { display:block; width:100%; height:auto; max-height:600px; object-fit:contain; }
+    pre,textarea { width:100%; overflow:auto; overflow-wrap:anywhere; white-space:pre-wrap; background:#f5f7fa; border:1px solid #d7e0e8; border-radius:6px; padding:12px; font-size:13px; }
+    textarea { min-height:200px; font-family:ui-monospace,Consolas,monospace; }
+    .legend { display:flex; flex-wrap:wrap; gap:12px; font-size:.9rem; }
+    .legend span::before { content:""; display:inline-block; width:12px; height:12px; margin-right:5px; border-radius:2px; vertical-align:-1px; }
+    .legend .present::before { background:#16803c; } .legend .absent::before { background:#d92d20; }
+    code { background:#eef2f6; padding:2px 5px; border-radius:4px; }
+    @media (max-width:760px) { body{padding:12px} .comparison{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <h1>VisionEPP | Comparación de umbrales YOLOv11</h1>
+  <p class="subtitle">Prueba independiente del modelo ONNX. Ejecuta una sola inferencia y compara el filtrado con umbrales de 0.45 y 0.25. No modifica la aplicación principal.</p>
+
+  <section class="panel">
+    <h2>1. Modelo e imagen</h2>
+    <p>Modelo: <code>./models/best.onnx</code></p>
+    <p>Imagen inicial: <code>./prueba-epp.jpg</code></p>
+    <label for="imageFile">Seleccionar otra fotografía:</label>
+    <input id="imageFile" type="file" accept="image/jpeg,image/png,image/webp">
+    <img id="sourceImage" alt="Fotografía original" hidden>
+    <p id="imageInfo" class="note">Cargando fotografía...</p>
+  </section>
+
+  <section class="panel">
+    <h2>2. Ejecutar comparación</h2>
+    <p class="note">Ambas opciones usan la misma inferencia, preprocesamiento y NMS. Solo cambia el umbral mínimo de confianza. Entrada experimental: 640 × 640, RGB, NCHW, píxeles / 255 y relleno gris 114. El preprocesamiento aún debe contrastarse con la referencia original.</p>
+    <button id="runButton" disabled>Ejecutar comparación 0.45 vs 0.25</button>
+    <p id="status" class="status">Preparando...</p>
+  </section>
+
+  <section class="panel">
+    <h2>3. Resultados visuales</h2>
+    <div class="legend"><span class="present">Clases de EPP</span><span class="absent">Clases “Sin EPP”</span></div>
+    <p class="note">Las cajas son preliminares y no representan una validación de seguridad. Una detección de “Sin EPP” no prueba por sí sola que el trabajador carezca del equipo.</p>
+    <div class="comparison">
+      <div class="result-card">
+        <h2>Umbral 0.45 (actual)</h2>
+        <div class="canvas-wrap"><canvas id="canvas45"></canvas></div>
+        <pre id="summary45">Aún no hay resultados.</pre>
+      </div>
+      <div class="result-card">
+        <h2>Umbral 0.25 (más sensible)</h2>
+        <div class="canvas-wrap"><canvas id="canvas25"></canvas></div>
+        <pre id="summary25">Aún no hay resultados.</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>4. Comparación de conteos</h2>
+    <pre id="comparisonSummary">Ejecuta la comparación para ver los conteos.</pre>
+  </section>
+
+  <section class="panel">
+    <h2>5. Reporte JSON</h2>
+    <button id="downloadButton" disabled>Descargar reporte JSON</button>
+    <button id="selectButton" disabled>Seleccionar reporte</button>
+    <textarea id="report" readonly placeholder="El reporte completo aparecerá aquí."></textarea>
+  </section>
+
+<script>
+(() => {
+  'use strict';
+
+  const MODEL_URL = './models/best.onnx';
+  const DEFAULT_IMAGE_URL = './prueba-epp.jpg';
+  const INPUT_W = 640, INPUT_H = 640;
+  const THRESHOLDS = [0.45, 0.25];
+  const NMS_IOU_THRESHOLD = 0.70;
+  const PPE_CLASSES = [
+    'Botas', 'Guantes', 'Lentes de seguridad', 'Casco',
+    'Sin botas', 'Sin guantes', 'Sin lentes', 'Sin casco',
+    'Sin chaleco', 'Chaleco'
+  ];
+  const $ = id => document.getElementById(id);
+  let session = null, imageObjectUrl = null, reportData = null, busy = false;
+
+  function setStatus(message, type = '') {
+    $('status').textContent = message;
+    $('status').className = 'status ' + type;
+  }
+
+  function loadImage(url) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error('No se pudo cargar la imagen: ' + url));
+      img.src = url;
+    });
+  }
+
+  function useImage(img, source) {
+    const preview = $('sourceImage');
+    preview.src = img.src;
+    preview.hidden = false;
+    preview.dataset.source = source;
+    $('imageInfo').textContent = `${source} — ${img.naturalWidth} × ${img.naturalHeight} píxeles`;
+    $('runButton').disabled = false;
+    setStatus('Fotografía lista. Ejecuta la comparación cuando quieras.');
+    $('canvas45').width = $('canvas45').height = 0;
+    $('canvas25').width = $('canvas25').height = 0;
+    $('summary45').textContent = 'Aún no hay resultados.';
+    $('summary25').textContent = 'Aún no hay resultados.';
+    $('comparisonSummary').textContent = 'Ejecuta la comparación para ver los conteos.';
+    $('report').value = '';
+    $('downloadButton').disabled = $('selectButton').disabled = true;
+    reportData = null;
+  }
+
+  async function initializeImage() {
+    try { useImage(await loadImage(DEFAULT_IMAGE_URL), DEFAULT_IMAGE_URL); }
+    catch (error) {
+      $('imageInfo').textContent = 'No se cargó la imagen predeterminada. Selecciona una fotografía local.';
+      setStatus(error.message, 'error');
+    }
+  }
+
+  $('imageFile').addEventListener('change', event => {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    if (imageObjectUrl) URL.revokeObjectURL(imageObjectUrl);
+    imageObjectUrl = URL.createObjectURL(file);
+    loadImage(imageObjectUrl)
+      .then(img => useImage(img, file.name))
+      .catch(error => setStatus(error.message, 'error'));
+  });
+
+  function preprocess(img) {
+    const originalW = img.naturalWidth, originalH = img.naturalHeight;
+    const scale = Math.min(INPUT_W / originalW, INPUT_H / originalH);
+    const resizedW = Math.round(originalW * scale), resizedH = Math.round(originalH * scale);
+    const padX = Math.floor((INPUT_W - resizedW) / 2), padY = Math.floor((INPUT_H - resizedH) / 2);
+    const canvas = document.createElement('canvas');
+    canvas.width = INPUT_W; canvas.height = INPUT_H;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    ctx.fillStyle = 'rgb(114,114,114)';
+    ctx.fillRect(0, 0, INPUT_W, INPUT_H);
+    ctx.drawImage(img, padX, padY, resizedW, resizedH);
+    const rgba = ctx.getImageData(0, 0, INPUT_W, INPUT_H).data;
+    const planeSize = INPUT_W * INPUT_H, tensorData = new Float32Array(3 * planeSize);
+    for (let i = 0; i < planeSize; i++) {
+      tensorData[i] = rgba[i * 4] / 255;
+      tensorData[planeSize + i] = rgba[i * 4 + 1] / 255;
+      tensorData[2 * planeSize + i] = rgba[i * 4 + 2] / 255;
+    }
+    return {
+      tensor: new ort.Tensor('float32', tensorData, [1, 3, INPUT_H, INPUT_W]),
+      originalW, originalH, scale, resizedW, resizedH, padX, padY,
+      inputW: INPUT_W, inputH: INPUT_H, fillRGB: [114,114,114],
+      layout: 'NCHW', channelOrder: 'RGB', normalization: 'pixel / 255'
+    };
+  }
+
+  async function getSession() {
+    if (session) return session;
+    if (typeof ort === 'undefined') throw new Error('ONNX Runtime Web no está disponible. Verifica la conexión al CDN.');
+    ort.env.wasm.numThreads = 1;
+    session = await ort.InferenceSession.create(MODEL_URL, {
+      executionProviders: ['wasm'], graphOptimizationLevel: 'all'
+    });
+    return session;
+  }
+
+  function tensorSummary(tensor) {
+    const data = tensor.data;
+    let min = Infinity, max = -Infinity, finiteValues = 0;
+    const firstValues = [];
+    for (let i = 0; i < data.length; i++) {
+      const value = Number(data[i]);
+      if (Number.isFinite(value)) { min = Math.min(min, value); max = Math.max(max, value); finiteValues++; }
+      if (firstValues.length < 24) firstValues.push(Number.isFinite(value) ? value : String(value));
+    }
+    return {
+      type: tensor.type, dimensions: Array.from(tensor.dims), values: data.length, finiteValues,
+      min: finiteValues ? min : null, max: finiteValues ? max : null, firstValues
+    };
+  }
+
+  function calculateIoU(a, b) {
+    const left = Math.max(a.x1,b.x1), top = Math.max(a.y1,b.y1);
+    const right = Math.min(a.x2,b.x2), bottom = Math.min(a.y2,b.y2);
+    const intersection = Math.max(0,right-left) * Math.max(0,bottom-top);
+    const areaA = Math.max(0,a.x2-a.x1) * Math.max(0,a.y2-a.y1);
+    const areaB = Math.max(0,b.x2-b.x1) * Math.max(0,b.y2-b.y1);
+    const union = areaA + areaB - intersection;
+    return union > 0 ? intersection / union : 0;
+  }
+
+  function decodeYoloOutput(tensor, threshold) {
+    const dims = Array.from(tensor.dims);
+    if (dims.length !== 3 || dims[0] !== 1) throw new Error(`Salida inesperada: [${dims.join(', ')}].`);
+    let channels, candidates, transposed = false;
+    if (dims[1] === 14) { channels = dims[1]; candidates = dims[2]; }
+    else if (dims[2] === 14) { channels = dims[2]; candidates = dims[1]; transposed = true; }
+    else throw new Error(`Se esperaban 14 canales (4 coordenadas + 10 clases); recibido [${dims.join(', ')}].`);
+    const data = tensor.data;
+    const at = (channel, candidate) => transposed ? data[candidate * channels + channel] : data[channel * candidates + candidate];
+    const raw = [];
+    for (let i = 0; i < candidates; i++) {
+      const cx = Number(at(0,i)), cy = Number(at(1,i)), w = Number(at(2,i)), h = Number(at(3,i));
+      if (![cx,cy,w,h].every(Number.isFinite) || w <= 0 || h <= 0) continue;
+      let bestClass = -1, bestScore = -Infinity;
+      for (let c = 0; c < PPE_CLASSES.length; c++) {
+        const score = Number(at(4+c,i));
+        if (Number.isFinite(score) && score > bestScore) { bestScore = score; bestClass = c; }
+      }
+      if (bestClass < 0 || bestScore < threshold) continue;
+      raw.push({ classId:bestClass, label:PPE_CLASSES[bestClass], score:bestScore,
+        x1:cx-w/2, y1:cy-h/2, x2:cx+w/2, y2:cy+h/2 });
+    }
+    const beforeNms = raw.length, kept = [];
+    for (const classId of [...new Set(raw.map(d => d.classId))]) {
+      const remaining = raw.filter(d => d.classId === classId).sort((a,b) => b.score-a.score);
+      while (remaining.length) {
+        const best = remaining.shift();
+        kept.push(best);
+        for (let i = remaining.length - 1; i >= 0; i--) {
+          if (calculateIoU(best, remaining[i]) > NMS_IOU_THRESHOLD) remaining.splice(i,1);
+        }
+      }
+    }
+    kept.sort((a,b) => b.score-a.score);
+    return { tensorShape:dims, beforeNms, detections:kept };
+  }
+
+  function mapBoxToOriginal(d, prep) {
+    return {
+      x1:Math.max(0,Math.min(prep.originalW,(d.x1-prep.padX)/prep.scale)),
+      y1:Math.max(0,Math.min(prep.originalH,(d.y1-prep.padY)/prep.scale)),
+      x2:Math.max(0,Math.min(prep.originalW,(d.x2-prep.padX)/prep.scale)),
+      y2:Math.max(0,Math.min(prep.originalH,(d.y2-prep.padY)/prep.scale))
+    };
+  }
+
+  function drawDetections(img, prep, detections, canvasId) {
+    const canvas = $(canvasId), ctx = canvas.getContext('2d');
+    canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    const lineWidth = Math.max(2,canvas.width/500), fontSize = Math.max(12,canvas.width/65);
+    ctx.lineWidth = lineWidth; ctx.font = `${fontSize}px Arial`;
+    for (const d of detections) {
+      const b = mapBoxToOriginal(d,prep), w = b.x2-b.x1, h = b.y2-b.y1;
+      if (w <= 0 || h <= 0) continue;
+      const absent = d.label.startsWith('Sin ');
+      const color = absent ? '#d92d20' : '#16803c';
+      ctx.strokeStyle = color; ctx.strokeRect(b.x1,b.y1,w,h);
+      const label = `${d.label} ${(d.score*100).toFixed(1)}%`;
+      const labelHeight = fontSize+7, labelWidth = ctx.measureText(label).width+8;
+      const labelY = Math.max(labelHeight,b.y1);
+      ctx.fillStyle = color; ctx.fillRect(b.x1,labelY-labelHeight,labelWidth,labelHeight);
+      ctx.fillStyle = '#fff'; ctx.fillText(label,b.x1+4,labelY-5);
+    }
+  }
+
+  function makeDetectionReport(decoded, prep) {
+    return decoded.detections.map(d => ({
+      classId:d.classId, label:d.label, score:d.score,
+      boxInput640:{x1:d.x1,y1:d.y1,x2:d.x2,y2:d.y2},
+      boxOriginal:mapBoxToOriginal(d,prep)
+    }));
+  }
+
+  function classCounts(detections) {
+    return PPE_CLASSES.map((className,classId) => ({
+      classId, className, count:detections.filter(d => d.classId === classId).length
+    })).filter(item => item.count > 0);
+  }
+
+  function renderThresholdSummary(elementId, threshold, decoded, detections) {
+    $(elementId).textContent = JSON.stringify({
+      threshold, nmsIouThreshold:NMS_IOU_THRESHOLD,
+      candidatesAfterThreshold:decoded.beforeNms,
+      detectionsAfterNMS:decoded.detections.length,
+      detectionsByClass:classCounts(decoded.detections),
+      detections
+    }, null, 2);
+  }
+
+  async function runComparison() {
+    if (busy) return;
+    busy = true;
+    $('runButton').disabled = true;
+    $('downloadButton').disabled = $('selectButton').disabled = true;
+    $('summary45').textContent = $('summary25').textContent = 'Ejecutando...';
+    $('report').value = '';
+    const startedAt = performance.now();
+    const result = {
+      status:'DIAGNOSTIC_STARTED', timestamp:new Date().toISOString(),
+      runtime:'ONNX Runtime Web', runtimeVersion:'1.22.0', providerRequested:'wasm',
+      model:{source:MODEL_URL,loaded:false,inputNames:[],outputNames:[]},
+      image:null, preprocessing:null, outputs:[], comparisons:[],
+      validation:{
+        modelLoaded:false,inferenceExecuted:false,outputsFound:false,
+        outputShapeCompatibleWithAssumedDecoder:false,
+        preprocessingVerifiedAgainstReference:false,
+        classOrderVerifiedAgainstTrainingConfig:false,
+        detectionsSemanticallyValidated:false,
+        suitableForOperationalSafetyDecisions:false
+      },
+      warnings:[
+        'Preprocesamiento 640x640, RGB, relleno 114 y normalización /255: aún sin verificar contra referencia.',
+        'El decodificador supone salida [1,14,8400]: 4 coordenadas xywh y 10 puntuaciones de clase.',
+        'La comparación de umbrales no demuestra por sí sola la precisión del modelo.',
+        'Las detecciones no están validadas para decisiones operativas de seguridad.'
+      ]
+    };
+    try {
+      setStatus('Cargando modelo ONNX...');
+      const activeSession = await getSession();
+      result.model.loaded = true;
+      result.model.inputNames = [...activeSession.inputNames];
+      result.model.outputNames = [...activeSession.outputNames];
+      result.validation.modelLoaded = true;
+      if (!activeSession.inputNames.length || !activeSession.outputNames.length) throw new Error('El modelo no declara entradas o salidas.');
+      const img = $('sourceImage');
+      if (img.hidden || !img.complete || !img.naturalWidth) throw new Error('Carga primero una fotografía válida.');
+      result.image = {source:img.dataset.source || DEFAULT_IMAGE_URL,width:img.naturalWidth,height:img.naturalHeight};
+      setStatus('Preprocesando imagen...');
+      const prep = preprocess(img);
+      result.preprocessing = {
+        inputWidth:prep.inputW,inputHeight:prep.inputH,tensorShape:Array.from(prep.tensor.dims),
+        tensorLayout:prep.layout,channelOrder:prep.channelOrder,normalization:prep.normalization,
+        fillRGB:prep.fillRGB,scale:prep.scale,resizedWidth:prep.resizedW,resizedHeight:prep.resizedH,
+        padX:prep.padX,padY:prep.padY,verifiedAgainstReference:false
+      };
+      const feeds = {}; feeds[activeSession.inputNames[0]] = prep.tensor;
+      setStatus('Ejecutando una inferencia con WASM...');
+      const outputs = await activeSession.run(feeds);
+      result.validation.inferenceExecuted = true;
+      result.outputs = activeSession.outputNames.map(name => outputs[name] ? {name,found:true,...tensorSummary(outputs[name])} : {name,found:false});
+      result.validation.outputsFound = result.outputs.length > 0 && result.outputs.every(output => output.found);
+      const outputName = activeSession.outputNames[0], outputTensor = outputs[outputName];
+      if (!outputTensor) throw new Error(`No se encontró el tensor ${outputName}.`);
+      setStatus('Comparando los umbrales 0.45 y 0.25...');
+      const decoded45 = decodeYoloOutput(outputTensor,THRESHOLDS[0]);
+      const decoded25 = decodeYoloOutput(outputTensor,THRESHOLDS[1]);
+      result.validation.outputShapeCompatibleWithAssumedDecoder = true;
+      const detections45 = makeDetectionReport(decoded45,prep);
+      const detections25 = makeDetectionReport(decoded25,prep);
+      drawDetections(img,prep,decoded45.detections,'canvas45');
+      drawDetections(img,prep,decoded25.detections,'canvas25');
+      renderThresholdSummary('summary45',THRESHOLDS[0],decoded45,detections45);
+      renderThresholdSummary('summary25',THRESHOLDS[1],decoded25,detections25);
+      result.comparisons = [
+        {threshold:THRESHOLDS[0],nmsIouThreshold:NMS_IOU_THRESHOLD,candidatesAfterThreshold:decoded45.beforeNms,detectionsAfterNMS:decoded45.detections.length,detectionsByClass:classCounts(decoded45.detections),detections:detections45},
+        {threshold:THRESHOLDS[1],nmsIouThreshold:NMS_IOU_THRESHOLD,candidatesAfterThreshold:decoded25.beforeNms,detectionsAfterNMS:decoded25.detections.length,detectionsByClass:classCounts(decoded25.detections),detections:detections25}
+      ];
+      result.status = 'INFERENCE_EXECUTED_THRESHOLD_COMPARISON_PRELIMINARY';
+      $('comparisonSummary').textContent = JSON.stringify({
+        sameInference:true,
+        detectionsAt045:decoded45.detections.length,
+        detectionsAt025:decoded25.detections.length,
+        additionalBoxesAt025:Math.max(0,decoded25.detections.length-decoded45.detections.length),
+        countsAt045:classCounts(decoded45.detections),
+        countsAt025:classCounts(decoded25.detections),
+        note:'Las cajas adicionales requieren inspección visual; no se consideran aciertos automáticamente.'
+      },null,2);
+      setStatus(`Comparación completada. Umbral 0.45: ${decoded45.detections.length} cajas; umbral 0.25: ${decoded25.detections.length} cajas.`,'ok');
+    } catch (error) {
+      result.status = 'DIAGNOSTIC_ERROR';
+      result.error = {name:error?.name || 'Error',message:error?.message || String(error)};
+      setStatus('Error: ' + result.error.message,'error');
+      $('comparisonSummary').textContent = 'No se pudo completar la comparación.';
+    } finally {
+      result.elapsedMilliseconds = Math.round(performance.now()-startedAt);
+      reportData = result;
+      $('report').value = JSON.stringify(result,null,2);
+      $('downloadButton').disabled = $('selectButton').disabled = false;
+      $('runButton').disabled = false;
+      busy = false;
+    }
+  }
+
+  $('runButton').addEventListener('click',runComparison);
+  $('downloadButton').addEventListener('click',() => {
+    if (!reportData) return;
+    const blob = new Blob([JSON.stringify(reportData,null,2)],{type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url; link.download = 'comparacion-umbrales-yolov11.json'; link.click();
+    setTimeout(() => URL.revokeObjectURL(url),1000);
+  });
+  $('selectButton').addEventListener('click',() => {
+    $('report').focus(); $('report').select();
+    setStatus('Reporte seleccionado. Puedes copiarlo con Ctrl+C.','ok');
+  });
+  initializeImage();
+})();
+</script>
+</body>
+</html>
