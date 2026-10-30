@@ -903,3 +903,93 @@
 }
 
 
+/* =====================================================
+   VISIONEPP — TABLA COMPACTA DE TIPOS DE OBRA
+   ===================================================== */
+
+/* Reducir el espacio general de la tabla */
+.catalog-table {
+  min-width: 760px;
+  table-layout: auto;
+}
+
+/* Encabezados */
+.catalog-table th {
+  padding: 10px 13px;
+  font-size: 10px;
+}
+
+/* Filas más compactas */
+.catalog-table td {
+  padding: 9px 13px;
+  font-size: 11px;
+  line-height: 1.35;
+  vertical-align: middle;
+}
+
+/* Nombre del tipo de obra */
+.catalog-table td:first-child {
+  min-width: 175px;
+  white-space: nowrap;
+}
+
+/* Descripciones */
+.catalog-table td:nth-child(2) {
+  min-width: 280px;
+  max-width: 480px;
+  color: #718096;
+  line-height: 1.4;
+}
+
+/* Estatus */
+.catalog-table td:nth-child(3) {
+  min-width: 95px;
+  white-space: nowrap;
+}
+
+/* Columna de acciones */
+.catalog-table th:last-child,
+.catalog-table td:last-child {
+  width: 185px;
+  min-width: 185px;
+}
+
+/* Botones siempre en una sola línea */
+.catalog-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+/* Botones más pequeños */
+.catalog-actions .catalog-button {
+  min-height: 28px;
+  padding: 5px 9px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+/* Filas más discretas al pasar el cursor */
+.catalog-table tbody tr:hover {
+  background: #f4f9fd;
+}
+
+/* Mensaje de tabla vacía */
+.catalog-table .catalog-empty {
+  padding: 22px !important;
+}
+
+/* En pantallas pequeñas se conserva el desplazamiento horizontal */
+@media (max-width: 850px) {
+  .catalog-table {
+    min-width: 760px;
+  }
+}
+
+
+
+
+
