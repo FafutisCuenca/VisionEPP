@@ -1,288 +1,77 @@
 
-<!doctype html>
-<html lang="es-MX">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <meta name="description"
-    content="VisionEPP: administración de obras y seguridad laboral.">
-  <meta name="theme-color" content="#102a43">
-
-  <title>VisionEPP | Centro de administración</title>
-
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/admin.css">
-</head>
-
-<body>
-
-  <!-- ENCABEZADO -->
-  <header class="site-header admin-header">
-    <div class="header-content">
-
-      <a class="brand" href="./" aria-label="VisionEPP">
-        <span class="brand-mark">V</span>
-        <span>VisionEPP</span>
-      </a>
-
-      <nav class="main-navigation" aria-label="Navegación principal">
-        <a href="./" class="nav-link">Inspección</a>
-        <a href="admin.html" class="nav-link active"
-           aria-current="page">Administración</a>
-      </nav>
-
-      <span class="header-label">Centro de control</span>
-
-    </div>
-  </header>
-
-  <main class="admin-container">
-
-    <!-- BIENVENIDA -->
-    <section class="dashboard-welcome">
-      <div>
-        <p class="eyebrow">VISIONEPP / ADMINISTRACIÓN</p>
-        <h1>Centro de administración</h1>
-        <p>
-          Gestiona tus proyectos, configura los catálogos y organiza
-          los recursos de Seguridad y Salud en el Trabajo.
-        </p>
-      </div>
-
-      <div class="welcome-indicator">
-        <span class="indicator-dot"></span>
-        Sistema en desarrollo
-      </div>
-    </section>
-
-    <!-- INDICADORES -->
-    <section class="dashboard-metrics">
-
-      <article class="metric-card">
-        <div class="metric-icon metric-blue">▦</div>
-        <div>
-          <span class="metric-label">Obras registradas</span>
-          <strong>0</strong>
-          <small>Proyectos administrados</small>
-        </div>
-      </article>
-
-      <article class="metric-card">
-        <div class="metric-icon metric-teal">⚙</div>
-        <div>
-          <span class="metric-label">Catálogos generales</span>
-          <strong>10</strong>
-          <small>Catálogos previstos</small>
-        </div>
-      </article>
-
-      <article class="metric-card">
-        <div class="metric-icon metric-amber">♙</div>
-        <div>
-          <span class="metric-label">Personal</span>
-          <strong>—</strong>
-          <small>Por registrar</small>
-        </div>
-      </article>
-
-      <article class="metric-card">
-        <div class="metric-icon metric-purple">✓</div>
-        <div>
-          <span class="metric-label">Inspecciones</span>
-          <strong>—</strong>
-          <small>Por integrar</small>
-        </div>
-      </article>
-
-    </section>
-
-    <!-- CONFIGURACIÓN GENERAL -->
-    <section class="dashboard-section">
-
-      <div class="section-title">
-        <div>
-          <p class="eyebrow">01 / CONFIGURACIÓN</p>
-          <h2>Configuración general</h2>
-          <p>
-            Catálogos centrales reutilizables en todos los proyectos.
-          </p>
-        </div>
-
-        <span class="section-counter">10 CATÁLOGOS</span>
-      </div>
-
-      <div class="module-grid">
-
-        <a class="module-card module-featured" href="#tipos-obra">
-          <span class="module-icon">▤</span>
-          <span class="module-content">
-            <strong>Tipos de obra</strong>
-            <small>
-              Construcción, infraestructura, instalaciones,
-              mantenimiento y más.
-            </small>
-            <span class="module-action">Configurar catálogo →</span>
-          </span>
-        </a>
-
-        <a class="module-card" href="#especialidades">
-          <span class="module-icon">⌘</span>
-          <span class="module-content">
-            <strong>Especialidades</strong>
-            <small>Electricidad, estructuras, soldadura y disciplinas.</small>
-            <span class="module-action">Próximamente</span>
-          </span>
-        </a>
-
-        <a class="module-card" href="#etapas">
-          <span class="module-icon">◷</span>
-          <span class="module-content">
-            <strong>Etapas de obra</strong>
-            <small>Fases y procesos generales de los proyectos.</small>
-            <span class="module-action">Próximamente</span>
-          </span>
-        </a>
-
-        <a class="module-card" href="#actividades">
-          <span class="module-icon">▧</span>
-          <span class="module-content">
-            <strong>Actividades</strong>
-            <small>Trabajos y operaciones que se realizan en obra.</small>
-            <span class="module-action">Próximamente</span>
-          </span>
-        </a>
-
-        <a class="module-card" href="#zonas">
-          <span class="module-icon">⌖</span>
-          <span class="module-content">
-            <strong>Tipos de zona</strong>
-            <small>Áreas de trabajo, circulación y almacenamiento.</small>
-            <span class="module-action">Próximamente</span>
-          </span>
-        </a>
-
-        <a class="module-card" href="#riesgos">
-          <span class="module-icon">⚠</span>
-          <span class="module-content">
-            <strong>Riesgos</strong>
-            <small>Peligros y riesgos asociados a las actividades.</small>
-            <span class="module-action">Próximamente</span>
-          </span>
-        </a>
-
-        <a class="module-card" href="#epp">
-          <span class="module-icon">⛑</span>
-          <span class="module-content">
-            <strong>Equipo de protección</strong>
-            <small>Equipos de protección personal y características.</small>
-            <span class="module-action">Próximamente</span>
-          </span>
-        </a>
-
-        <a class="module-card" href="#maquinaria">
-          <span class="module-icon">⚙</span>
-          <span class="module-content">
-            <strong>Maquinaria y equipos</strong>
-            <small>Equipos, vehículos y herramientas de trabajo.</small>
-            <span class="module-action">Próximamente</span>
-          </span>
-        </a>
-
-        <a class="module-card" href="#objetos">
-          <span class="module-icon">◉</span>
-          <span class="module-content">
-            <strong>Objetos detectables</strong>
-            <small>Elementos revisables mediante visión o inspección humana.</small>
-            <span class="module-action">Próximamente</span>
-          </span>
-        </a>
-
-        <a class="module-card" href="#normativa">
-          <span class="module-icon">§</span>
-          <span class="module-content">
-            <strong>Normativa SST</strong>
-            <small>Referencias normativas y requisitos de seguridad.</small>
-            <span class="module-action">Próximamente</span>
-          </span>
-        </a>
-
-      </div>
-    </section>
-
-    <!-- ADMINISTRACIÓN DE OBRAS -->
-    <section class="dashboard-section">
-
-      <div class="section-title">
-        <div>
-          <p class="eyebrow">02 / PROYECTOS</p>
-          <h2>Administración de obras</h2>
-          <p>
-            Cada proyecto tendrá su propia información y configuración.
-          </p>
-        </div>
-      </div>
-
-      <div class="module-grid work-modules">
-
-        <a class="module-card" href="#registro-obras">
-          <span class="module-icon">▣</span>
-          <span class="module-content">
-            <strong>Registro de obras</strong>
-            <small>Datos generales, ubicación, clientes y contratistas.</small>
-            <span class="module-action">Próximamente</span>
-          </span>
-        </a>
-
-        <a class="module-card" href="#areas">
-          <span class="module-icon">▦</span>
-          <span class="module-content">
-            <strong>Áreas y zonas</strong>
-            <small>Espacios físicos y zonas de trabajo de cada proyecto.</small>
-            <span class="module-action">Próximamente</span>
-          </span>
-        </a>
-
-        <a class="module-card" href="#personal">
-          <span class="module-icon">♙</span>
-          <span class="module-content">
-            <strong>Personal y empresas</strong>
-            <small>Trabajadores, contratistas, funciones y responsables.</small>
-            <span class="module-action">Próximamente</span>
-          </span>
-        </a>
-
-        <a class="module-card" href="#autorizaciones">
-          <span class="module-icon">✓</span>
-          <span class="module-content">
-            <strong>Autorizaciones</strong>
-            <small>Accesos y actividades permitidas al personal.</small>
-            <span class="module-action">Próximamente</span>
-          </span>
-        </a>
-
-      </div>
-    </section>
-
-    <!-- RESPALDO -->
-    <section class="storage-panel">
-      <div class="storage-icon">◇</div>
-      <div>
-        <strong>Información almacenada localmente</strong>
-        <p>
-          Los datos permanecerán en este navegador. Se podrán respaldar
-          y transferir mediante archivos JSON. No existe sincronización
-          automática entre dispositivos.
-        </p>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="site-footer">
-    <p><strong>VisionEPP</strong> · Centro de administración</p>
-    <p>Gestión de obras y Seguridad y Salud en el Trabajo.</p>
-  </footer>
-
-</body>
-</html>
+{
+  "schemaVersion": 1,
+  "application": "VisionEPP",
+  "catalogs": [
+    {
+      "id": "tipos-obra",
+      "name": "Tipos de obra",
+      "file": "tipos-obra.json",
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "id": "especialidades",
+      "name": "Especialidades",
+      "file": "especialidades.json",
+      "version": 1,
+      "status": "planned"
+    },
+    {
+      "id": "etapas",
+      "name": "Etapas de obra",
+      "file": "etapas.json",
+      "version": 1,
+      "status": "planned"
+    },
+    {
+      "id": "actividades",
+      "name": "Actividades",
+      "file": "actividades.json",
+      "version": 1,
+      "status": "planned"
+    },
+    {
+      "id": "tipos-zona",
+      "name": "Tipos de zona",
+      "file": "tipos-zona.json",
+      "version": 1,
+      "status": "planned"
+    },
+    {
+      "id": "riesgos",
+      "name": "Riesgos",
+      "file": "riesgos.json",
+      "version": 1,
+      "status": "planned"
+    },
+    {
+      "id": "epp",
+      "name": "Equipo de protección personal",
+      "file": "epp.json",
+      "version": 1,
+      "status": "planned"
+    },
+    {
+      "id": "maquinaria",
+      "name": "Maquinaria y equipos",
+      "file": "maquinaria.json",
+      "version": 1,
+      "status": "planned"
+    },
+    {
+      "id": "objetos-detectables",
+      "name": "Objetos detectables",
+      "file": "objetos-detectables.json",
+      "version": 1,
+      "status": "planned"
+    },
+    {
+      "id": "normativa-sst",
+      "name": "Normativa SST",
+      "file": "normativa-sst.json",
+      "version": 1,
+      "status": "planned"
+    }
+  ]
+}
