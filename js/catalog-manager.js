@@ -12,7 +12,7 @@ import {
   saveAdminData
 } from './storage.js';
 
-const CATALOGS_PATH = '../../catalogs/';
+const CATALOGS_PATH = '../catalogs/';
 
 const LOCAL_CATALOG_KEYS = {
   'tipos-obra': 'workTypes'
