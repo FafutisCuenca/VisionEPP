@@ -293,6 +293,7 @@ function renderTable() {
     return matchesSearch && matchesStatus;
   });
 
+
   filtered.forEach(item => {
     const row = createElement('tr');
 
@@ -306,25 +307,24 @@ function renderTable() {
       )
     );
 
+    const actions = createElement('td');
+    const actionGroup = createElement('div', 'catalog-actions');
 
-const actions = createElement('td');
+    actionGroup.append(
+      createButton('Editar', 'catalog-button small secondary', () => {
+        openForm(item);
+      }),
+      createButton(
+        item.status === 'active' ? 'Desactivar' : 'Activar',
+        'catalog-button small secondary',
+        () => toggleStatus(item)
+      )
+    );
 
-const actionGroup = createElement('div', 'catalog-actions');
-
-actionGroup.append(
-  createButton('Editar', 'catalog-button small secondary', () => {
-    openForm(item);
-  }),
-  createButton(
-    item.status === 'active' ? 'Desactivar' : 'Activar',
-    'catalog-button small secondary',
-    () => toggleStatus(item)
-  )
-);
-
-actions.append(actionGroup);
-row.append(actions);
-
+    actions.append(actionGroup);
+    row.append(actions);
+    tbody.append(row);
+  });
 
   if (!filtered.length) {
     const row = createElement('tr');
