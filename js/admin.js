@@ -222,11 +222,16 @@ async function showCatalog() {
 
     catalog = await loadCatalog('tipos-obra');
 
-    renderTable();
+renderTable();
 
-    history.replaceState(null, '', '#tipos-obra');
+history.replaceState(null, '', '#tipos-obra');
 
-  } catch (error) {
+// Llevar automáticamente al usuario al catálogo.
+view.scrollIntoView({
+  behavior: 'smooth',
+  block: 'start'
+});
+    catch (error) {
     console.error(error);
 
     if (dashboard) dashboard.hidden = false;
