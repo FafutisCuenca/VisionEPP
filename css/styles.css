@@ -1045,3 +1045,83 @@ select:focus-visible,
     min-height: 130px;
   }
 }
+
+
+
+/* =========================================
+   VISIONEPP - NAVEGACIÓN PRINCIPAL
+   ========================================= */
+
+.site-header {
+  background: var(--navy);
+  color: var(--white);
+  padding: 0 5%;
+}
+
+.header-content {
+  min-height: 76px;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.main-navigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-link {
+  color: #d2e0e8;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 13px;
+  border-radius: 8px;
+  transition: .2s;
+}
+
+.nav-link:hover {
+  background: rgba(255,255,255,.10);
+  color: var(--white);
+}
+
+.nav-link.active {
+  background: var(--teal);
+  color: var(--navy);
+}
+
+.header-label {
+  color: #bed0dc;
+  font-size: 12px;
+}
+
+@media (max-width: 650px) {
+  .site-header {
+    padding: 0 14px;
+  }
+
+  .header-content {
+    min-height: 68px;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 0;
+  }
+
+  .main-navigation {
+    order: 3;
+    width: 100%;
+  }
+
+  .nav-link {
+    flex: 1;
+    text-align: center;
+  }
+
+  .header-label {
+    font-size: 10px;
+  }
+}
