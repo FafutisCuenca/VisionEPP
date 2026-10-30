@@ -1,0 +1,70 @@
+
+{
+  "schemaVersion": 1,
+  "catalogId": "tipos-obra",
+  "name": "Tipos de obra",
+  "version": 1,
+  "updatedAt": "2026-10-30",
+  "items": [
+    {
+      "id": "obra-edificacion-residencial",
+      "name": "Edificación residencial",
+      "description": "Construcción de viviendas, casas, departamentos y conjuntos habitacionales.",
+      "status": "active"
+    },
+    {
+      "id": "obra-edificacion-comercial",
+      "name": "Edificación comercial",
+      "description": "Construcción de oficinas, locales comerciales, centros comerciales y edificios de servicios.",
+      "status": "active"
+    },
+    {
+      "id": "obra-edificacion-industrial",
+      "name": "Edificación industrial",
+      "description": "Construcción de fábricas, naves industriales, plantas y centros de producción.",
+      "status": "active"
+    },
+    {
+      "id": "obra-infraestructura-vial",
+      "name": "Infraestructura vial",
+      "description": "Construcción y rehabilitación de carreteras, puentes, caminos y vialidades.",
+      "status": "active"
+    },
+    {
+      "id": "obra-infraestructura-hidraulica",
+      "name": "Infraestructura hidráulica",
+      "description": "Construcción de redes de agua potable, drenaje, plantas de tratamiento y obras hidráulicas.",
+      "status": "active"
+    },
+    {
+      "id": "obra-publica-urbana",
+      "name": "Obra pública y urbana",
+      "description": "Construcción y rehabilitación de espacios públicos, infraestructura y equipamiento urbano.",
+      "status": "active"
+    },
+    {
+      "id": "obra-instalaciones",
+      "name": "Instalaciones eléctricas y electromecánicas",
+      "description": "Instalación de sistemas eléctricos, mecánicos, electromecánicos y servicios técnicos.",
+      "status": "active"
+    },
+    {
+      "id": "obra-remodelacion-mantenimiento",
+      "name": "Remodelación y mantenimiento",
+      "description": "Remodelación, adecuación, conservación y mantenimiento de inmuebles e instalaciones.",
+      "status": "active"
+    },
+    {
+      "id": "obra-demolicion",
+      "name": "Demolición",
+      "description": "Demolición parcial o total de estructuras, edificaciones e instalaciones.",
+      "status": "active"
+    },
+    {
+      "id": "obra-urbanizacion",
+      "name": "Urbanización y desarrollos",
+      "description": "Urbanización de terrenos, lotificación y desarrollo de infraestructura para nuevos asentamientos.",
+      "status": "active"
+    }
+  ]
+}
