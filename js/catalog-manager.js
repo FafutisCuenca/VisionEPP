@@ -21,18 +21,24 @@ const LOCAL_CATALOG_KEYS = {
 /**
  * Descarga y valida un archivo JSON.
  */
+
 async function fetchJSON(path) {
-  const response = await fetch(path, {
-    cache: 'no-cache'
-  });
+  const response = await fetch(path, { cache: 'no-cache' });
+  const content = await response.text();
 
   if (!response.ok) {
     throw new Error(
-      `No fue posible cargar el archivo: ${path}`
+      `Error HTTP ${response.status} al cargar: ${response.url}`
     );
   }
 
-  return response.json();
+  try {
+    return JSON.parse(content);
+  } catch {
+    throw new Error(
+      `La respuesta no es JSON. URL solicitada: ${response.url}`
+    );
+  }
 }
 
 /**
