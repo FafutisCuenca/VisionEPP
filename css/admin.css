@@ -438,3 +438,468 @@
     transform: none;
   }
 }
+
+/* =====================================================
+   VISIONEPP — CATÁLOGOS ADMINISTRATIVOS
+   Interfaz profesional para gestión de catálogos
+   ===================================================== */
+
+.catalog-view {
+  width: 100%;
+  margin: 28px auto 45px;
+  padding: 30px;
+  background: #ffffff;
+  border: 1px solid #e1eaf0;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(16, 42, 67, 0.055);
+  animation: catalogAppear .25s ease;
+}
+
+.catalog-view[hidden] {
+  display: none !important;
+}
+
+@keyframes catalogAppear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ENCABEZADO DEL CATÁLOGO */
+
+.catalog-view > .section-title {
+  margin-bottom: 25px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #e8eef3;
+}
+
+.catalog-view > .section-title h1 {
+  margin: 5px 0 8px;
+  color: #102a43;
+  font-size: clamp(25px, 3vw, 32px);
+  font-weight: 750;
+  letter-spacing: -0.8px;
+}
+
+.catalog-view > .section-title p:not(.eyebrow) {
+  color: #718096;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.catalog-view .eyebrow {
+  color: #008577;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+/* BARRA DE ACCIONES */
+
+.catalog-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+/* BOTONES */
+
+.catalog-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 39px;
+  padding: 9px 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .18s, border-color .18s,
+              color .18s, transform .18s, box-shadow .18s;
+}
+
+.catalog-button:hover {
+  transform: translateY(-1px);
+}
+
+.catalog-button.primary {
+  color: #ffffff;
+  background: #0878e8;
+  border-color: #0878e8;
+  box-shadow: 0 4px 10px rgba(8, 120, 232, .16);
+}
+
+.catalog-button.primary:hover {
+  background: #0666c8;
+  box-shadow: 0 5px 14px rgba(8, 120, 232, .23);
+}
+
+.catalog-button.secondary {
+  color: #31516d;
+  background: #f5f8fb;
+  border-color: #dce6ee;
+}
+
+.catalog-button.secondary:hover {
+  color: #0878e8;
+  background: #edf5ff;
+  border-color: #b9d6f5;
+}
+
+.catalog-button.small {
+  min-height: 32px;
+  padding: 6px 11px;
+  font-size: 11px;
+}
+
+/* INDICADORES DEL CATÁLOGO */
+
+.catalog-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.catalog-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 17px 19px;
+  background: #f8fafc;
+  border: 1px solid #e5edf3;
+  border-radius: 11px;
+}
+
+.catalog-summary .metric-label {
+  color: #718096;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.catalog-summary strong {
+  color: #102a43;
+  font-size: 25px;
+  line-height: 1.2;
+}
+
+/* BÚSQUEDA Y FILTROS */
+
+.catalog-filters {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 220px;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.catalog-filters input,
+.catalog-filters select {
+  width: 100%;
+  min-height: 43px;
+  padding: 10px 13px;
+  color: #263f56;
+  background: #ffffff;
+  border: 1px solid #dce6ee;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+  transition: border-color .18s, box-shadow .18s;
+}
+
+.catalog-filters input:focus,
+.catalog-filters select:focus {
+  border-color: #1684e8;
+  box-shadow: 0 0 0 3px rgba(22, 132, 232, .10);
+}
+
+/* TABLA */
+
+.catalog-table-container {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e2eaf0;
+  border-radius: 11px;
+  background: #ffffff;
+}
+
+.catalog-table {
+  width: 100%;
+  min-width: 690px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.catalog-table thead {
+  background: #f3f7fb;
+}
+
+.catalog-table th {
+  padding: 15px 17px;
+  color: #48627a;
+  border-bottom: 1px solid #e2eaf0;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .55px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.catalog-table td {
+  padding: 15px 17px;
+  color: #40566b;
+  border-bottom: 1px solid #edf1f5;
+  font-size: 12px;
+  line-height: 1.55;
+  vertical-align: middle;
+}
+
+.catalog-table tbody tr {
+  transition: background .15s;
+}
+
+.catalog-table tbody tr:hover {
+  background: #f7fbff;
+}
+
+.catalog-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.catalog-table td:first-child {
+  color: #173c59;
+  font-weight: 700;
+}
+
+.catalog-table td:nth-child(2) {
+  min-width: 240px;
+  color: #718096;
+}
+
+/* ESTADOS */
+
+.catalog-table .status-active,
+.catalog-table .status-inactive {
+  display: inline-block;
+  width: fit-content;
+  padding: 5px 11px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.catalog-table .status-active {
+  color: #087d57;
+  background: #e2f7ee;
+}
+
+.catalog-table .status-inactive {
+  color: #a15c16;
+  background: #fff2df;
+}
+
+/* ACCIONES DE LA TABLA */
+
+.catalog-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  min-width: 175px;
+}
+
+.catalog-actions .catalog-button {
+  min-height: 30px;
+  padding: 5px 10px;
+}
+
+/* MENSAJES */
+
+.catalog-message {
+  min-height: 18px;
+  margin: 13px 2px;
+  color: #087d57;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.catalog-message:empty {
+  display: none;
+}
+
+.catalog-message[data-type="error"] {
+  color: #c0392b;
+}
+
+.catalog-empty {
+  padding: 35px !important;
+  color: #8998a6 !important;
+  text-align: center;
+}
+
+/* FORMULARIO */
+
+.catalog-form-panel {
+  margin-top: 25px;
+  padding: 25px;
+  background: #f7fafc;
+  border: 1px solid #e0e9f0;
+  border-radius: 13px;
+  animation: catalogAppear .2s ease;
+}
+
+.catalog-form-panel[hidden] {
+  display: none !important;
+}
+
+.catalog-form-panel h2 {
+  margin: 0 0 22px;
+  color: #173c59;
+  font-size: 19px;
+  font-weight: 750;
+}
+
+.catalog-form-panel form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 9px;
+}
+
+.catalog-form-panel label {
+  margin-top: 7px;
+  color: #40566b;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.catalog-form-panel input,
+.catalog-form-panel textarea {
+  width: 100%;
+  padding: 12px 13px;
+  color: #263f56;
+  background: #ffffff;
+  border: 1px solid #dce6ee;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+  resize: vertical;
+  transition: border-color .18s, box-shadow .18s;
+}
+
+.catalog-form-panel input:focus,
+.catalog-form-panel textarea:focus {
+  border-color: #1684e8;
+  box-shadow: 0 0 0 3px rgba(22, 132, 232, .10);
+}
+
+.catalog-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* ACCESIBILIDAD */
+
+.catalog-button:focus-visible {
+  outline: 3px solid rgba(22, 132, 232, .35);
+  outline-offset: 2px;
+}
+
+/* TABLETAS */
+
+@media (max-width: 850px) {
+  .catalog-view {
+    padding: 22px;
+  }
+
+  .catalog-summary {
+    gap: 9px;
+  }
+
+  .catalog-summary > div {
+    padding: 14px;
+  }
+}
+
+/* TELÉFONOS */
+
+@media (max-width: 600px) {
+  .catalog-view {
+    margin-top: 18px;
+    padding: 17px 13px;
+    border-radius: 12px;
+  }
+
+  .catalog-view > .section-title {
+    margin-bottom: 18px;
+  }
+
+  .catalog-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .catalog-toolbar .catalog-button {
+    width: 100%;
+  }
+
+  .catalog-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-summary > div {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .catalog-summary strong {
+    font-size: 21px;
+  }
+
+  .catalog-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-form-panel {
+    padding: 17px;
+  }
+
+  .catalog-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .catalog-form-actions .catalog-button {
+    width: 100%;
+  }
+}
+
+/* MOVIMIENTO REDUCIDO */
+
+@media (prefers-reduced-motion: reduce) {
+  .catalog-view,
+  .catalog-form-panel {
+    animation: none;
+  }
+
+  .catalog-button {
+    transition: none;
+  }
+}
+
+
