@@ -306,22 +306,25 @@ function renderTable() {
       )
     );
 
-    const actions = createElement('td', 'catalog-actions');
 
-    actions.append(
-      createButton('Editar', 'catalog-button small secondary', () => {
-        openForm(item);
-      }),
-      createButton(
-        item.status === 'active' ? 'Desactivar' : 'Activar',
-        'catalog-button small secondary',
-        () => toggleStatus(item)
-      )
-    );
+const actions = createElement('td');
 
-    row.append(actions);
-    tbody.append(row);
-  });
+const actionGroup = createElement('div', 'catalog-actions');
+
+actionGroup.append(
+  createButton('Editar', 'catalog-button small secondary', () => {
+    openForm(item);
+  }),
+  createButton(
+    item.status === 'active' ? 'Desactivar' : 'Activar',
+    'catalog-button small secondary',
+    () => toggleStatus(item)
+  )
+);
+
+actions.append(actionGroup);
+row.append(actions);
+
 
   if (!filtered.length) {
     const row = createElement('tr');
