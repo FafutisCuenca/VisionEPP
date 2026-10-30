@@ -1020,3 +1020,29 @@
   line-height: 1.2;
 }
 
+/* CONTENEDOR DE ACCIONES DE LA TABLA */
+
+.catalog-table td:last-child {
+  white-space: nowrap;
+  min-width: 175px;
+}
+
+.catalog-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.catalog-actions .catalog-button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: auto;
+  margin: 0;
+  padding: 5px 9px;
+  white-space: nowrap;
+}
+
