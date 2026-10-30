@@ -205,29 +205,48 @@ function showDashboard() {
   history.replaceState(null, '', location.pathname);
 }
 
+
 async function showCatalog() {
   try {
-    if (dashboard) dashboard.hidden = true;
+    // Ocultar el tablero principal.
+    if (dashboard) {
+      dashboard.hidden = true;
+    }
+
+    // Buscar la sección del catálogo.
     let view = document.getElementById('workTypesView');
+
+    // Crear el catálogo si todavía no existe.
     if (!view) {
       view = createCatalogView();
       main.append(view);
-    } else {
-      view.hidden = false;
     }
-    view.hidden = false;
-    catalog = await loadCatalog('tipos-obra');
-    renderTable();
-    history.replaceState(null, '', '#tipos-obra');
-// Llevar automáticamente al usuario al catálogo.
-    view.scrollIntoView({
-  behavior: 'smooth',
-  block: 'start'
-});
-}   catch (error) {
-    console.error(error);
 
-    if (dashboard) dashboard.hidden = false;
+    // Asegurar que la sección esté visible.
+    view.hidden = false;
+
+    // Cargar los datos del catálogo externo y local.
+    catalog = await loadCatalog('tipos-obra');
+
+    // Dibujar la tabla.
+    renderTable();
+
+    // Actualizar la dirección de navegación.
+    history.replaceState(null, '', '#tipos-obra');
+
+    // Desplazarse automáticamente hasta el catálogo.
+    view.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+
+  } catch (error) {
+    console.error('Error al abrir Tipos de obra:', error);
+
+    // Recuperar el tablero si ocurre un error.
+    if (dashboard) {
+      dashboard.hidden = false;
+    }
 
     alert(
       'No fue posible abrir el catálogo de tipos de obra.\n\n' +
