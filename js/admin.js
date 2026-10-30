@@ -224,8 +224,7 @@ async function showCatalog() {
   behavior: 'smooth',
   block: 'start'
 });
-  }
-    catch (error) {
+}   catch (error) {
     console.error(error);
 
     if (dashboard) dashboard.hidden = false;
