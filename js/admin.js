@@ -208,29 +208,23 @@ function showDashboard() {
 async function showCatalog() {
   try {
     if (dashboard) dashboard.hidden = true;
-
     let view = document.getElementById('workTypesView');
-
     if (!view) {
       view = createCatalogView();
       main.append(view);
     } else {
       view.hidden = false;
     }
-
     view.hidden = false;
-
     catalog = await loadCatalog('tipos-obra');
-
-renderTable();
-
-history.replaceState(null, '', '#tipos-obra');
-
+    renderTable();
+    history.replaceState(null, '', '#tipos-obra');
 // Llevar automáticamente al usuario al catálogo.
-view.scrollIntoView({
+    view.scrollIntoView({
   behavior: 'smooth',
   block: 'start'
 });
+  }
     catch (error) {
     console.error(error);
 
