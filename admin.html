@@ -5,13 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta
-    name="description"
-    content="VisionEPP: administración general de obras y catálogos de seguridad."
-  >
+  <meta name="description"
+    content="VisionEPP: administración de obras y seguridad laboral.">
   <meta name="theme-color" content="#102a43">
 
-  <title>VisionEPP | Administración</title>
+  <title>VisionEPP | Centro de administración</title>
 
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/admin.css">
@@ -19,267 +17,270 @@
 
 <body>
 
-  <header class="site-header">
+  <!-- ENCABEZADO -->
+  <header class="site-header admin-header">
     <div class="header-content">
 
-      <a class="brand" href="./" aria-label="VisionEPP, página principal">
-        <span class="brand-mark" aria-hidden="true">V</span>
+      <a class="brand" href="./" aria-label="VisionEPP">
+        <span class="brand-mark">V</span>
         <span>VisionEPP</span>
       </a>
 
       <nav class="main-navigation" aria-label="Navegación principal">
         <a href="./" class="nav-link">Inspección</a>
-
-        <a href="admin.html" class="nav-link active" aria-current="page">
-          Administración
-        </a>
+        <a href="admin.html" class="nav-link active"
+           aria-current="page">Administración</a>
       </nav>
 
-      <span class="header-label">Centro administrativo</span>
+      <span class="header-label">Centro de control</span>
 
     </div>
   </header>
 
   <main class="admin-container">
 
-    <!-- PRESENTACIÓN -->
-    <section class="admin-hero">
+    <!-- BIENVENIDA -->
+    <section class="dashboard-welcome">
       <div>
-        <p class="eyebrow">VISIONEPP / CENTRO DE CONTROL</p>
-
-        <h1>Administración general</h1>
-
+        <p class="eyebrow">VISIONEPP / ADMINISTRACIÓN</p>
+        <h1>Centro de administración</h1>
         <p>
-          Configura los catálogos institucionales, administra tus obras
-          y organiza los elementos necesarios para la gestión de
-          Seguridad y Salud en el Trabajo.
+          Gestiona tus proyectos, configura los catálogos y organiza
+          los recursos de Seguridad y Salud en el Trabajo.
         </p>
       </div>
 
-      <div class="admin-hero-mark" aria-hidden="true">V</div>
+      <div class="welcome-indicator">
+        <span class="indicator-dot"></span>
+        Sistema en desarrollo
+      </div>
     </section>
 
-    <!-- RESUMEN -->
-    <section class="admin-summary">
+    <!-- INDICADORES -->
+    <section class="dashboard-metrics">
 
-      <article class="summary-card">
-        <span class="summary-icon">▦</span>
+      <article class="metric-card">
+        <div class="metric-icon metric-blue">▦</div>
         <div>
+          <span class="metric-label">Obras registradas</span>
           <strong>0</strong>
-          <span>Obras registradas</span>
+          <small>Proyectos administrados</small>
         </div>
       </article>
 
-      <article class="summary-card">
-        <span class="summary-icon">⚙</span>
+      <article class="metric-card">
+        <div class="metric-icon metric-teal">⚙</div>
         <div>
+          <span class="metric-label">Catálogos generales</span>
           <strong>10</strong>
-          <span>Catálogos previstos</span>
+          <small>Catálogos previstos</small>
         </div>
       </article>
 
-      <article class="summary-card">
-        <span class="summary-icon">✓</span>
+      <article class="metric-card">
+        <div class="metric-icon metric-amber">♙</div>
         <div>
-          <strong>Local</strong>
-          <span>Almacenamiento</span>
+          <span class="metric-label">Personal</span>
+          <strong>—</strong>
+          <small>Por registrar</small>
+        </div>
+      </article>
+
+      <article class="metric-card">
+        <div class="metric-icon metric-purple">✓</div>
+        <div>
+          <span class="metric-label">Inspecciones</span>
+          <strong>—</strong>
+          <small>Por integrar</small>
         </div>
       </article>
 
     </section>
 
     <!-- CONFIGURACIÓN GENERAL -->
-    <section class="admin-section">
+    <section class="dashboard-section">
 
-      <div class="admin-section-heading">
+      <div class="section-title">
         <div>
           <p class="eyebrow">01 / CONFIGURACIÓN</p>
           <h2>Configuración general</h2>
           <p>
-            Administra los catálogos reutilizables en todas las obras.
+            Catálogos centrales reutilizables en todos los proyectos.
           </p>
         </div>
+
+        <span class="section-counter">10 CATÁLOGOS</span>
       </div>
 
-      <div class="admin-card-grid">
+      <div class="module-grid">
 
-        <article class="admin-card">
-          <span class="admin-card-icon">▤</span>
-          <h3>Tipos de obra</h3>
-          <p>
-            Clasifica proyectos de construcción, infraestructura,
-            instalaciones, mantenimiento y otros.
-          </p>
-          <span class="card-status">Primer catálogo por desarrollar</span>
-        </article>
+        <a class="module-card module-featured" href="#tipos-obra">
+          <span class="module-icon">▤</span>
+          <span class="module-content">
+            <strong>Tipos de obra</strong>
+            <small>
+              Construcción, infraestructura, instalaciones,
+              mantenimiento y más.
+            </small>
+            <span class="module-action">Configurar catálogo →</span>
+          </span>
+        </a>
 
-        <article class="admin-card">
-          <span class="admin-card-icon">⌘</span>
-          <h3>Especialidades</h3>
-          <p>
-            Organiza disciplinas como electricidad, estructuras,
-            soldadura, excavaciones y otras.
-          </p>
-          <span class="card-status">Pendiente</span>
-        </article>
+        <a class="module-card" href="#especialidades">
+          <span class="module-icon">⌘</span>
+          <span class="module-content">
+            <strong>Especialidades</strong>
+            <small>Electricidad, estructuras, soldadura y disciplinas.</small>
+            <span class="module-action">Próximamente</span>
+          </span>
+        </a>
 
-        <article class="admin-card">
-          <span class="admin-card-icon">◷</span>
-          <h3>Etapas de obra</h3>
-          <p>
-            Define las etapas generales que pueden formar parte
-            de un proyecto.
-          </p>
-          <span class="card-status">Pendiente</span>
-        </article>
+        <a class="module-card" href="#etapas">
+          <span class="module-icon">◷</span>
+          <span class="module-content">
+            <strong>Etapas de obra</strong>
+            <small>Fases y procesos generales de los proyectos.</small>
+            <span class="module-action">Próximamente</span>
+          </span>
+        </a>
 
-        <article class="admin-card">
-          <span class="admin-card-icon">▧</span>
-          <h3>Actividades</h3>
-          <p>
-            Define las actividades que se realizan durante
-            las diferentes etapas.
-          </p>
-          <span class="card-status">Pendiente</span>
-        </article>
+        <a class="module-card" href="#actividades">
+          <span class="module-icon">▧</span>
+          <span class="module-content">
+            <strong>Actividades</strong>
+            <small>Trabajos y operaciones que se realizan en obra.</small>
+            <span class="module-action">Próximamente</span>
+          </span>
+        </a>
 
-        <article class="admin-card">
-          <span class="admin-card-icon">⌖</span>
-          <h3>Tipos de zona</h3>
-          <p>
-            Clasifica áreas de trabajo, almacenamiento,
-            circulación y espacios restringidos.
-          </p>
-          <span class="card-status">Pendiente</span>
-        </article>
+        <a class="module-card" href="#zonas">
+          <span class="module-icon">⌖</span>
+          <span class="module-content">
+            <strong>Tipos de zona</strong>
+            <small>Áreas de trabajo, circulación y almacenamiento.</small>
+            <span class="module-action">Próximamente</span>
+          </span>
+        </a>
 
-        <article class="admin-card">
-          <span class="admin-card-icon">⚠</span>
-          <h3>Riesgos</h3>
-          <p>
-            Organiza los peligros y riesgos asociados
-            a las actividades de obra.
-          </p>
-          <span class="card-status">Pendiente</span>
-        </article>
+        <a class="module-card" href="#riesgos">
+          <span class="module-icon">⚠</span>
+          <span class="module-content">
+            <strong>Riesgos</strong>
+            <small>Peligros y riesgos asociados a las actividades.</small>
+            <span class="module-action">Próximamente</span>
+          </span>
+        </a>
 
-        <article class="admin-card">
-          <span class="admin-card-icon">⛑</span>
-          <h3>Equipo de protección</h3>
-          <p>
-            Administra los equipos de protección personal
-            y sus características.
-          </p>
-          <span class="card-status">Pendiente</span>
-        </article>
+        <a class="module-card" href="#epp">
+          <span class="module-icon">⛑</span>
+          <span class="module-content">
+            <strong>Equipo de protección</strong>
+            <small>Equipos de protección personal y características.</small>
+            <span class="module-action">Próximamente</span>
+          </span>
+        </a>
 
-        <article class="admin-card">
-          <span class="admin-card-icon">⚙</span>
-          <h3>Maquinaria y equipos</h3>
-          <p>
-            Registra los equipos y maquinaria utilizados
-            en las diferentes actividades.
-          </p>
-          <span class="card-status">Pendiente</span>
-        </article>
+        <a class="module-card" href="#maquinaria">
+          <span class="module-icon">⚙</span>
+          <span class="module-content">
+            <strong>Maquinaria y equipos</strong>
+            <small>Equipos, vehículos y herramientas de trabajo.</small>
+            <span class="module-action">Próximamente</span>
+          </span>
+        </a>
 
-        <article class="admin-card">
-          <span class="admin-card-icon">◉</span>
-          <h3>Objetos detectables</h3>
-          <p>
-            Define los elementos que VisionEPP podrá revisar
-            visualmente o mediante inspección humana.
-          </p>
-          <span class="card-status">Pendiente</span>
-        </article>
+        <a class="module-card" href="#objetos">
+          <span class="module-icon">◉</span>
+          <span class="module-content">
+            <strong>Objetos detectables</strong>
+            <small>Elementos revisables mediante visión o inspección humana.</small>
+            <span class="module-action">Próximamente</span>
+          </span>
+        </a>
 
-        <article class="admin-card">
-          <span class="admin-card-icon">§</span>
-          <h3>Normativa SST</h3>
-          <p>
-            Organiza las referencias normativas y los requisitos
-            de Seguridad y Salud en el Trabajo.
-          </p>
-          <span class="card-status">Pendiente</span>
-        </article>
+        <a class="module-card" href="#normativa">
+          <span class="module-icon">§</span>
+          <span class="module-content">
+            <strong>Normativa SST</strong>
+            <small>Referencias normativas y requisitos de seguridad.</small>
+            <span class="module-action">Próximamente</span>
+          </span>
+        </a>
 
       </div>
     </section>
 
     <!-- ADMINISTRACIÓN DE OBRAS -->
-    <section class="admin-section">
+    <section class="dashboard-section">
 
-      <div class="admin-section-heading">
+      <div class="section-title">
         <div>
           <p class="eyebrow">02 / PROYECTOS</p>
           <h2>Administración de obras</h2>
           <p>
-            Cada obra tendrá su propia configuración y estará
-            relacionada con los catálogos generales.
+            Cada proyecto tendrá su propia información y configuración.
           </p>
         </div>
       </div>
 
-      <div class="admin-card-grid work-grid">
+      <div class="module-grid work-modules">
 
-        <article class="admin-card">
-          <span class="admin-card-icon">▣</span>
-          <h3>Registro de obras</h3>
-          <p>
-            Datos generales, ubicación, cliente, contratistas,
-            responsables y vigencia del proyecto.
-          </p>
-          <span class="card-status">Pendiente de desarrollo</span>
-        </article>
+        <a class="module-card" href="#registro-obras">
+          <span class="module-icon">▣</span>
+          <span class="module-content">
+            <strong>Registro de obras</strong>
+            <small>Datos generales, ubicación, clientes y contratistas.</small>
+            <span class="module-action">Próximamente</span>
+          </span>
+        </a>
 
-        <article class="admin-card">
-          <span class="admin-card-icon">▦</span>
-          <h3>Áreas y zonas</h3>
-          <p>
-            Organiza los espacios físicos y las zonas de trabajo
-            de cada proyecto.
-          </p>
-          <span class="card-status">Pendiente de desarrollo</span>
-        </article>
+        <a class="module-card" href="#areas">
+          <span class="module-icon">▦</span>
+          <span class="module-content">
+            <strong>Áreas y zonas</strong>
+            <small>Espacios físicos y zonas de trabajo de cada proyecto.</small>
+            <span class="module-action">Próximamente</span>
+          </span>
+        </a>
 
-        <article class="admin-card">
-          <span class="admin-card-icon">♙</span>
-          <h3>Personal y empresas</h3>
-          <p>
-            Administra trabajadores, contratistas, funciones
-            y responsables.
-          </p>
-          <span class="card-status">Pendiente de desarrollo</span>
-        </article>
+        <a class="module-card" href="#personal">
+          <span class="module-icon">♙</span>
+          <span class="module-content">
+            <strong>Personal y empresas</strong>
+            <small>Trabajadores, contratistas, funciones y responsables.</small>
+            <span class="module-action">Próximamente</span>
+          </span>
+        </a>
 
-        <article class="admin-card">
-          <span class="admin-card-icon">✓</span>
-          <h3>Autorizaciones</h3>
-          <p>
-            Controla las autorizaciones de acceso y las actividades
-            permitidas al personal.
-          </p>
-          <span class="card-status">Pendiente de desarrollo</span>
-        </article>
+        <a class="module-card" href="#autorizaciones">
+          <span class="module-icon">✓</span>
+          <span class="module-content">
+            <strong>Autorizaciones</strong>
+            <small>Accesos y actividades permitidas al personal.</small>
+            <span class="module-action">Próximamente</span>
+          </span>
+        </a>
 
       </div>
     </section>
 
-    <!-- ALMACENAMIENTO -->
-    <section class="admin-storage-note">
-      <strong>Almacenamiento local</strong>
-      <p>
-        VisionEPP conservará la información en el navegador.
-        Los respaldos y las transferencias de información se realizarán
-        mediante archivos JSON. No existe sincronización automática
-        entre dispositivos.
-      </p>
+    <!-- RESPALDO -->
+    <section class="storage-panel">
+      <div class="storage-icon">◇</div>
+      <div>
+        <strong>Información almacenada localmente</strong>
+        <p>
+          Los datos permanecerán en este navegador. Se podrán respaldar
+          y transferir mediante archivos JSON. No existe sincronización
+          automática entre dispositivos.
+        </p>
+      </div>
     </section>
 
   </main>
 
   <footer class="site-footer">
-    <p><strong>VisionEPP</strong> · Centro administrativo</p>
+    <p><strong>VisionEPP</strong> · Centro de administración</p>
     <p>Gestión de obras y Seguridad y Salud en el Trabajo.</p>
   </footer>
 
