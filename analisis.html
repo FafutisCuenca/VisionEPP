@@ -1,0 +1,443 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Análisis de evidencia | VisionEPP</title>
+
+  <meta
+    name="description"
+    content="Módulo de análisis de evidencia de VisionEPP. Análisis de imágenes individuales, lotes de imágenes y video."
+  >
+
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    /* =====================================================
+       VISIONEPP - CENTRO DE ANÁLISIS
+       Estilos específicos de esta página
+       ===================================================== */
+
+    .analysis-main {
+      width: min(1180px, 92%);
+      margin: 0 auto;
+      padding: 32px 0 55px;
+    }
+
+    .analysis-intro {
+      margin-bottom: 30px;
+    }
+
+    .analysis-intro h1 {
+      margin-bottom: 12px;
+    }
+
+    .analysis-intro p {
+      max-width: 850px;
+      line-height: 1.7;
+    }
+
+    .analysis-notice {
+      padding: 16px 20px;
+      margin: 22px 0 32px;
+      border: 1px solid var(--border-color, #d8dee8);
+      border-left: 4px solid var(--primary-color, #2563eb);
+      border-radius: 10px;
+      background: var(--surface-color, #f8fafc);
+      line-height: 1.6;
+    }
+
+    .analysis-section-title {
+      margin-bottom: 18px;
+    }
+
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      margin: 25px 0 35px;
+    }
+
+    .analysis-card {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: 24px;
+      border: 1px solid var(--border-color, #d8dee8);
+      border-radius: 14px;
+      background: var(--card-background, #ffffff);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.045);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .analysis-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.09);
+    }
+
+    .analysis-card-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 54px;
+      height: 54px;
+      margin-bottom: 18px;
+      border-radius: 12px;
+      background: var(--background-color, #eef2ff);
+      font-size: 27px;
+    }
+
+    .analysis-card h3 {
+      margin: 0 0 12px;
+      line-height: 1.35;
+    }
+
+    .analysis-card p {
+      flex-grow: 1;
+      margin: 0 0 18px;
+      line-height: 1.65;
+    }
+
+    .analysis-card ul {
+      padding-left: 20px;
+      margin: 0 0 22px;
+      line-height: 1.8;
+    }
+
+    .analysis-card .analysis-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 44px;
+      padding: 11px 16px;
+      border-radius: 8px;
+      background: var(--primary-color, #2563eb);
+      color: #ffffff;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .analysis-card .analysis-button:hover {
+      opacity: 0.88;
+    }
+
+    .analysis-secondary {
+      margin-top: 38px;
+      padding: 22px;
+      border: 1px solid var(--border-color, #d8dee8);
+      border-radius: 12px;
+      background: var(--surface-color, #f8fafc);
+    }
+
+    .analysis-secondary h2 {
+      margin-top: 0;
+    }
+
+    .analysis-secondary p {
+      line-height: 1.7;
+    }
+
+    .analysis-secondary a {
+      font-weight: 600;
+    }
+
+    .analysis-disclaimer {
+      margin-top: 28px;
+      padding: 18px 20px;
+      border: 1px solid #e5c98a;
+      border-radius: 10px;
+      background: #fff9e9;
+      color: #614b1b;
+      line-height: 1.65;
+    }
+
+    .analysis-footer {
+      margin-top: 35px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-color, #d8dee8);
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-muted, #64748b);
+    }
+
+    @media (max-width: 900px) {
+      .analysis-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .analysis-main {
+        width: min(94%, 100%);
+        padding-top: 22px;
+      }
+
+      .analysis-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .analysis-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =====================================================
+       ENCABEZADO Y NAVEGACIÓN
+       ===================================================== -->
+
+  <header class="site-header">
+    <div class="header-content">
+
+      <div class="header-brand">
+        <a href="./" aria-label="VisionEPP - Inicio">
+          <span class="brand-name">VisionEPP</span>
+        </a>
+        <span class="header-label">Análisis de evidencia</span>
+      </div>
+
+      <nav class="main-nav" aria-label="Navegación principal">
+        <a href="./">Inicio</a>
+        <a href="analisis.html" class="active" aria-current="page">
+          Análisis de evidencia
+        </a>
+        <a href="inspeccion.html">Inspección de EPP</a>
+        <a href="admin.html">Administración</a>
+      </nav>
+
+    </div>
+  </header>
+
+
+  <!-- =====================================================
+       CONTENIDO PRINCIPAL
+       ===================================================== -->
+
+  <main class="analysis-main">
+
+    <section class="analysis-intro">
+
+      <h1>Análisis de evidencia</h1>
+
+      <p>
+        Selecciona la modalidad de análisis que necesitas utilizar.
+        VisionEPP permite trabajar con imágenes individuales, conjuntos
+        de imágenes y archivos de video mediante herramientas
+        independientes de procesamiento.
+      </p>
+
+      <div class="analysis-notice">
+        <strong>Información importante:</strong>
+        Los análisis de este módulo son herramientas experimentales
+        de apoyo para la identificación visual de elementos de
+        protección personal. Sus resultados requieren revisión y
+        validación humana.
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MODALIDADES DE ANÁLISIS
+         ===================================================== -->
+
+    <section aria-labelledby="modalidadesTitle">
+
+      <h2 class="analysis-section-title" id="modalidadesTitle">
+        Selecciona una modalidad
+      </h2>
+
+      <div class="analysis-grid">
+
+        <!-- IMAGEN INDIVIDUAL -->
+
+        <article class="analysis-card">
+
+          <div class="analysis-card-icon" aria-hidden="true">
+            🖼️
+          </div>
+
+          <h3>Imagen individual</h3>
+
+          <p>
+            Analiza una fotografía para explorar la identificación
+            visual de elementos de protección personal mediante
+            el modelo experimental YOLOv11.
+          </p>
+
+          <ul>
+            <li>Selección de una imagen.</li>
+            <li>Comparación de umbrales de confianza.</li>
+            <li>Visualización de cajas y clasificaciones.</li>
+            <li>Exportación de resultados técnicos.</li>
+          </ul>
+
+          <a
+            class="analysis-button"
+            href="prueba-yolov11.html"
+          >
+            Abrir análisis individual
+          </a>
+
+        </article>
+
+
+        <!-- LOTE DE IMÁGENES -->
+
+        <article class="analysis-card">
+
+          <div class="analysis-card-icon" aria-hidden="true">
+            📚
+          </div>
+
+          <h3>Lote de imágenes</h3>
+
+          <p>
+            Procesa varias fotografías en una misma sesión para
+            obtener resultados individuales y un resumen general
+            de las imágenes analizadas.
+          </p>
+
+          <ul>
+            <li>Selección de múltiples imágenes.</li>
+            <li>Selección de carpetas.</li>
+            <li>Procesamiento individual por fotografía.</li>
+            <li>Resultados globales y exportación CSV/JSON.</li>
+          </ul>
+
+          <a
+            class="analysis-button"
+            href="lote-imagenes-visionepp.html"
+          >
+            Abrir análisis por lotes
+          </a>
+
+        </article>
+
+
+        <!-- VIDEO -->
+
+        <article class="analysis-card">
+
+          <div class="analysis-card-icon" aria-hidden="true">
+            🎥
+          </div>
+
+          <h3>Análisis de video</h3>
+
+          <p>
+            Examina fotogramas seleccionados de un video para
+            explorar la presencia visual de elementos de protección
+            personal a lo largo de una secuencia temporal.
+          </p>
+
+          <ul>
+            <li>Selección de archivos de video.</li>
+            <li>Configuración del intervalo entre fotogramas.</li>
+            <li>Resultados por fotograma y línea de tiempo.</li>
+            <li>Exportación de resultados técnicos.</li>
+          </ul>
+
+          <a
+            class="analysis-button"
+            href="video-visionepp.html"
+          >
+            Abrir análisis de video
+          </a>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         RELACIÓN CON INSPECCIÓN Y ADMINISTRACIÓN
+         ===================================================== -->
+
+    <section class="analysis-secondary">
+
+      <h2>Complementa el análisis con una inspección</h2>
+
+      <p>
+        El análisis visual de imágenes y videos es independiente
+        del módulo de inspección operativa. Para registrar el
+        contexto de una obra, zona, actividad y función del personal,
+        utiliza el módulo de Inspección de EPP.
+      </p>
+
+      <p>
+        Los catálogos, tipos de obra, zonas, actividades y demás
+        parámetros configurables se administran desde el módulo
+        de Administración.
+      </p>
+
+      <p>
+        <a href="inspeccion.html">Ir a Inspección de EPP</a>
+        &nbsp; | &nbsp;
+        <a href="admin.html">Ir a Administración</a>
+      </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         ADVERTENCIA TÉCNICA Y DE SEGURIDAD
+         ===================================================== -->
+
+    <section class="analysis-disclaimer">
+
+      <strong>Alcance y limitaciones del análisis</strong>
+
+      <p>
+        Las clasificaciones generadas por el modelo pueden contener
+        falsos positivos, falsos negativos o interpretaciones
+        incorrectas. Una clasificación como «Sin EPP» no demuestra
+        por sí sola que una persona incumpla una disposición de
+        seguridad.
+      </p>
+
+      <p>
+        Los resultados no sustituyen una inspección física, la
+        evaluación de un responsable de Seguridad y Salud en el
+        Trabajo ni la interpretación de las Normas Oficiales
+        Mexicanas aplicables.
+      </p>
+
+      <p>
+        La evidencia debe interpretarse considerando las condiciones
+        de captura, visibilidad, resolución, posición de los objetos
+        y limitaciones del modelo.
+      </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         PIE DE PÁGINA
+         ===================================================== -->
+
+    <footer class="analysis-footer">
+      <p>
+        VisionEPP · Herramienta de apoyo para la revisión de
+        equipo de protección personal.
+      </p>
+      <p>
+        Versión 0.1.0
+      </p>
+    </footer>
+
+  </main>
+
+</body>
+</html>
