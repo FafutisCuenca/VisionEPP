@@ -15,7 +15,8 @@ import {
 const CATALOGS_PATH = '../catalogs/';
 
 const LOCAL_CATALOG_KEYS = {
-  'tipos-obra': 'workTypes'
+  'tipos-obra': 'workTypes',
+  'especialidades': 'specialties'
 };
 
 /**
