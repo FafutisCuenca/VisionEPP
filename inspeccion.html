@@ -13,10 +13,153 @@
   <title>VisionEPP | Piloto de seguridad en obra</title>
 
   <link rel="stylesheet" href="css/styles.css">
+
+  
+<style>
+/* =====================================================
+   ENCABEZADO GENERAL VISIONEPP
+   ===================================================== */
+
+.site-header {
+  padding: 14px clamp(16px, 4vw, 44px);
+  color: #ffffff;
+  background: var(--navy);
+}
+
+.header-content {
+  width: min(1500px, 100%);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.brand-home {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  color: #ffffff;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.brand-home svg {
+  display: block;
+  width: 25px;
+  height: 25px;
+}
+
+.brand-home:hover {
+  color: #ffd54a;
+}
+
+.brand-name {
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 750;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.brand-name:hover {
+  color: #ffd54a;
+}
+
+.header-divider {
+  color: #ffffff;
+  opacity: 0.75;
+  font-weight: 400;
+}
+
+.header-title {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.main-nav a {
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-weight: 550;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.main-nav a:hover,
+.main-nav a:focus-visible {
+  color: #ffd54a;
+  text-decoration: none;
+}
+
+.main-nav .nav-divider {
+  color: #ffffff;
+  opacity: 0.65;
+  user-select: none;
+}
+
+@media (max-width: 700px) {
+  .site-header {
+    padding: 13px 16px;
+  }
+
+  .header-content {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .header-brand {
+    gap: 8px;
+  }
+
+  .brand-home,
+  .brand-home svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .brand-name {
+    font-size: 1.05rem;
+  }
+
+  .header-title {
+    font-size: 0.92rem;
+  }
+
+  .main-nav {
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .main-nav a {
+    font-size: 0.88rem;
+  }
+}
+</style>
+
 </head>
 
 <body>
-
 
 <header class="site-header">
   <div class="header-content">
