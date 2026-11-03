@@ -186,6 +186,71 @@
         padding: 20px;
       }
     }
+    
+/* =====================================================
+   ENCABEZADO VISIONEPP - ESTÁNDAR VISUAL
+   ===================================================== */
+
+/* Nombre y título del módulo */
+.site-header .header-brand,
+.site-header .header-brand a,
+.site-header .brand-name,
+.site-header .header-label {
+  color: #ffffff !important;
+}
+
+.site-header .brand-name {
+  font-size: 1.65rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.3px;
+}
+
+.site-header .header-label {
+  display: inline-block;
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
+  margin-left: 12px;
+}
+
+/* Navegación: blanco en todos los estados normales */
+.site-header .main-nav a,
+.site-header .main-nav a:link,
+.site-header .main-nav a:visited,
+.site-header .main-nav a:active {
+  color: #ffffff !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease;
+}
+
+/* Hover: amarillo */
+.site-header .main-nav a:hover,
+.site-header .main-nav a:focus-visible {
+  color: #ffdf45 !important;
+  text-decoration: none !important;
+}
+
+/* La opción activa no debe quedarse morada */
+.site-header .main-nav a.active {
+  color: #ffffff !important;
+}
+
+/* Enlace activo también amarillo al pasar el apuntador */
+.site-header .main-nav a.active:hover {
+  color: #ffdf45 !important;
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 600px) {
+  .site-header .brand-name {
+    font-size: 1.4rem !important;
+  }
+
+  .site-header .header-label {
+    font-size: 0.95rem !important;
+    margin-left: 8px;
+  }
+}
+
   </style>
 </head>
 
