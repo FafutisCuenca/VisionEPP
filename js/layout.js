@@ -1,7 +1,10 @@
-
 /* =====================================================
-   VisionEPP - SISTEMA CENTRALIZADO DE LAYOUT
+   VisionEPP - LAYOUT GLOBAL DE PAGINAS
    Version: 2.0
+   Responsabilidad:
+   - Estructura general de todas las páginas
+   - Contenedor principal
+   - Título estandarizado
    ===================================================== */
 
 (() => {
@@ -45,64 +48,64 @@
   };
 
   function cargarEstilos(scriptActual) {
-    if (document.querySelector("[data-visionepp-layout-css]")) {
+    if (document.querySelector("link[data-visionepp-layout-css]")) {
       return;
     }
+
+    const rutaCSS = scriptActual
+      ? new URL("../css/layout.css", scriptActual.src).href
+      : "./css/layout.css";
 
     const hojaEstilos = document.createElement("link");
 
     hojaEstilos.rel = "stylesheet";
-    hojaEstilos.href = new URL(
-      "../css/layout.css",
-      scriptActual.src
-    ).href;
-
+    hojaEstilos.href = rutaCSS;
     hojaEstilos.dataset.visioneppLayoutCss = "true";
 
     document.head.appendChild(hojaEstilos);
   }
 
   function aplicarLayout() {
-    const contenedor = document.getElementById(
+    const contenedorTitulo = document.getElementById(
       "visionEPP-page-title"
     );
 
-    if (!contenedor) {
-      console.error(
-        "VisionEPP: falta el contenedor #visionEPP-page-title."
+    if (!contenedorTitulo) {
+      console.warn(
+        "VisionEPP: no se encontró #visionEPP-page-title."
       );
       return;
     }
 
     const pagina = (
-      contenedor.dataset.page || "inicio"
+      contenedorTitulo.dataset.page || "inicio"
     ).toLowerCase();
 
     const contenido = PAGINAS[pagina];
 
     if (!contenido) {
-      console.error(
-        `VisionEPP: no existe configuración de layout para "${pagina}".`
+      console.warn(
+        `VisionEPP: no existe configuración para la página "${pagina}".`
       );
       return;
     }
 
-    const main = contenedor.closest("main");
+    const contenedorPrincipal = contenedorTitulo.closest("main");
 
-    if (!main) {
+    if (!contenedorPrincipal) {
       console.error(
         "VisionEPP: el título debe estar dentro de un elemento <main>."
       );
       return;
     }
 
-    // Aplicar el contenedor global.
-    main.classList.add("vision-page-container");
+    // Aplicar la estructura global.
+    contenedorPrincipal.classList.add("vision-page-container");
+    contenedorPrincipal.dataset.visionLayout = "true";
 
-    // Insertar el título estandarizado.
-    contenedor.innerHTML = `
+    // Generar el título común.
+    contenedorTitulo.innerHTML = `
       <section class="vision-page-title">
-
         <p class="vision-page-eyebrow">
           ${contenido.etiqueta}
         </p>
@@ -114,22 +117,11 @@
         <p class="vision-page-description">
           ${contenido.descripcion}
         </p>
-
       </section>
     `;
-
-    // Marcar la página como estandarizada.
-    main.dataset.visionLayout = "true";
   }
 
   const scriptActual = document.currentScript;
-
-  if (!scriptActual) {
-    console.error(
-      "VisionEPP: no fue posible identificar layout.js."
-    );
-    return;
-  }
 
   cargarEstilos(scriptActual);
   aplicarLayout();
