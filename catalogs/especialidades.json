@@ -1,0 +1,244 @@
+
+{
+  "schemaVersion": 1,
+  "catalogId": "especialidades",
+  "name": "Especialidades",
+  "version": 1,
+  "updatedAt": "2026-11-02",
+  "items": [
+    {
+      "id": "esp-arquitectura",
+      "name": "Arquitectura",
+      "description": "Trabajos de diseño arquitectónico, distribución espacial, coordinación y supervisión de proyectos de edificación.",
+      "status": "active"
+    },
+    {
+      "id": "esp-obra-civil",
+      "name": "Obra civil",
+      "description": "Ejecución de obras civiles, infraestructura, estructuras y trabajos generales de construcción.",
+      "status": "active"
+    },
+    {
+      "id": "esp-cimentaciones",
+      "name": "Cimentaciones y subestructuras",
+      "description": "Construcción de zapatas, losas de cimentación, pilotes, pilas, muros de contención y sistemas de soporte estructural.",
+      "status": "active"
+    },
+    {
+      "id": "esp-estructuras-concreto",
+      "name": "Estructuras de concreto",
+      "description": "Construcción, armado, habilitado, cimbrado y colado de elementos estructurales de concreto reforzado o simple.",
+      "status": "active"
+    },
+    {
+      "id": "esp-estructuras-metalicas",
+      "name": "Estructuras metálicas",
+      "description": "Fabricación, montaje, instalación y mantenimiento de estructuras de acero y elementos metálicos.",
+      "status": "active"
+    },
+    {
+      "id": "esp-albanileria",
+      "name": "Albañilería",
+      "description": "Construcción de muros, tabiques, mampostería, firmes, castillos, dalas y elementos de obra negra.",
+      "status": "active"
+    },
+    {
+      "id": "esp-prefabricados",
+      "name": "Elementos prefabricados",
+      "description": "Fabricación, transporte, izaje y montaje de elementos prefabricados de concreto, acero y otros materiales.",
+      "status": "active"
+    },
+    {
+      "id": "esp-demolicion",
+      "name": "Demolición y desmantelamiento",
+      "description": "Demolición parcial o total de estructuras, desmantelamiento de instalaciones y retiro controlado de materiales.",
+      "status": "active"
+    },
+    {
+      "id": "esp-excavaciones",
+      "name": "Excavaciones y movimiento de tierras",
+      "description": "Excavaciones manuales y mecánicas, zanjas, cortes, rellenos y movimiento de materiales.",
+      "status": "active"
+    },
+    {
+      "id": "esp-terracerias",
+      "name": "Terracerías y compactación",
+      "description": "Preparación, conformación, nivelación y compactación de terrenos y plataformas de construcción.",
+      "status": "active"
+    },
+    {
+      "id": "esp-pavimentos",
+      "name": "Pavimentos y asfaltos",
+      "description": "Construcción, rehabilitación y mantenimiento de pavimentos de concreto, asfalto y materiales pétreos.",
+      "status": "active"
+    },
+    {
+      "id": "esp-urbanizacion",
+      "name": "Urbanización",
+      "description": "Construcción de banquetas, guarniciones, vialidades, redes urbanas y espacios públicos.",
+      "status": "active"
+    },
+    {
+      "id": "esp-puentes",
+      "name": "Construcción de puentes y viaductos",
+      "description": "Construcción, montaje, rehabilitación y mantenimiento de puentes, viaductos y estructuras de paso.",
+      "status": "active"
+    },
+    {
+      "id": "esp-tuneles",
+      "name": "Construcción de túneles",
+      "description": "Excavación, perforación, sostenimiento, revestimiento y construcción de túneles y obras subterráneas.",
+      "status": "active"
+    },
+    {
+      "id": "esp-infraestructura-ferroviaria",
+      "name": "Infraestructura ferroviaria",
+      "description": "Construcción y mantenimiento de vías férreas, sistemas ferroviarios, estaciones y obras complementarias.",
+      "status": "active"
+    },
+    {
+      "id": "esp-infraestructura-hidraulica",
+      "name": "Infraestructura hidráulica",
+      "description": "Construcción de presas, canales, acueductos, redes de distribución y obras de conducción de agua.",
+      "status": "active"
+    },
+    {
+      "id": "esp-instalaciones-hidrosanitarias",
+      "name": "Instalaciones hidrosanitarias",
+      "description": "Instalación de redes de agua potable, tuberías, drenaje sanitario, muebles y equipos hidrosanitarios.",
+      "status": "active"
+    },
+    {
+      "id": "esp-instalaciones-pluviales",
+      "name": "Instalaciones pluviales",
+      "description": "Construcción e instalación de sistemas de captación, conducción, almacenamiento y desalojo de aguas pluviales.",
+      "status": "active"
+    },
+    {
+      "id": "esp-instalaciones-electricas",
+      "name": "Instalaciones eléctricas",
+      "description": "Instalación, conexión, mantenimiento y pruebas de sistemas eléctricos, tableros, cableado, alumbrado y fuerza.",
+      "status": "active"
+    },
+    {
+      "id": "esp-instalaciones-electromecanicas",
+      "name": "Instalaciones electromecánicas",
+      "description": "Montaje, instalación y mantenimiento de equipos y sistemas electromecánicos en edificaciones e instalaciones industriales.",
+      "status": "active"
+    },
+    {
+      "id": "esp-aire-acondicionado",
+      "name": "Aire acondicionado y ventilación",
+      "description": "Instalación y mantenimiento de sistemas HVAC, ductos, ventiladores, equipos de climatización y extracción.",
+      "status": "active"
+    },
+    {
+      "id": "esp-instalaciones-gas",
+      "name": "Instalaciones de gas",
+      "description": "Instalación, conexión, pruebas y mantenimiento de redes y equipos de distribución de gas.",
+      "status": "active"
+    },
+    {
+      "id": "esp-telecomunicaciones",
+      "name": "Telecomunicaciones y cableado estructurado",
+      "description": "Instalación de redes de datos, fibra óptica, cableado estructurado, telefonía y sistemas de comunicación.",
+      "status": "active"
+    },
+    {
+      "id": "esp-automatizacion",
+      "name": "Automatización y control",
+      "description": "Instalación y configuración de sistemas de automatización, instrumentación, sensores y control de procesos.",
+      "status": "active"
+    },
+    {
+      "id": "esp-proteccion-incendios",
+      "name": "Sistemas de protección contra incendios",
+      "description": "Instalación y mantenimiento de rociadores, redes contra incendios, alarmas, detección y sistemas de extinción.",
+      "status": "active"
+    },
+    {
+      "id": "esp-impermeabilizacion",
+      "name": "Impermeabilización",
+      "description": "Aplicación de sistemas impermeabilizantes, membranas, recubrimientos y tratamientos contra humedad.",
+      "status": "active"
+    },
+    {
+      "id": "esp-acabados",
+      "name": "Acabados y recubrimientos",
+      "description": "Colocación de pisos, azulejos, recubrimientos, plafones, yeso, aplanados y acabados arquitectónicos.",
+      "status": "active"
+    },
+    {
+      "id": "esp-pintura",
+      "name": "Pintura y recubrimientos especiales",
+      "description": "Preparación de superficies y aplicación de pinturas, recubrimientos industriales y tratamientos protectores.",
+      "status": "active"
+    },
+    {
+      "id": "esp-carpinteria",
+      "name": "Carpintería",
+      "description": "Fabricación, instalación y montaje de elementos de madera, puertas, muebles, estructuras y acabados.",
+      "status": "active"
+    },
+    {
+      "id": "esp-herreria",
+      "name": "Herrería y cancelería",
+      "description": "Fabricación e instalación de puertas, ventanas, barandales, protecciones y elementos metálicos.",
+      "status": "active"
+    },
+    {
+      "id": "esp-aluminio-vidrio",
+      "name": "Aluminio y vidrio",
+      "description": "Fabricación e instalación de canceles, fachadas, ventanas, cristales y sistemas de aluminio y vidrio.",
+      "status": "active"
+    },
+    {
+      "id": "esp-soldadura",
+      "name": "Soldadura y corte de materiales",
+      "description": "Ejecución de trabajos de soldadura, oxicorte, corte térmico y unión de componentes metálicos.",
+      "status": "active"
+    },
+    {
+      "id": "esp-topografia",
+      "name": "Topografía y geodesia",
+      "description": "Levantamientos topográficos, trazos, nivelaciones, replanteos y control geométrico de obras.",
+      "status": "active"
+    },
+    {
+      "id": "esp-geotecnia",
+      "name": "Geotecnia y mecánica de suelos",
+      "description": "Estudios del terreno, exploración geotécnica, muestreo, pruebas de laboratorio y evaluación de estabilidad.",
+      "status": "active"
+    },
+    {
+      "id": "esp-maquinaria-pesada",
+      "name": "Operación de maquinaria pesada",
+      "description": "Operación de excavadoras, retroexcavadoras, cargadores, motoconformadoras, compactadores y maquinaria de construcción.",
+      "status": "active"
+    },
+    {
+      "id": "esp-izaje-montaje",
+      "name": "Izaje y montaje de cargas",
+      "description": "Maniobras de levantamiento, traslado, posicionamiento y montaje de estructuras, equipos y materiales mediante grúas y dispositivos de izaje.",
+      "status": "active"
+    },
+    {
+      "id": "esp-jardineria",
+      "name": "Paisajismo y jardinería",
+      "description": "Construcción de áreas verdes, instalación de sistemas de riego, plantación y mantenimiento de espacios exteriores.",
+      "status": "active"
+    },
+    {
+      "id": "esp-senalizacion",
+      "name": "Señalización y dispositivos de seguridad vial",
+      "description": "Instalación de señalamiento horizontal y vertical, barreras, dispositivos de protección y control de tránsito en obras.",
+      "status": "active"
+    },
+    {
+      "id": "esp-energias-renovables",
+      "name": "Energías renovables",
+      "description": "Instalación y mantenimiento de sistemas solares fotovoltaicos, solares térmicos y otras tecnologías de generación renovable.",
+      "status": "active"
+    }
+  ]
+}
