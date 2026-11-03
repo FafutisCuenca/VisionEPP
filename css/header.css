@@ -1,0 +1,159 @@
+
+/* =====================================================
+   VisionEPP - ESTILOS DEL ENCABEZADO CENTRALIZADO
+   Versión: 1.0
+   ===================================================== */
+
+#visionEPP-header {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#visionEPP-header .site-header {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 14px clamp(16px, 4vw, 44px);
+  color: #ffffff;
+  background: var(--navy, #102a43);
+}
+
+#visionEPP-header .header-content {
+  width: min(1500px, 100%);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+#visionEPP-header .header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex-wrap: wrap;
+  color: #ffffff;
+}
+
+#visionEPP-header .brand-home {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  color: #ffffff !important;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+#visionEPP-header .brand-home svg {
+  display: block;
+  width: 25px;
+  height: 25px;
+}
+
+#visionEPP-header .brand-home:hover {
+  color: #ffd54a !important;
+}
+
+#visionEPP-header .brand-name {
+  color: #ffffff !important;
+  font-size: 1.15rem;
+  font-weight: 750;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+#visionEPP-header .brand-divider,
+#visionEPP-header .header-divider {
+  color: #ffffff;
+  opacity: 0.75;
+  font-weight: 400;
+}
+
+#visionEPP-header .header-title {
+  color: #ffffff !important;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+#visionEPP-header .main-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#visionEPP-header .main-nav a {
+  color: #ffffff !important;
+  font-size: 0.92rem;
+  font-weight: 550;
+  text-decoration: none !important;
+  white-space: nowrap;
+  padding: 0;
+}
+
+#visionEPP-header .main-nav a:hover,
+#visionEPP-header .main-nav a:focus-visible,
+#visionEPP-header .main-nav a.active {
+  color: #ffd54a !important;
+  text-decoration: none !important;
+}
+
+#visionEPP-header .main-nav .nav-divider {
+  color: #ffffff;
+  opacity: 0.65;
+  user-select: none;
+}
+
+#visionEPP-header .brand-home:focus-visible,
+#visionEPP-header .main-nav a:focus-visible {
+  outline: 2px solid #ffd54a;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Adaptación para teléfonos y pantallas pequeñas */
+
+@media (max-width: 700px) {
+
+  #visionEPP-header .site-header {
+    padding: 13px 16px;
+  }
+
+  #visionEPP-header .header-content {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  #visionEPP-header .header-brand {
+    gap: 8px;
+  }
+
+  #visionEPP-header .brand-home,
+  #visionEPP-header .brand-home svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  #visionEPP-header .brand-name {
+    font-size: 1.05rem;
+  }
+
+  #visionEPP-header .header-title {
+    font-size: 0.92rem;
+  }
+
+  #visionEPP-header .main-nav {
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  #visionEPP-header .main-nav a {
+    font-size: 0.88rem;
+  }
+}
