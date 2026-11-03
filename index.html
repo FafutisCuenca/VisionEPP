@@ -17,6 +17,111 @@
   <link rel="stylesheet" href="css/styles.css">
 
   <style>
+    /* =====================================================
+       ENCABEZADO GENERAL VISIONEPP
+       ===================================================== */
+
+    .site-header {
+      padding: 14px clamp(16px, 4vw, 44px);
+      color: #ffffff;
+      background: var(--navy);
+    }
+
+    .header-content {
+      width: min(1500px, 100%);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+
+    .brand-home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 25px;
+      height: 25px;
+      color: #ffffff;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .brand-home svg {
+      display: block;
+      width: 25px;
+      height: 25px;
+    }
+
+    .brand-home:hover {
+      color: #ffd54a;
+    }
+
+    .brand-name {
+      color: #ffffff;
+      font-size: 1.15rem;
+      font-weight: 750;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .brand-name:hover {
+      color: #ffd54a;
+    }
+
+    .header-divider {
+      color: #ffffff;
+      opacity: 0.75;
+      font-weight: 400;
+    }
+
+    .header-title {
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .main-nav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .main-nav a {
+      color: #ffffff;
+      font-size: 0.92rem;
+      font-weight: 550;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .main-nav a:hover,
+    .main-nav a:focus-visible {
+      color: #ffd54a;
+      text-decoration: none;
+    }
+
+    .main-nav .nav-divider {
+      color: #ffffff;
+      opacity: 0.65;
+      user-select: none;
+    }
+
+    /* =====================================================
+       TABLERO PRINCIPAL
+       ===================================================== */
+
     .module-dashboard {
       max-width: 1180px;
       margin: 0 auto;
@@ -106,22 +211,6 @@
       font-weight: 700;
     }
 
-    .module-card.disabled {
-      background: #f5f7fa;
-      border-style: dashed;
-      color: #718096;
-      cursor: default;
-    }
-
-    .module-card.disabled p {
-      color: #718096;
-    }
-
-    .module-card.disabled .module-status {
-      background: #e9edf2;
-      color: #526477;
-    }
-
     .dashboard-notice {
       margin-top: 30px;
       padding: 18px 20px;
@@ -129,6 +218,45 @@
       border-radius: 6px;
       background: #fff9eb;
       line-height: 1.6;
+    }
+
+    @media (max-width: 700px) {
+      .site-header {
+        padding: 13px 16px;
+      }
+
+      .header-content {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .header-brand {
+        gap: 8px;
+      }
+
+      .brand-home,
+      .brand-home svg {
+        width: 23px;
+        height: 23px;
+      }
+
+      .brand-name {
+        font-size: 1.05rem;
+      }
+
+      .header-title {
+        font-size: 0.92rem;
+      }
+
+      .main-nav {
+        justify-content: flex-start;
+        gap: 8px;
+      }
+
+      .main-nav a {
+        font-size: 0.88rem;
+      }
     }
 
     @media (max-width: 600px) {
@@ -148,26 +276,44 @@
 <header class="site-header">
   <div class="header-content">
 
-    <a class="brand" href="./" aria-label="VisionEPP, página principal">
-      <span class="brand-mark" aria-hidden="true">V</span>
-      <span>VisionEPP</span>
-    </a>
-
-    <nav class="main-navigation" aria-label="Navegación principal">
-      <a href="./" class="nav-link active" aria-current="page">
-        Inicio
+    <div class="header-brand">
+      <a href="./" class="brand-home"
+         aria-label="Ir al inicio de VisionEPP">
+        <svg viewBox="0 0 24 24" fill="none"
+             xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true">
+          <path d="M3 10.5L12 3L21 10.5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
+          <path d="M5.5 9.5V20H18.5V9.5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
+          <text x="12" y="17"
+                text-anchor="middle"
+                font-size="6"
+                font-weight="bold"
+                fill="currentColor">VE</text>
+        </svg>
       </a>
 
-      <a href="inspeccion.html" class="nav-link">
-        Inspección
-      </a>
+      <span class="brand-name">VisionEPP</span>
+      <span class="header-divider">|</span>
+      <span class="header-title">Plataforma de seguridad en obra</span>
+    </div>
 
-      <a href="admin.html" class="nav-link">
-        Administración
-      </a>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a href="./" aria-current="page">Inicio</a>
+      <span class="nav-divider">|</span>
+      <a href="analisis.html">Análisis</a>
+      <span class="nav-divider">|</span>
+      <a href="inspeccion.html">Inspección</a>
+      <span class="nav-divider">|</span>
+      <a href="admin.html">Administración</a>
     </nav>
-
-    <span class="header-label">Seguridad en obra</span>
 
   </div>
 </header>
@@ -198,23 +344,23 @@
 
     <div class="module-grid">
 
-      <!-- PRUEBA YOLOv11 -->
+      <!-- ANÁLISIS -->
       <a
-        href="prueba-yolov11.html"
+        href="analisis.html"
         class="module-card featured"
       >
         <span class="module-icon" aria-hidden="true">⌕</span>
 
-        <h3>Prueba de detección YOLOv11</h3>
+        <h3>Análisis de evidencia</h3>
 
         <p>
-          Prueba y compara los parámetros de confianza del modelo
-          para identificar elementos de protección personal:
-          casco, chaleco, lentes, guantes y botas.
+          Accede a las herramientas experimentales de análisis
+          individual de imágenes, procesamiento por lotes y
+          análisis de video mediante el modelo de detección.
         </p>
 
         <span class="module-status">
-          Módulo funcional
+          Tres modalidades disponibles
         </span>
 
         <span class="module-action">
@@ -232,9 +378,9 @@
         <h3>Inspección de evidencia</h3>
 
         <p>
-          Accede al módulo existente de carga de evidencia,
-          visualización, configuración del contexto y registro
-          de sesiones de inspección.
+          Accede al módulo de carga de evidencia, visualización,
+          configuración del contexto y registro de sesiones
+          de inspección.
         </p>
 
         <span class="module-status">
@@ -269,54 +415,6 @@
           Ingresar al módulo →
         </span>
       </a>
-
-      <!-- ANÁLISIS POR LOTES -->
-      <div class="module-card disabled">
-        <span class="module-icon" aria-hidden="true">▦</span>
-
-        <h3>Análisis de imágenes por lotes</h3>
-
-        <p>
-          Preparación de análisis de múltiples fotografías
-          organizadas por obra, zona y actividad.
-        </p>
-
-        <span class="module-status">
-          Próximamente
-        </span>
-      </div>
-
-      <!-- VIDEO -->
-      <div class="module-card disabled">
-        <span class="module-icon" aria-hidden="true">▶</span>
-
-        <h3>Análisis de video</h3>
-
-        <p>
-          Revisión de grabaciones de obra y análisis de
-          elementos de protección personal durante las actividades.
-        </p>
-
-        <span class="module-status">
-          Próximamente
-        </span>
-      </div>
-
-      <!-- NORMATIVA -->
-      <div class="module-card disabled">
-        <span class="module-icon" aria-hidden="true">§</span>
-
-        <h3>Normativa y cumplimiento SST</h3>
-
-        <p>
-          Consulta de normas mexicanas, requisitos de seguridad
-          y referencias aplicables a las actividades de construcción.
-        </p>
-
-        <span class="module-status">
-          Próximamente
-        </span>
-      </div>
 
     </div>
   </section>
