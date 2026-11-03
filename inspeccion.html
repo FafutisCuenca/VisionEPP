@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="es-MX">
 <head>
@@ -14,279 +15,262 @@
 
   <link rel="stylesheet" href="css/styles.css">
 
-  
-<style>
-/* =====================================================
-   ENCABEZADO GENERAL VISIONEPP
-   ===================================================== */
+  <style>
+    /* =====================================================
+       ENCABEZADO GENERAL VISIONEPP
+       ===================================================== */
 
-.site-header {
-  padding: 14px clamp(16px, 4vw, 44px);
-  color: #ffffff;
-  background: var(--navy);
-}
+    .site-header {
+      padding: 14px clamp(16px, 4vw, 44px);
+      color: #ffffff;
+      background: var(--navy);
+    }
 
-.header-content {
-  width: min(1500px, 100%);
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  flex-wrap: wrap;
-}
+    .header-content {
+      width: min(1500px, 100%);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
 
-.header-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  flex-wrap: wrap;
-}
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
 
-.brand-home {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 25px;
-  height: 25px;
-  color: #ffffff;
-  text-decoration: none;
-  flex-shrink: 0;
-}
+    .brand-home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 25px;
+      height: 25px;
+      color: #ffffff;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
 
-.brand-home svg {
-  display: block;
-  width: 25px;
-  height: 25px;
-}
+    .brand-home svg {
+      display: block;
+      width: 25px;
+      height: 25px;
+    }
 
-.brand-home:hover {
-  color: #ffd54a;
-}
+    .brand-home:hover {
+      color: #ffd54a;
+    }
 
-.brand-name {
-  color: #ffffff;
-  font-size: 1.15rem;
-  font-weight: 750;
-  text-decoration: none;
-  white-space: nowrap;
-}
+    .brand-name {
+      color: #ffffff;
+      font-size: 1.15rem;
+      font-weight: 750;
+      text-decoration: none;
+      white-space: nowrap;
+    }
 
-.brand-name:hover {
-  color: #ffd54a;
-}
+    .brand-name:hover {
+      color: #ffd54a;
+    }
 
-.header-divider {
-  color: #ffffff;
-  opacity: 0.75;
-  font-weight: 400;
-}
+    .header-divider {
+      color: #ffffff;
+      opacity: 0.75;
+      font-weight: 400;
+    }
 
-.header-title {
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: 600;
-}
+    .header-title {
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 600;
+    }
 
-.main-nav {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+    .main-nav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-.main-nav a {
-  color: #ffffff;
-  font-size: 0.92rem;
-  font-weight: 550;
-  text-decoration: none;
-  white-space: nowrap;
-}
+    .main-nav a {
+      color: #ffffff;
+      font-size: 0.92rem;
+      font-weight: 550;
+      text-decoration: none;
+      white-space: nowrap;
+    }
 
-.main-nav a:hover,
-.main-nav a:focus-visible {
-  color: #ffd54a;
-  text-decoration: none;
-}
+    .main-nav a:hover,
+    .main-nav a:focus-visible {
+      color: #ffd54a;
+      text-decoration: none;
+    }
 
-.main-nav .nav-divider {
-  color: #ffffff;
-  opacity: 0.65;
-  user-select: none;
-}
+    .main-nav .nav-divider {
+      color: #ffffff;
+      opacity: 0.65;
+      user-select: none;
+    }
 
-@media (max-width: 700px) {
-  .site-header {
-    padding: 13px 16px;
-  }
+    @media (max-width: 700px) {
+      .site-header {
+        padding: 13px 16px;
+      }
 
-  .header-content {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 12px;
-  }
+      .header-content {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+      }
 
-  .header-brand {
-    gap: 8px;
-  }
+      .header-brand {
+        gap: 8px;
+      }
 
-  .brand-home,
-  .brand-home svg {
-    width: 23px;
-    height: 23px;
-  }
+      .brand-home,
+      .brand-home svg {
+        width: 23px;
+        height: 23px;
+      }
 
-  .brand-name {
-    font-size: 1.05rem;
-  }
+      .brand-name {
+        font-size: 1.05rem;
+      }
 
-  .header-title {
-    font-size: 0.92rem;
-  }
+      .header-title {
+        font-size: 0.92rem;
+      }
 
-  .main-nav {
-    justify-content: flex-start;
-    gap: 8px;
-  }
+      .main-nav {
+        justify-content: flex-start;
+        gap: 8px;
+      }
 
-  .main-nav a {
-    font-size: 0.88rem;
-  }
-}
-</style>
+      .main-nav a {
+        font-size: 0.88rem;
+      }
+    }
 
-<style>
-/* =====================================================
-   PRESENTACIÓN DEL MÓDULO DE INSPECCIÓN
-   ===================================================== */
+    /* =====================================================
+       PRESENTACIÓN DEL MÓDULO DE INSPECCIÓN
+       ===================================================== */
 
-.inspection-hero {
-  padding: 38px 0 30px;
-  margin-bottom: 25px;
-}
+    .inspection-hero {
+      padding: 30px 0 25px;
+      margin-bottom: 25px;
+    }
 
-.inspection-hero .eyebrow {
-  margin-bottom: 18px;
-  letter-spacing: 1.2px;
-}
+    .inspection-hero h1 {
+      max-width: 950px;
+      margin: 0 0 16px;
+      font-size: clamp(1.7rem, 3vw, 2.3rem);
+      line-height: 1.25;
+      letter-spacing: -0.4px;
+      color: #ffffff;
+    }
 
-.inspection-hero h1 {
-  max-width: 1050px;
-  margin: 0 0 20px;
-  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
-  line-height: 1.15;
-  letter-spacing: -0.8px;
-}
+    .inspection-hero .hero-description {
+      max-width: 950px;
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #ffffff;
+    }
 
-.inspection-hero .hero-description {
-  max-width: 950px;
-  margin: 0;
-  font-size: 1.05rem;
-  line-height: 1.8;
-  color: #526477;
-}
+    .inspection-hero .hero-description strong {
+      display: block;
+      margin-bottom: 7px;
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
 
-.inspection-hero .hero-description strong {
-  display: block;
-  margin-bottom: 8px;
-  color: #102a43;
-  font-size: 1.12rem;
-  font-weight: 650;
-}
+    @media (max-width: 700px) {
+      .inspection-hero {
+        padding: 22px 0 18px;
+      }
 
-@media (max-width: 700px) {
-  .inspection-hero {
-    padding: 25px 0 20px;
-  }
+      .inspection-hero h1 {
+        font-size: 1.7rem;
+        line-height: 1.25;
+      }
 
-  .inspection-hero h1 {
-    font-size: 2rem;
-    line-height: 1.2;
-  }
-
-  .inspection-hero .hero-description {
-    font-size: 0.98rem;
-    line-height: 1.7;
-  }
-}
-</style>
-
-  
+      .inspection-hero .hero-description {
+        font-size: 0.95rem;
+        line-height: 1.65;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<header class="site-header">
-  <div class="header-content">
-    <div class="header-brand">
+  <header class="site-header">
+    <div class="header-content">
+      <div class="header-brand">
 
-      <a href="./" class="brand-home"
-         aria-label="Ir al inicio de VisionEPP">
-        <svg viewBox="0 0 24 24" fill="none"
-             xmlns="http://www.w3.org/2000/svg"
-             aria-hidden="true">
-          <path d="M3 10.5L12 3L21 10.5"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"/>
-          <path d="M5.5 9.5V20H18.5V9.5"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"/>
-          <text x="12" y="17"
-                text-anchor="middle"
-                font-size="6"
-                font-weight="bold"
-                fill="currentColor">VE</text>
-        </svg>
-      </a>
+        <a href="./" class="brand-home"
+           aria-label="Ir al inicio de VisionEPP">
+          <svg viewBox="0 0 24 24" fill="none"
+               xmlns="http://www.w3.org/2000/svg"
+               aria-hidden="true">
+            <path d="M3 10.5L12 3L21 10.5"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"/>
+            <path d="M5.5 9.5V20H18.5V9.5"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"/>
+            <text x="12" y="17"
+                  text-anchor="middle"
+                  font-size="6"
+                  font-weight="bold"
+                  fill="currentColor">VE</text>
+          </svg>
+        </a>
 
-      <span class="brand-name">VisionEPP</span>
-      <span class="header-divider">|</span>
-      <span class="header-title">Inspección de evidencia</span>
+        <span class="brand-name">VisionEPP</span>
+        <span class="header-divider">|</span>
+        <span class="header-title">Inspección de evidencia</span>
+
+      </div>
+
+      <nav class="main-nav" aria-label="Navegación principal">
+        <a href="./">Inicio</a>
+        <span class="nav-divider">|</span>
+        <a href="analisis.html">Análisis</a>
+        <span class="nav-divider">|</span>
+        <a href="inspeccion.html" aria-current="page">Inspección</a>
+        <span class="nav-divider">|</span>
+        <a href="admin.html">Administración</a>
+      </nav>
 
     </div>
-
-    <nav class="main-nav" aria-label="Navegación principal">
-      <a href="./">Inicio</a>
-      <span class="nav-divider">|</span>
-      <a href="analisis.html">Análisis</a>
-      <span class="nav-divider">|</span>
-      <a href="inspeccion.html" aria-current="page">Inspección</a>
-      <span class="nav-divider">|</span>
-      <a href="admin.html">Administración</a>
-    </nav>
-
-  </div>
-</header>
-
-
+  </header>
 
   <main class="page-container">
 
+    <!-- PRESENTACIÓN DEL MÓDULO -->
+    <section class="hero inspection-hero">
 
+      <h1>Inspección visual de áreas de trabajo</h1>
 
-<!-- PRESENTACIÓN DEL MÓDULO -->
-<section class="hero inspection-hero">
+      <p class="hero-description">
+        <strong>Documentación fotográfica y revisión de condiciones de seguridad en obra.</strong>
+        Carga fotografías de las áreas de trabajo, identifica las actividades
+        que se realizan y establece el contexto necesario para revisar los
+        elementos de protección personal del personal en campo.
+      </p>
 
-  <p class="eyebrow">
-    INSPECCIÓN DE OBRA · EVIDENCIA FOTOGRÁFICA
-  </p>
-
-  <h1>Inspección visual de áreas de trabajo</h1>
-
-  <p class="hero-description">
-    <strong>Documentación fotográfica y revisión de condiciones de seguridad en obra.</strong>
-    Carga fotografías de las áreas de trabajo, identifica las actividades
-    que se realizan y establece el contexto necesario para revisar los
-    elementos de protección personal del personal en campo.
-  </p>
-
-</section>
+    </section>
 
     <!-- ÁREA PRINCIPAL -->
     <div class="main-grid">
