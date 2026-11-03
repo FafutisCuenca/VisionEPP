@@ -1,0 +1,807 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Consulta de normas oficiales mexicanas relacionadas con seguridad, salud y equipo de protección personal en obras.">
+  <title>Normativa mexicana NOM | VisionEPP</title>
+
+  <!-- Hoja de estilos general del proyecto -->
+  <link rel="stylesheet" href="./css/styles.css">
+
+  <style>
+    /* =====================================================
+       NORMATIVA VISIONEPP
+       Estilos particulares del submódulo
+       ===================================================== */
+
+    .normativa-main {
+      width: min(1500px, 92%);
+      margin: 0 auto;
+      padding: 38px 0 60px;
+    }
+
+    .normativa-intro {
+      margin-bottom: 28px;
+    }
+
+    .normativa-intro h1 {
+      color: #ffffff;
+      font-size: clamp(1.7rem, 3vw, 2.3rem);
+      line-height: 1.2;
+      margin: 0 0 12px;
+    }
+
+    .normativa-intro p {
+      color: rgba(255, 255, 255, 0.88);
+      max-width: 850px;
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    .normativa-panel {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: clamp(18px, 3vw, 28px);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.10);
+      margin-bottom: 22px;
+    }
+
+    .normativa-panel h2 {
+      color: #102a43;
+      font-size: 1.2rem;
+      margin: 0 0 18px;
+    }
+
+    .normativa-filtros {
+      display: grid;
+      grid-template-columns: minmax(220px, 2fr) minmax(180px, 1fr);
+      gap: 16px;
+      align-items: end;
+    }
+
+    .campo-filtro label {
+      display: block;
+      color: #334e68;
+      font-size: 0.9rem;
+      font-weight: 650;
+      margin-bottom: 7px;
+    }
+
+    .campo-filtro input,
+    .campo-filtro select {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid #bcccdc;
+      border-radius: 9px;
+      padding: 10px 12px;
+      background: #ffffff;
+      color: #102a43;
+      font: inherit;
+      box-sizing: border-box;
+    }
+
+    .campo-filtro input:focus,
+    .campo-filtro select:focus {
+      outline: 2px solid #00a896;
+      outline-offset: 2px;
+    }
+
+    .normativa-resumen {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .normativa-contador {
+      color: #486581;
+      font-size: 0.92rem;
+    }
+
+    .normativa-contador strong {
+      color: #102a43;
+    }
+
+    .normativa-lista {
+      display: grid;
+      gap: 16px;
+    }
+
+    .norma-card {
+      border: 1px solid #d9e2ec;
+      border-radius: 13px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .norma-card-header {
+      padding: 18px 20px;
+      background: #f5f8fa;
+      border-bottom: 1px solid #d9e2ec;
+    }
+
+    .norma-clave {
+      display: inline-block;
+      color: #007f78;
+      font-size: 0.82rem;
+      font-weight: 750;
+      letter-spacing: 0.035em;
+      margin-bottom: 7px;
+    }
+
+    .norma-card h3 {
+      color: #102a43;
+      font-size: 1.08rem;
+      line-height: 1.45;
+      margin: 0 0 10px;
+    }
+
+    .norma-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .norma-etiqueta {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      background: #e6f6f4;
+      color: #006d67;
+      font-size: 0.76rem;
+      font-weight: 650;
+    }
+
+    .norma-etiqueta.estatus {
+      background: #e8f1fb;
+      color: #245b8f;
+    }
+
+    .norma-card-body {
+      padding: 18px 20px;
+    }
+
+    .norma-objetivo {
+      color: #334e68;
+      line-height: 1.6;
+      margin: 0 0 16px;
+    }
+
+    .norma-detalles {
+      border-top: 1px solid #e5edf3;
+      padding-top: 14px;
+    }
+
+    .norma-detalles summary {
+      color: #007f78;
+      cursor: pointer;
+      font-weight: 700;
+      padding: 5px 0;
+    }
+
+    .norma-detalles summary:hover {
+      color: #005b56;
+    }
+
+    .norma-seccion {
+      margin-top: 18px;
+    }
+
+    .norma-seccion h4 {
+      color: #102a43;
+      font-size: 0.92rem;
+      margin: 0 0 8px;
+    }
+
+    .norma-seccion p {
+      color: #486581;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .norma-seccion ul {
+      color: #486581;
+      line-height: 1.6;
+      margin: 0;
+      padding-left: 21px;
+    }
+
+    .norma-enlaces {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .norma-enlaces a {
+      display: inline-block;
+      color: #007f78;
+      font-weight: 650;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      overflow-wrap: anywhere;
+    }
+
+    .norma-enlaces a:hover {
+      color: #005b56;
+    }
+
+    .norma-nota {
+      border-left: 3px solid #00a896;
+      background: #f3f8f8;
+      color: #486581;
+      padding: 11px 14px;
+      margin-top: 10px;
+      border-radius: 0 7px 7px 0;
+      line-height: 1.55;
+    }
+
+    .normativa-mensaje {
+      border-radius: 10px;
+      padding: 15px 17px;
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+
+    .normativa-mensaje.error {
+      background: #fff1f0;
+      color: #a12622;
+      border: 1px solid #f5c6c3;
+    }
+
+    .normativa-mensaje.info {
+      background: #edf6fc;
+      color: #245b8f;
+      border: 1px solid #c8dfef;
+    }
+
+    .normativa-vacio {
+      text-align: center;
+      color: #627d98;
+      padding: 35px 15px;
+      border: 1px dashed #bcccdc;
+      border-radius: 12px;
+      line-height: 1.6;
+    }
+
+    .normativa-criterio {
+      color: #627d98;
+      font-size: 0.86rem;
+      line-height: 1.6;
+      margin: 18px 0 0;
+    }
+
+    .normativa-footer {
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 0.83rem;
+      line-height: 1.6;
+      text-align: center;
+      margin-top: 28px;
+    }
+
+    @media (max-width: 700px) {
+      .normativa-filtros {
+        grid-template-columns: 1fr;
+      }
+
+      .normativa-main {
+        padding-top: 28px;
+      }
+
+      .norma-card-header,
+      .norma-card-body {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =====================================================
+       ENCABEZADO GENERAL VISIONEPP
+       ===================================================== -->
+
+  <header class="site-header">
+    <div class="header-content">
+
+      <div class="header-brand">
+        <a href="./" class="brand-home" aria-label="VisionEPP, página principal">
+          <svg
+            class="brand-icon"
+            width="25"
+            height="25"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true">
+            <path
+              d="M3 10.5L12 3L21 10.5"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"/>
+            <path
+              d="M5.5 9.5V20H18.5V9.5"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"/>
+            <path
+              d="M9 20V13H15V20"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linejoin="round"/>
+          </svg>
+          <span class="brand-name">VE</span>
+        </a>
+
+        <span class="header-label">VisionEPP</span>
+      </div>
+
+      <nav class="main-nav" aria-label="Navegación principal">
+        <a href="./" class="nav-link">Inicio</a>
+        <span aria-hidden="true">|</span>
+        <a href="./analisis.html" class="nav-link">Análisis</a>
+        <span aria-hidden="true">|</span>
+        <a href="./inspeccion.html" class="nav-link">Inspección</a>
+        <span aria-hidden="true">|</span>
+        <a href="./normativa.html" class="nav-link" aria-current="page">Normativa</a>
+        <span aria-hidden="true">|</span>
+        <a href="./admin.html" class="nav-link">Administración</a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- =====================================================
+       CONTENIDO PRINCIPAL
+       ===================================================== -->
+
+  <main class="normativa-main">
+
+    <section class="normativa-intro">
+      <h1>Normativa mexicana NOM</h1>
+      <p>
+        Consulta las referencias normativas relacionadas con la seguridad
+        y salud en el trabajo, la construcción y la selección y uso del
+        equipo de protección personal.
+      </p>
+    </section>
+
+    <section class="normativa-panel">
+
+      <h2>Consulta de normas</h2>
+
+      <div class="normativa-filtros">
+
+        <div class="campo-filtro">
+          <label for="buscarNorma">Buscar por clave o nombre</label>
+          <input
+            type="search"
+            id="buscarNorma"
+            placeholder="Ej. NOM-017 o equipo de protección personal"
+            autocomplete="off">
+        </div>
+
+        <div class="campo-filtro">
+          <label for="filtrarTipo">Filtrar por tipo</label>
+          <select id="filtrarTipo">
+            <option value="">Todos los tipos</option>
+            <option value="General">General</option>
+            <option value="Construcción">Construcción</option>
+            <option value="Actividad específica">Actividad específica</option>
+          </select>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="normativa-panel">
+
+      <div id="mensajeNormativa" aria-live="polite"></div>
+
+      <div class="normativa-resumen">
+        <h2 style="margin: 0;">Normas registradas</h2>
+        <div class="normativa-contador" id="contadorNormas">
+          Cargando catálogo...
+        </div>
+      </div>
+
+      <div class="normativa-lista" id="listaNormas">
+        <div class="normativa-vacio">
+          Cargando información del catálogo normativo...
+        </div>
+      </div>
+
+      <p class="normativa-criterio" id="criterioNormativo"></p>
+
+    </section>
+
+    <p class="normativa-footer">
+      VisionEPP · Catálogo de referencias normativas mexicanas.
+      La consulta es orientativa y no sustituye la evaluación de personal
+      competente en Seguridad y Salud en el Trabajo.
+    </p>
+
+  </main>
+
+  <!-- =====================================================
+       LÓGICA DEL CATÁLOGO
+       ===================================================== -->
+
+  <script>
+    "use strict";
+
+    const RUTA_NORMAS = "./data/normas.json";
+
+    const buscarNorma = document.getElementById("buscarNorma");
+    const filtrarTipo = document.getElementById("filtrarTipo");
+    const listaNormas = document.getElementById("listaNormas");
+    const contadorNormas = document.getElementById("contadorNormas");
+    const mensajeNormativa = document.getElementById("mensajeNormativa");
+    const criterioNormativo = document.getElementById("criterioNormativo");
+
+    let catalogoNormas = [];
+
+    /* -----------------------------------------------------
+       FUNCIONES DE APOYO
+       ----------------------------------------------------- */
+
+    function crearElemento(etiqueta, clase, contenido) {
+      const elemento = document.createElement(etiqueta);
+
+      if (clase) {
+        elemento.className = clase;
+      }
+
+      if (contenido !== undefined && contenido !== null) {
+        elemento.textContent = contenido;
+      }
+
+      return elemento;
+    }
+
+    function crearLista(elementos) {
+      const lista = document.createElement("ul");
+
+      if (!Array.isArray(elementos)) {
+        return lista;
+      }
+
+      elementos.forEach(texto => {
+        const item = document.createElement("li");
+        item.textContent = texto;
+        lista.appendChild(item);
+      });
+
+      return lista;
+    }
+
+    function agregarSeccion(contenedor, titulo, contenido) {
+      if (
+        contenido === undefined ||
+        contenido === null ||
+        contenido === "" ||
+        (Array.isArray(contenido) && contenido.length === 0)
+      ) {
+        return;
+      }
+
+      const seccion = crearElemento("section", "norma-seccion");
+      seccion.appendChild(crearElemento("h4", "", titulo));
+
+      if (Array.isArray(contenido)) {
+        seccion.appendChild(crearLista(contenido));
+      } else {
+        seccion.appendChild(crearElemento("p", "", contenido));
+      }
+
+      contenedor.appendChild(seccion);
+    }
+
+    function normalizarTexto(texto) {
+      return String(texto || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+    }
+
+    /* -----------------------------------------------------
+       CREACIÓN DE FICHAS
+       ----------------------------------------------------- */
+
+    function crearFichaNorma(norma) {
+      const tarjeta = crearElemento("article", "norma-card");
+
+      // Encabezado
+      const encabezado = crearElemento("div", "norma-card-header");
+
+      encabezado.appendChild(
+        crearElemento("span", "norma-clave", norma.clave || norma.id || "")
+      );
+
+      encabezado.appendChild(
+        crearElemento("h3", "", norma.titulo || "Norma sin título")
+      );
+
+      const metadatos = crearElemento("div", "norma-meta");
+
+      if (norma.tipo) {
+        metadatos.appendChild(
+          crearElemento("span", "norma-etiqueta", norma.tipo)
+        );
+      }
+
+      if (norma.estatus) {
+        metadatos.appendChild(
+          crearElemento("span", "norma-etiqueta estatus", norma.estatus)
+        );
+      }
+
+      encabezado.appendChild(metadatos);
+      tarjeta.appendChild(encabezado);
+
+      // Contenido
+      const cuerpo = crearElemento("div", "norma-card-body");
+
+      if (norma.objetivo_en_visionepp) {
+        cuerpo.appendChild(
+          crearElemento("p", "norma-objetivo", norma.objetivo_en_visionepp)
+        );
+      }
+
+      // Detalles desplegables
+      const detalles = document.createElement("details");
+      detalles.className = "norma-detalles";
+
+      const resumen = document.createElement("summary");
+      resumen.textContent = "Consultar información y referencias";
+      detalles.appendChild(resumen);
+
+      const contenido = document.createElement("div");
+
+      agregarSeccion(
+        contenido,
+        "Autoridad emisora",
+        norma.autoridad
+      );
+
+      agregarSeccion(
+        contenido,
+        "Aplicabilidad",
+        norma.aplicabilidad
+      );
+
+      agregarSeccion(
+        contenido,
+        "Actividades relacionadas",
+        norma.actividades_relacionadas
+      );
+
+      agregarSeccion(
+        contenido,
+        "Elementos de protección relacionados",
+        norma.elementos_epp_relacionados
+      );
+
+      agregarSeccion(
+        contenido,
+        "Notas para la revisión",
+        norma.notas
+      );
+
+      // Referencias oficiales
+      if (
+        Array.isArray(norma.referencias_oficiales) &&
+        norma.referencias_oficiales.length > 0
+      ) {
+        const seccionEnlaces = crearElemento("section", "norma-seccion");
+
+        seccionEnlaces.appendChild(
+          crearElemento("h4", "", "Referencias y consulta oficial")
+        );
+
+        const enlaces = crearElemento("div", "norma-enlaces");
+
+        norma.referencias_oficiales.forEach(referencia => {
+          if (!referencia.url) return;
+
+          try {
+            const url = new URL(referencia.url);
+
+            if (!["https:", "http:"].includes(url.protocol)) {
+              return;
+            }
+
+            const enlace = document.createElement("a");
+            enlace.href = url.href;
+            enlace.target = "_blank";
+            enlace.rel = "noopener noreferrer";
+            enlace.textContent =
+              (referencia.tipo || "Consultar referencia") + " ↗";
+
+            enlaces.appendChild(enlace);
+
+          } catch (error) {
+            console.warn("Referencia con URL no válida:", referencia);
+          }
+        });
+
+        if (enlaces.childElementCount > 0) {
+          seccionEnlaces.appendChild(enlaces);
+          contenido.appendChild(seccionEnlaces);
+        }
+      }
+
+      if (norma.verificacion_estatus || norma.nivel_verificacion) {
+        const verificacion = [];
+
+        if (norma.verificacion_estatus) {
+          verificacion.push(
+            "Fecha registrada de revisión: " + norma.verificacion_estatus
+          );
+        }
+
+        if (norma.nivel_verificacion) {
+          verificacion.push(
+            "Referencia consultada: " + norma.nivel_verificacion
+          );
+        }
+
+        const nota = crearElemento("div", "norma-nota");
+        nota.textContent = verificacion.join(" · ");
+        contenido.appendChild(nota);
+      }
+
+      detalles.appendChild(contenido);
+      cuerpo.appendChild(detalles);
+      tarjeta.appendChild(cuerpo);
+
+      return tarjeta;
+    }
+
+    /* -----------------------------------------------------
+       FILTRADO Y PRESENTACIÓN
+       ----------------------------------------------------- */
+
+    function renderizarNormas() {
+      const busqueda = normalizarTexto(buscarNorma.value);
+      const tipo = filtrarTipo.value;
+
+      const resultados = catalogoNormas.filter(norma => {
+        const textoBusqueda = normalizarTexto([
+          norma.clave,
+          norma.id,
+          norma.titulo,
+          norma.objetivo_en_visionepp,
+          norma.autoridad,
+          ...(norma.actividades_relacionadas || []),
+          ...(norma.elementos_epp_relacionados || [])
+        ].join(" "));
+
+        const coincideBusqueda =
+          !busqueda || textoBusqueda.includes(busqueda);
+
+        const coincideTipo =
+          !tipo || norma.tipo === tipo;
+
+        return coincideBusqueda && coincideTipo;
+      });
+
+      listaNormas.replaceChildren();
+
+      contadorNormas.textContent =
+        resultados.length + " de " + catalogoNormas.length + " normas";
+
+      if (resultados.length === 0) {
+        listaNormas.appendChild(
+          crearElemento(
+            "div",
+            "normativa-vacio",
+            "No se encontraron normas que coincidan con los criterios de búsqueda. Intenta con otra palabra o selecciona otro tipo."
+          )
+        );
+
+        return;
+      }
+
+      resultados.forEach(norma => {
+        listaNormas.appendChild(crearFichaNorma(norma));
+      });
+    }
+
+    /* -----------------------------------------------------
+       CARGA DEL ARCHIVO JSON
+       ----------------------------------------------------- */
+
+    async function cargarNormativa() {
+      mensajeNormativa.replaceChildren();
+
+      try {
+        const respuesta = await fetch(RUTA_NORMAS, {
+          cache: "no-store"
+        });
+
+        if (!respuesta.ok) {
+          throw new Error(
+            "No se pudo localizar el archivo normas.json. Código: " +
+            respuesta.status
+          );
+        }
+
+        const datos = await respuesta.json();
+
+        if (!datos || !Array.isArray(datos.normas)) {
+          throw new Error(
+            "El archivo JSON no contiene una lista válida de normas."
+          );
+        }
+
+        catalogoNormas = datos.normas;
+
+        if (datos.criterio_de_uso) {
+          criterioNormativo.textContent = datos.criterio_de_uso;
+        }
+
+        if (datos.ultima_revision_catalogo) {
+          const mensaje = crearElemento(
+            "div",
+            "normativa-mensaje info",
+            "Fecha registrada de revisión del catálogo: " +
+            datos.ultima_revision_catalogo +
+            ". Esta fecha no representa una actualización automática."
+          );
+
+          mensajeNormativa.appendChild(mensaje);
+        }
+
+        renderizarNormas();
+
+      } catch (error) {
+        console.error("Error al cargar el catálogo normativo:", error);
+
+        contadorNormas.textContent = "Catálogo no disponible";
+
+        listaNormas.replaceChildren();
+
+        listaNormas.appendChild(
+          crearElemento(
+            "div",
+            "normativa-vacio",
+            "No fue posible mostrar las normas registradas."
+          )
+        );
+
+        const mensaje = crearElemento(
+          "div",
+          "normativa-mensaje error",
+          "Error al cargar data/normas.json. Verifica que el archivo exista, que el nombre sea exactamente normas.json y que su contenido sea JSON válido. Detalle: " +
+          error.message
+        );
+
+        mensajeNormativa.appendChild(mensaje);
+      }
+    }
+
+    /* -----------------------------------------------------
+       EVENTOS
+       ----------------------------------------------------- */
+
+    buscarNorma.addEventListener("input", renderizarNormas);
+    filtrarTipo.addEventListener("change", renderizarNormas);
+
+    // Inicialización
+    cargarNormativa();
+
+  </script>
+
+</body>
+</html>
