@@ -18,107 +18,6 @@
 
   <style>
     /* =====================================================
-       ENCABEZADO GENERAL VISIONEPP
-       ===================================================== */
-
-    .site-header {
-      padding: 14px clamp(16px, 4vw, 44px);
-      color: #ffffff;
-      background: var(--navy);
-    }
-
-    .header-content {
-      width: min(1500px, 100%);
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .header-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-      flex-wrap: wrap;
-    }
-
-    .brand-home {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 25px;
-      height: 25px;
-      color: #ffffff;
-      text-decoration: none;
-      flex-shrink: 0;
-    }
-
-    .brand-home svg {
-      display: block;
-      width: 25px;
-      height: 25px;
-    }
-
-    .brand-home:hover {
-      color: #ffd54a;
-    }
-
-    .brand-name {
-      color: #ffffff;
-      font-size: 1.15rem;
-      font-weight: 750;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    .brand-name:hover {
-      color: #ffd54a;
-    }
-
-    .header-divider {
-      color: #ffffff;
-      opacity: 0.75;
-      font-weight: 400;
-    }
-
-    .header-title {
-      color: #ffffff;
-      font-size: 1rem;
-      font-weight: 600;
-    }
-
-    .main-nav {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .main-nav a {
-      color: #ffffff;
-      font-size: 0.92rem;
-      font-weight: 550;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    .main-nav a:hover,
-    .main-nav a:focus-visible {
-      color: #ffd54a;
-      text-decoration: none;
-    }
-
-    .main-nav .nav-divider {
-      color: #ffffff;
-      opacity: 0.65;
-      user-select: none;
-    }
-
-    /* =====================================================
        TABLERO PRINCIPAL
        ===================================================== */
 
@@ -126,20 +25,6 @@
       max-width: 1180px;
       margin: 0 auto;
       padding: 35px 20px 60px;
-    }
-
-    .module-intro {
-      margin-bottom: 35px;
-    }
-
-    .module-intro h1 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      margin: 12px 0;
-    }
-
-    .module-intro p {
-      max-width: 760px;
-      line-height: 1.7;
     }
 
     .module-section-title {
@@ -220,45 +105,6 @@
       line-height: 1.6;
     }
 
-    @media (max-width: 700px) {
-      .site-header {
-        padding: 13px 16px;
-      }
-
-      .header-content {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .header-brand {
-        gap: 8px;
-      }
-
-      .brand-home,
-      .brand-home svg {
-        width: 23px;
-        height: 23px;
-      }
-
-      .brand-name {
-        font-size: 1.05rem;
-      }
-
-      .header-title {
-        font-size: 0.92rem;
-      }
-
-      .main-nav {
-        justify-content: flex-start;
-        gap: 8px;
-      }
-
-      .main-nav a {
-        font-size: 0.88rem;
-      }
-    }
-
     @media (max-width: 600px) {
       .module-dashboard {
         padding: 25px 15px 40px;
@@ -273,130 +119,130 @@
 
 <body>
 
-<!-- ENCABEZADO CENTRALIZADO VisionEPP -->
-<div id="visionEPP-header" data-page="inicio"></div>
+  <!-- ENCABEZADO CENTRALIZADO VisionEPP -->
+  <div id="visionEPP-header" data-page="inicio"></div>
 
   <main class="module-dashboard">
 
-  <section class="module-intro">
-    <p class="eyebrow">SEGURIDAD · INTELIGENCIA ARTIFICIAL · PREVENCIÓN</p>
+    <!-- TITULO CENTRALIZADO -->
+    <div id="visionEPP-page-title" data-page="inicio"></div>
 
-    <h1>Plataforma VisionEPP</h1>
+    <section aria-labelledby="modulesHeading">
+
+      <div class="module-section-title">
+        <p class="eyebrow">PLATAFORMA</p>
+        <h2 id="modulesHeading">Módulos de trabajo</h2>
+        <p>
+          Selecciona el módulo al que deseas ingresar.
+        </p>
+      </div>
+
+      <div class="module-grid">
+
+        <!-- ANÁLISIS -->
+        <a
+          href="analisis.html"
+          class="module-card featured"
+        >
+          <span class="module-icon" aria-hidden="true">⌕</span>
+
+          <h3>Análisis de evidencia</h3>
+
+          <p>
+            Accede a las herramientas experimentales de análisis
+            individual de imágenes, procesamiento por lotes y
+            análisis de video mediante el modelo de detección.
+          </p>
+
+          <span class="module-status">
+            Tres modalidades disponibles
+          </span>
+
+          <span class="module-action">
+            Ingresar al módulo →
+          </span>
+        </a>
+
+        <!-- INSPECCIÓN -->
+        <a
+          href="inspeccion.html"
+          class="module-card"
+        >
+          <span class="module-icon" aria-hidden="true">▧</span>
+
+          <h3>Inspección de evidencia</h3>
+
+          <p>
+            Accede al módulo de carga de evidencia, visualización,
+            configuración del contexto y registro de sesiones
+            de inspección.
+          </p>
+
+          <span class="module-status">
+            Módulo disponible
+          </span>
+
+          <span class="module-action">
+            Ingresar al módulo →
+          </span>
+        </a>
+
+        <!-- ADMINISTRACIÓN -->
+        <a
+          href="admin.html"
+          class="module-card"
+        >
+          <span class="module-icon" aria-hidden="true">⚙</span>
+
+          <span>
+            <h3>Administración</h3>
+          </span>
+
+          <p>
+            Administra los catálogos generales de VisionEPP,
+            tipos de obra, especialidades y futuras configuraciones
+            de seguridad.
+          </p>
+
+          <span class="module-status">
+            Módulo disponible
+          </span>
+
+          <span class="module-action">
+            Ingresar al módulo →
+          </span>
+        </a>
+
+      </div>
+    </section>
+
+    <div class="dashboard-notice" role="note">
+      <strong>Nota importante:</strong>
+      VisionEPP es un proyecto en desarrollo. Las detecciones y
+      resultados experimentales requieren validación humana.
+      La plataforma no sustituye la evaluación de riesgos ni la
+      aprobación del responsable de Seguridad y Salud en el Trabajo.
+    </div>
+
+  </main>
+
+  <!-- PIE DE PAGINA ACTUAL: SE CONSERVA POR AHORA -->
+  <footer class="site-footer">
+    <p>
+      <strong>VisionEPP</strong> · Plataforma experimental de seguridad en obra.
+    </p>
 
     <p>
-      Plataforma experimental para apoyar la revisión de equipo de
-      protección personal en obras de construcción mediante herramientas
-      de análisis visual, administración y configuración de seguridad.
+      Análisis visual de equipo de protección personal y apoyo a la
+      gestión de Seguridad y Salud en el Trabajo.
     </p>
-  </section>
+  </footer>
 
-  <section aria-labelledby="modulesHeading">
+  <!-- ENCABEZADO CENTRALIZADO -->
+  <script src="./js/header.js"></script>
 
-    <div class="module-section-title">
-      <p class="eyebrow">PLATAFORMA</p>
-      <h2 id="modulesHeading">Módulos de trabajo</h2>
-      <p>
-        Selecciona el módulo al que deseas ingresar.
-      </p>
-    </div>
+  <!-- TITULO CENTRALIZADO -->
+  <script src="./js/layout.js"></script>
 
-    <div class="module-grid">
-
-      <!-- ANÁLISIS -->
-      <a
-        href="analisis.html"
-        class="module-card featured"
-      >
-        <span class="module-icon" aria-hidden="true">⌕</span>
-
-        <h3>Análisis de evidencia</h3>
-
-        <p>
-          Accede a las herramientas experimentales de análisis
-          individual de imágenes, procesamiento por lotes y
-          análisis de video mediante el modelo de detección.
-        </p>
-
-        <span class="module-status">
-          Tres modalidades disponibles
-        </span>
-
-        <span class="module-action">
-          Ingresar al módulo →
-        </span>
-      </a>
-
-      <!-- INSPECCIÓN -->
-      <a
-        href="inspeccion.html"
-        class="module-card"
-      >
-        <span class="module-icon" aria-hidden="true">▧</span>
-
-        <h3>Inspección de evidencia</h3>
-
-        <p>
-          Accede al módulo de carga de evidencia, visualización,
-          configuración del contexto y registro de sesiones
-          de inspección.
-        </p>
-
-        <span class="module-status">
-          Módulo disponible
-        </span>
-
-        <span class="module-action">
-          Ingresar al módulo →
-        </span>
-      </a>
-
-      <!-- ADMINISTRACIÓN -->
-      <a
-        href="admin.html"
-        class="module-card"
-      >
-        <span class="module-icon" aria-hidden="true">⚙</span>
-
-        <h3>Administración</h3>
-
-        <p>
-          Administra los catálogos generales de VisionEPP,
-          tipos de obra, especialidades y futuras configuraciones
-          de seguridad.
-        </p>
-
-        <span class="module-status">
-          Módulo disponible
-        </span>
-
-        <span class="module-action">
-          Ingresar al módulo →
-        </span>
-      </a>
-
-    </div>
-  </section>
-
-  <div class="dashboard-notice" role="note">
-    <strong>Nota importante:</strong>
-    VisionEPP es un proyecto en desarrollo. Las detecciones y
-    resultados experimentales requieren validación humana.
-    La plataforma no sustituye la evaluación de riesgos ni la
-    aprobación del responsable de Seguridad y Salud en el Trabajo.
-  </div>
-
-</main>
-
-<footer class="site-footer">
-  <p>
-    <strong>VisionEPP</strong> · Plataforma experimental de seguridad en obra.
-  </p>
-
-  <p>
-    Análisis visual de equipo de protección personal y apoyo a la
-    gestión de Seguridad y Salud en el Trabajo.
-  </p>
-</footer>
-<script src="./js/header.js"></script>
 </body>
 </html>
