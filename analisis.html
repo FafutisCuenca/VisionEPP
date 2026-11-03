@@ -251,6 +251,36 @@
   }
 }
 
+/* Separación visual entre opciones del menú */
+.site-header .main-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.site-header .main-nav a {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+
+/* Guion separador entre opciones */
+.site-header .main-nav a:not(:last-child)::after {
+  content: "|";
+  color: #ffffff;
+  margin-left: 18px;
+  font-weight: 400;
+  pointer-events: none;
+}
+
+/* Mantener el separador blanco al pasar el apuntador */
+.site-header .main-nav a:hover::after,
+.site-header .main-nav a.active::after {
+  color: #ffffff;
+}
+
   </style>
 </head>
 
