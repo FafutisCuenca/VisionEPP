@@ -1,10 +1,12 @@
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-MX">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Consulta de normas oficiales mexicanas relacionadas con seguridad, salud y equipo de protección personal en obras.">
+  <meta name="theme-color" content="#102a43">
+
   <title>Normativa mexicana NOM | VisionEPP</title>
 
   <!-- Hoja de estilos general del proyecto -->
@@ -20,27 +22,6 @@
       width: min(1500px, 92%);
       margin: 0 auto;
       padding: 38px 0 60px;
-    }
-
-    .normativa-intro {
-      background: #123b63;
-      padding: 25px 28px;
-      border-radius: 12px;
-      margin-bottom: 28px;
-    }
-
-    .normativa-intro h1 {
-      color: #ffffff;
-      font-size: clamp(1.7rem, 3vw, 2.3rem);
-      line-height: 1.2;
-      margin: 0 0 12px;
-    }
-
-    .normativa-intro p {
-      color: rgba(255, 255, 255, 0.9);
-      max-width: 850px;
-      line-height: 1.65;
-      margin: 0;
     }
 
     .normativa-panel {
@@ -296,10 +277,6 @@
         padding-top: 28px;
       }
 
-      .normativa-intro {
-        padding: 21px 18px;
-      }
-
       .norma-card-header,
       .norma-card-body {
         padding: 15px;
@@ -319,14 +296,8 @@
 
   <main class="normativa-main">
 
-    <section class="normativa-intro">
-      <h1>Normativa mexicana NOM</h1>
-      <p>
-        Consulta las referencias normativas relacionadas con la seguridad
-        y salud en el trabajo, la construcción y la selección y uso del
-        equipo de protección personal.
-      </p>
-    </section>
+    <!-- TITULO CENTRALIZADO -->
+    <div id="visionEPP-page-title" data-page="normativa"></div>
 
     <section class="normativa-panel">
 
@@ -388,6 +359,9 @@
 
   <!-- ENCABEZADO CENTRALIZADO -->
   <script src="./js/header.js"></script>
+
+  <!-- TITULO CENTRALIZADO DE PAGINAS -->
+  <script src="./js/layout.js"></script>
 
   <!-- =====================================================
        LÓGICA DEL CATÁLOGO
