@@ -17,25 +17,8 @@
 
 <body>
 
-  <!-- ENCABEZADO -->
-  <header class="site-header admin-header">
-    <div class="header-content">
-
-      <a class="brand" href="./" aria-label="VisionEPP">
-        <span class="brand-mark">V</span>
-        <span>VisionEPP</span>
-      </a>
-
-      <nav class="main-navigation" aria-label="Navegación principal">
-        <a href="./" class="nav-link">Inspección</a>
-        <a href="admin.html" class="nav-link active"
-           aria-current="page">Administración</a>
-      </nav>
-
-      <span class="header-label">Centro de control</span>
-
-    </div>
-  </header>
+  <!-- ENCABEZADO CENTRALIZADO VisionEPP -->
+  <div id="visionEPP-header" data-page="admin"></div>
 
   <main class="admin-container">
 
@@ -283,6 +266,12 @@
     <p><strong>VisionEPP</strong> · Centro de administración</p>
     <p>Gestión de obras y Seguridad y Salud en el Trabajo.</p>
   </footer>
-<script type="module" src="js/admin.js"></script>
+
+  <!-- ENCABEZADO CENTRALIZADO -->
+  <script src="./js/header.js"></script>
+
+  <!-- Punto de entrada de administración -->
+  <script type="module" src="js/admin.js"></script>
+
 </body>
 </html>
