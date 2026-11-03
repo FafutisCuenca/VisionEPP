@@ -14,58 +14,6 @@
   <title>VisionEPP | Inspección visual de obra</title>
 
   <link rel="stylesheet" href="css/styles.css">
-
-  <style>
-    /* =====================================================
-       PRESENTACIÓN DEL MÓDULO DE INSPECCIÓN
-       ===================================================== */
-
-    .inspection-hero {
-      padding: 30px 0 25px;
-      margin-bottom: 25px;
-    }
-
-    .inspection-hero h1 {
-      max-width: 950px;
-      margin: 0 0 16px;
-      font-size: clamp(1.7rem, 3vw, 2.3rem);
-      line-height: 1.25;
-      letter-spacing: -0.4px;
-      color: #ffffff;
-    }
-
-    .inspection-hero .hero-description {
-      max-width: 950px;
-      margin: 0;
-      font-size: 1rem;
-      line-height: 1.7;
-      color: #ffffff;
-    }
-
-    .inspection-hero .hero-description strong {
-      display: block;
-      margin-bottom: 7px;
-      color: #ffffff;
-      font-size: 1.05rem;
-      font-weight: 700;
-    }
-
-    @media (max-width: 700px) {
-      .inspection-hero {
-        padding: 22px 0 18px;
-      }
-
-      .inspection-hero h1 {
-        font-size: 1.7rem;
-        line-height: 1.25;
-      }
-
-      .inspection-hero .hero-description {
-        font-size: 0.95rem;
-        line-height: 1.65;
-      }
-    }
-  </style>
 </head>
 
 <body>
@@ -75,19 +23,8 @@
 
   <main class="page-container">
 
-    <!-- PRESENTACIÓN DEL MÓDULO -->
-    <section class="hero inspection-hero">
-
-      <h1>Inspección visual de áreas de trabajo</h1>
-
-      <p class="hero-description">
-        <strong>Documentación fotográfica y revisión de condiciones de seguridad en obra.</strong>
-        Carga fotografías de las áreas de trabajo, identifica las actividades
-        que se realizan y establece el contexto necesario para revisar los
-        elementos de protección personal del personal en campo.
-      </p>
-
-    </section>
+    <!-- TITULO CENTRALIZADO -->
+    <div id="visionEPP-page-title" data-page="inspeccion"></div>
 
     <!-- ÁREA PRINCIPAL -->
     <div class="main-grid">
@@ -378,6 +315,9 @@
 
   <!-- ENCABEZADO CENTRALIZADO -->
   <script src="./js/header.js"></script>
+
+  <!-- TITULO CENTRALIZADO DE PAGINAS -->
+  <script src="./js/layout.js"></script>
 
   <!-- Punto de entrada de la aplicación -->
   <script type="module" src="js/app.js"></script>
