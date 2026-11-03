@@ -1,58 +1,145 @@
+/* =====================================================
+   VisionEPP - LAYOUT GLOBAL
+   Version: 2.0
+
+   Responsabilidad exclusiva:
+   - Ancho del contenido principal
+   - Centrado y márgenes
+   - Espaciado general
+   - Apariencia del título de página
+   - Adaptación a dispositivos móviles
+
+   Los componentes funcionales pertenecen a sus
+   respectivas hojas de estilos.
+   ===================================================== */
+
+:root {
+  --vision-layout-navy: #102a43;
+  --vision-layout-eyebrow: #b8d2e8;
+  --vision-layout-white: #ffffff;
+
+  --vision-layout-max-width: 1440px;
+  --vision-layout-side-space: 48px;
+
+  --vision-layout-top-space: 32px;
+  --vision-layout-bottom-space: 56px;
+}
 
 /* =====================================================
-   VisionEPP - TITULO CENTRALIZADO
-   Version: 1.1
+   1. CONTENEDOR GENERAL DE TODAS LAS PÁGINAS
+   ===================================================== */
+
+main.vision-page-container {
+  box-sizing: border-box;
+  width: calc(100% - var(--vision-layout-side-space));
+  max-width: var(--vision-layout-max-width);
+  margin: 0 auto;
+  padding: var(--vision-layout-top-space) 0
+    var(--vision-layout-bottom-space);
+}
+
+/* =====================================================
+   2. CONTENEDOR DEL TÍTULO
    ===================================================== */
 
 #visionEPP-page-title {
+  display: block;
   width: 100%;
   margin: 0 0 30px;
+  padding: 0;
 }
+
+/* =====================================================
+   3. BLOQUE VISUAL DEL TÍTULO
+   ===================================================== */
 
 #visionEPP-page-title .vision-page-title {
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   width: 100%;
-  padding: 28px 30px;
-  background: #102a43;
+  min-height: 174px;
+
+  margin: 0;
+  padding: 28px 32px;
+
+  background: var(--vision-layout-navy);
+  background-image: none;
+
+  border: 0;
   border-radius: 12px;
-  color: #ffffff;
+
+  color: var(--vision-layout-white);
 }
+
+/* Etiqueta superior */
 
 #visionEPP-page-title .vision-page-eyebrow {
   margin: 0 0 10px;
-  color: #b8d2e8;
+  padding: 0;
+
+  color: var(--vision-layout-eyebrow);
+
   font-size: 0.76rem;
   font-weight: 750;
   letter-spacing: 0.10em;
   line-height: 1.4;
+  text-transform: uppercase;
 }
+
+/* Título principal */
 
 #visionEPP-page-title .vision-page-heading {
   margin: 0 0 10px;
-  color: #ffffff;
+  padding: 0;
+
+  color: var(--vision-layout-white);
+
   font-size: clamp(1.65rem, 3vw, 2.15rem);
   font-weight: 750;
   line-height: 1.2;
 }
 
+/* Descripción */
+
 #visionEPP-page-title .vision-page-description {
   max-width: 850px;
+
   margin: 0;
-  color: #ffffff;
+  padding: 0;
+
+  color: var(--vision-layout-white);
+
   font-size: 0.98rem;
+  font-weight: 400;
   line-height: 1.65;
   opacity: 0.92;
 }
 
-/* Adaptacion para telefonos */
+/* =====================================================
+   4. ADAPTACIÓN A TABLETAS Y TELÉFONOS
+   ===================================================== */
 
 @media (max-width: 700px) {
+
+  :root {
+    --vision-layout-side-space: 28px;
+    --vision-layout-top-space: 24px;
+    --vision-layout-bottom-space: 40px;
+  }
+
+  main.vision-page-container {
+    width: calc(100% - var(--vision-layout-side-space));
+  }
 
   #visionEPP-page-title {
     margin-bottom: 22px;
   }
 
   #visionEPP-page-title .vision-page-title {
+    min-height: 150px;
     padding: 23px 19px;
     border-radius: 10px;
   }
