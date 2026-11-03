@@ -23,6 +23,9 @@
     }
 
     .normativa-intro {
+      background: #123b63;
+      padding: 25px 28px;
+      border-radius: 12px;
       margin-bottom: 28px;
     }
 
@@ -34,7 +37,7 @@
     }
 
     .normativa-intro p {
-      color: rgba(255, 255, 255, 0.88);
+      color: rgba(255, 255, 255, 0.9);
       max-width: 850px;
       line-height: 1.65;
       margin: 0;
@@ -293,110 +296,22 @@
         padding-top: 28px;
       }
 
+      .normativa-intro {
+        padding: 21px 18px;
+      }
+
       .norma-card-header,
       .norma-card-body {
         padding: 15px;
       }
     }
-    
-/* Corrección visual del encabezado y título de Normativa */
-
-/* Icono de inicio y marca */
-.site-header .brand-home,
-.site-header .brand-home:visited,
-.site-header .brand-home svg,
-.site-header .brand-name {
-  color: #ffffff !important;
-}
-
-.site-header .brand-home:hover,
-.site-header .brand-home:hover svg,
-.site-header .brand-home:hover .brand-name {
-  color: #f4c542 !important;
-}
-
-/* Franja azul para el título de la subpágina */
-.normativa-intro {
-  background: #123b63;
-  padding: 25px 28px;
-  border-radius: 12px;
-  margin-bottom: 28px;
-}
-
-.normativa-intro h1 {
-  color: #ffffff;
-}
-
-.normativa-intro p {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-@media (max-width: 700px) {
-  .normativa-intro {
-    padding: 21px 18px;
-  }
-}
-
   </style>
 </head>
 
 <body>
 
-  <!-- =====================================================
-       ENCABEZADO GENERAL VISIONEPP
-       ===================================================== -->
-
-  <header class="site-header">
-    <div class="header-content">
-
-      <div class="header-brand">
-        <a href="./" class="brand-home" aria-label="VisionEPP, página principal">
-          <svg
-            class="brand-icon"
-            width="25"
-            height="25"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true">
-            <path
-              d="M3 10.5L12 3L21 10.5"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"/>
-            <path
-              d="M5.5 9.5V20H18.5V9.5"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"/>
-            <path
-              d="M9 20V13H15V20"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linejoin="round"/>
-          </svg>
-          <span class="brand-name">VE</span>
-        </a>
-
-        <span class="header-label">VisionEPP</span>
-      </div>
-
-      <nav class="main-nav" aria-label="Navegación principal">
-        <a href="./" class="nav-link">Inicio</a>
-        <span aria-hidden="true">|</span>
-        <a href="./analisis.html" class="nav-link">Análisis</a>
-        <span aria-hidden="true">|</span>
-        <a href="./inspeccion.html" class="nav-link">Inspección</a>
-        <span aria-hidden="true">|</span>
-        <a href="./normativa.html" class="nav-link" aria-current="page">Normativa</a>
-        <span aria-hidden="true">|</span>
-        <a href="./admin.html" class="nav-link">Administración</a>
-      </nav>
-
-    </div>
-  </header>
+  <!-- ENCABEZADO CENTRALIZADO VisionEPP -->
+  <div id="visionEPP-header" data-page="normativa"></div>
 
   <!-- =====================================================
        CONTENIDO PRINCIPAL
@@ -470,6 +385,9 @@
     </p>
 
   </main>
+
+  <!-- ENCABEZADO CENTRALIZADO -->
+  <script src="./js/header.js"></script>
 
   <!-- =====================================================
        LÓGICA DEL CATÁLOGO
