@@ -1,6 +1,7 @@
+
 /* =====================================================
-   VisionEPP - ESTILOS DEL TITULO CENTRALIZADO
-   Version: 1.0
+   VisionEPP - TITULO CENTRALIZADO
+   Version: 1.1
    ===================================================== */
 
 #visionEPP-page-title {
@@ -11,24 +12,24 @@
 #visionEPP-page-title .vision-page-title {
   box-sizing: border-box;
   width: 100%;
-  padding: 26px 30px;
-  background: #f3f6fa;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
+  padding: 28px 30px;
+  background: #102a43;
+  border-radius: 12px;
+  color: #ffffff;
 }
 
 #visionEPP-page-title .vision-page-eyebrow {
-  margin: 0 0 9px;
-  color: #3976a5;
+  margin: 0 0 10px;
+  color: #b8d2e8;
   font-size: 0.76rem;
   font-weight: 750;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.10em;
   line-height: 1.4;
 }
 
 #visionEPP-page-title .vision-page-heading {
   margin: 0 0 10px;
-  color: #102a43;
+  color: #ffffff;
   font-size: clamp(1.65rem, 3vw, 2.15rem);
   font-weight: 750;
   line-height: 1.2;
@@ -37,9 +38,10 @@
 #visionEPP-page-title .vision-page-description {
   max-width: 850px;
   margin: 0;
-  color: #526477;
+  color: #ffffff;
   font-size: 0.98rem;
   line-height: 1.65;
+  opacity: 0.92;
 }
 
 /* Adaptacion para telefonos */
@@ -51,8 +53,8 @@
   }
 
   #visionEPP-page-title .vision-page-title {
-    padding: 21px 19px;
-    border-radius: 11px;
+    padding: 23px 19px;
+    border-radius: 10px;
   }
 
   #visionEPP-page-title .vision-page-heading {
