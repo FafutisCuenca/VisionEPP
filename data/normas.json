@@ -1,0 +1,181 @@
+
+{
+  "version": "1.0.0",
+  "proyecto": "VisionEPP",
+  "descripcion": "Catálogo de referencias normativas mexicanas para orientar la revisión de seguridad y equipo de protección personal en obras.",
+  "ultima_revision_catalogo": "2026-11-03",
+  "criterio_de_uso": "Las referencias orientan la revisión. La aplicabilidad debe determinarse según la actividad, los riesgos, el ámbito de cada norma y las condiciones del centro de trabajo.",
+  "normas": [
+    {
+      "id": "NOM-017-STPS-2024",
+      "clave": "NOM-017-STPS-2024",
+      "titulo": "Equipo de protección personal - Selección, uso y manejo en los centros de trabajo",
+      "autoridad": "Secretaría del Trabajo y Previsión Social",
+      "estatus": "Vigente",
+      "verificacion_estatus": "2026-11-03",
+      "nivel_verificacion": "Verificada en publicación oficial",
+      "tipo": "General",
+      "prioridad": 1,
+      "objetivo_en_visionepp": "Orientar la selección, el uso, el manejo y la revisión del equipo de protección personal a partir de los riesgos identificados.",
+      "aplicabilidad": [
+        "Centros de trabajo donde se requiera EPP",
+        "Selección de EPP por puesto y área",
+        "Revisión de condiciones de uso y conservación del EPP"
+      ],
+      "actividades_relacionadas": [
+        "Obra general",
+        "Trabajo en altura",
+        "Soldadura y corte",
+        "Riesgo eléctrico",
+        "Manejo de sustancias peligrosas"
+      ],
+      "elementos_epp_relacionados": [
+        "Casco",
+        "Chaleco o ropa de protección",
+        "Lentes de seguridad",
+        "Guantes",
+        "Calzado de protección",
+        "Protección respiratoria",
+        "Protección auditiva",
+        "Sistemas de protección contra caídas, cuando correspondan"
+      ],
+      "referencias_oficiales": [
+        {
+          "tipo": "Texto oficial",
+          "url": "https://dof.gob.mx/website/normasOficiales/9496/stps/stps.html"
+        }
+      ],
+      "notas": [
+        "La selección del EPP debe partir de la identificación y análisis de los riesgos.",
+        "La imagen no demuestra por sí sola la certificación, el estado interno, la talla adecuada ni la capacidad de protección del equipo.",
+        "El Apéndice I de esta norma es no normativo."
+      ]
+    },
+    {
+      "id": "NOM-031-STPS-2011",
+      "clave": "NOM-031-STPS-2011",
+      "titulo": "Construcción - Condiciones de seguridad y salud en el trabajo",
+      "autoridad": "Secretaría del Trabajo y Previsión Social",
+      "estatus": "Vigente",
+      "verificacion_estatus": "2026-11-03",
+      "nivel_verificacion": "Ficha y publicación oficial consultadas",
+      "tipo": "Construcción",
+      "prioridad": 1,
+      "objetivo_en_visionepp": "Servir como referencia de seguridad y salud para el contexto de las obras de construcción y relacionar las condiciones observadas con los riesgos de la actividad.",
+      "aplicabilidad": [
+        "Obras de construcción comprendidas en su campo de aplicación",
+        "Condiciones de seguridad de las áreas de trabajo",
+        "Identificación y prevención de riesgos durante la obra"
+      ],
+      "actividades_relacionadas": [
+        "Obra general",
+        "Trabajos en altura",
+        "Excavación",
+        "Uso de maquinaria y herramientas",
+        "Movimiento de materiales"
+      ],
+      "elementos_epp_relacionados": [
+        "Casco",
+        "Chaleco o ropa de protección",
+        "Lentes de seguridad",
+        "Guantes",
+        "Calzado de protección",
+        "Protección específica según el riesgo"
+      ],
+      "referencias_oficiales": [
+        {
+          "tipo": "Texto oficial",
+          "url": "https://sidof.segob.gob.mx/notas/docFuente/5188292"
+        },
+        {
+          "tipo": "Ficha de normalización",
+          "url": "https://platiica.economia.gob.mx/normalizacion/nom-031-stps-2011/"
+        }
+      ],
+      "notas": [
+        "La aplicabilidad concreta depende del tipo de obra y del campo de aplicación de la norma.",
+        "La inspección fotográfica no sustituye la evaluación integral de las condiciones de seguridad."
+      ]
+    },
+    {
+      "id": "NOM-009-STPS-2011",
+      "clave": "NOM-009-STPS-2011",
+      "titulo": "Condiciones de seguridad para realizar trabajos en altura",
+      "autoridad": "Secretaría del Trabajo y Previsión Social",
+      "estatus": "Vigente",
+      "verificacion_estatus": "2026-11-03",
+      "nivel_verificacion": "Ficha oficial de normalización consultada",
+      "tipo": "Actividad específica",
+      "prioridad": 2,
+      "objetivo_en_visionepp": "Orientar la revisión de condiciones relacionadas con los trabajos en altura y los equipos de protección que correspondan al riesgo identificado.",
+      "aplicabilidad": [
+        "Trabajos comprendidos en la definición y campo de aplicación de la norma",
+        "Actividades con riesgo de caída de altura"
+      ],
+      "actividades_relacionadas": [
+        "Trabajo en altura",
+        "Trabajos en plataformas",
+        "Trabajos en bordes o desniveles"
+      ],
+      "elementos_epp_relacionados": [
+        "Casco adecuado al riesgo",
+        "Sistema personal para interrumpir caídas, cuando corresponda",
+        "Arnés y componentes compatibles, cuando sean requeridos"
+      ],
+      "referencias_oficiales": [
+        {
+          "tipo": "Ficha de normalización",
+          "url": "https://platiica.economia.gob.mx/normalizacion/nom-009-stps-2011/"
+        }
+      ],
+      "notas": [
+        "No se debe concluir que un sistema contra caídas es adecuado solo porque aparece en la fotografía.",
+        "La compatibilidad, inspección, anclaje y funcionamiento requieren comprobaciones adicionales según corresponda."
+      ]
+    },
+    {
+      "id": "NOM-027-STPS-2008",
+      "clave": "NOM-027-STPS-2008",
+      "titulo": "Actividades de soldadura y corte - Condiciones de seguridad e higiene",
+      "autoridad": "Secretaría del Trabajo y Previsión Social",
+      "estatus": "Vigente",
+      "verificacion_estatus": "2026-11-03",
+      "nivel_verificacion": "Ficha oficial de normalización consultada",
+      "tipo": "Actividad específica",
+      "prioridad": 2,
+      "objetivo_en_visionepp": "Orientar la revisión de riesgos y medidas de seguridad asociados con actividades de soldadura y corte.",
+      "aplicabilidad": [
+        "Actividades comprendidas en el campo de aplicación de la norma",
+        "Trabajos con exposición a radiación, proyecciones, chispas u otros riesgos propios del proceso"
+      ],
+      "actividades_relacionadas": [
+        "Soldadura",
+        "Corte",
+        "Esmerilado relacionado con la preparación o acabado del trabajo"
+      ],
+      "elementos_epp_relacionados": [
+        "Protección ocular y facial apropiada al proceso",
+        "Guantes apropiados para la actividad",
+        "Ropa de protección adecuada al riesgo",
+        "Protección respiratoria cuando la evaluación de riesgos la requiera",
+        "Calzado de protección"
+      ],
+      "referencias_oficiales": [
+        {
+          "tipo": "Ficha de normalización",
+          "url": "https://platiica.economia.gob.mx/normalizacion/nom-027-stps-2008/"
+        }
+      ],
+      "notas": [
+        "La selección del equipo debe corresponder al proceso y a los riesgos identificados.",
+        "No todas las actividades de esmerilado quedan automáticamente comprendidas en los mismos requisitos; se debe evaluar el proceso concreto."
+      ]
+    }
+  ],
+  "limitaciones": [
+    "Este catálogo inicial no constituye un inventario exhaustivo de las NOM aplicables a construcción.",
+    "La fecha de revisión registra cuándo se consultó la referencia; no implica que exista un mecanismo automático de actualización.",
+    "Antes de convertir una disposición en una regla de evaluación, se debe identificar el numeral oficial que la sustenta.",
+    "Los resultados de VisionEPP son orientativos y requieren validación por personal competente en Seguridad y Salud en el Trabajo."
+  ]
+}
