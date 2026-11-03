@@ -1,0 +1,65 @@
+/* =====================================================
+   VisionEPP - ESTILOS DEL TITULO CENTRALIZADO
+   Version: 1.0
+   ===================================================== */
+
+#visionEPP-page-title {
+  width: 100%;
+  margin: 0 0 30px;
+}
+
+#visionEPP-page-title .vision-page-title {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 26px 30px;
+  background: #f3f6fa;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+}
+
+#visionEPP-page-title .vision-page-eyebrow {
+  margin: 0 0 9px;
+  color: #3976a5;
+  font-size: 0.76rem;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+  line-height: 1.4;
+}
+
+#visionEPP-page-title .vision-page-heading {
+  margin: 0 0 10px;
+  color: #102a43;
+  font-size: clamp(1.65rem, 3vw, 2.15rem);
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+#visionEPP-page-title .vision-page-description {
+  max-width: 850px;
+  margin: 0;
+  color: #526477;
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+/* Adaptacion para telefonos */
+
+@media (max-width: 700px) {
+
+  #visionEPP-page-title {
+    margin-bottom: 22px;
+  }
+
+  #visionEPP-page-title .vision-page-title {
+    padding: 21px 19px;
+    border-radius: 11px;
+  }
+
+  #visionEPP-page-title .vision-page-heading {
+    font-size: 1.55rem;
+  }
+
+  #visionEPP-page-title .vision-page-description {
+    font-size: 0.91rem;
+  }
+}
