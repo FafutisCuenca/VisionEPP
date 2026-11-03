@@ -1,0 +1,346 @@
+
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta
+    name="description"
+    content="VisionEPP: plataforma de análisis y evaluación de equipo de protección personal en obras."
+  >
+
+  <meta name="theme-color" content="#102a43">
+
+  <title>VisionEPP | Plataforma de seguridad en obra</title>
+
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    .module-dashboard {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 35px 20px 60px;
+    }
+
+    .module-intro {
+      margin-bottom: 35px;
+    }
+
+    .module-intro h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin: 12px 0;
+    }
+
+    .module-intro p {
+      max-width: 760px;
+      line-height: 1.7;
+    }
+
+    .module-section-title {
+      margin: 35px 0 18px;
+    }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(260px, 1fr)
+      );
+      gap: 20px;
+    }
+
+    .module-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 225px;
+      padding: 24px;
+      border: 1px solid #d9e2ec;
+      border-radius: 14px;
+      background: #fff;
+      color: #102a43;
+      text-decoration: none;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    a.module-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(16, 42, 67, .12);
+    }
+
+    .module-card.featured {
+      border: 2px solid #16865b;
+    }
+
+    .module-icon {
+      font-size: 32px;
+      margin-bottom: 18px;
+    }
+
+    .module-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .module-card p {
+      line-height: 1.6;
+      margin: 0 0 20px;
+      color: #526477;
+    }
+
+    .module-action {
+      margin-top: auto;
+      font-weight: 700;
+      color: #176b50;
+    }
+
+    .module-status {
+      display: inline-block;
+      align-self: flex-start;
+      margin-top: auto;
+      padding: 5px 10px;
+      border-radius: 20px;
+      background: #e8f5ee;
+      color: #176b50;
+      font-size: .8rem;
+      font-weight: 700;
+    }
+
+    .module-card.disabled {
+      background: #f5f7fa;
+      border-style: dashed;
+      color: #718096;
+      cursor: default;
+    }
+
+    .module-card.disabled p {
+      color: #718096;
+    }
+
+    .module-card.disabled .module-status {
+      background: #e9edf2;
+      color: #526477;
+    }
+
+    .dashboard-notice {
+      margin-top: 30px;
+      padding: 18px 20px;
+      border-left: 4px solid #d69e36;
+      border-radius: 6px;
+      background: #fff9eb;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .module-dashboard {
+        padding: 25px 15px 40px;
+      }
+
+      .module-card {
+        min-height: 190px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="header-content">
+
+    <a class="brand" href="./" aria-label="VisionEPP, página principal">
+      <span class="brand-mark" aria-hidden="true">V</span>
+      <span>VisionEPP</span>
+    </a>
+
+    <nav class="main-navigation" aria-label="Navegación principal">
+      <a href="./" class="nav-link active" aria-current="page">
+        Inicio
+      </a>
+
+      <a href="inspeccion.html" class="nav-link">
+        Inspección
+      </a>
+
+      <a href="admin.html" class="nav-link">
+        Administración
+      </a>
+    </nav>
+
+    <span class="header-label">Seguridad en obra</span>
+
+  </div>
+</header>
+
+<main class="module-dashboard">
+
+  <section class="module-intro">
+    <p class="eyebrow">SEGURIDAD · INTELIGENCIA ARTIFICIAL · PREVENCIÓN</p>
+
+    <h1>Plataforma VisionEPP</h1>
+
+    <p>
+      Plataforma experimental para apoyar la revisión de equipo de
+      protección personal en obras de construcción mediante herramientas
+      de análisis visual, administración y configuración de seguridad.
+    </p>
+  </section>
+
+  <section aria-labelledby="modulesHeading">
+
+    <div class="module-section-title">
+      <p class="eyebrow">PLATAFORMA</p>
+      <h2 id="modulesHeading">Módulos de trabajo</h2>
+      <p>
+        Selecciona el módulo al que deseas ingresar.
+      </p>
+    </div>
+
+    <div class="module-grid">
+
+      <!-- PRUEBA YOLOv11 -->
+      <a
+        href="prueba-yolov11.html"
+        class="module-card featured"
+      >
+        <span class="module-icon" aria-hidden="true">⌕</span>
+
+        <h3>Prueba de detección YOLOv11</h3>
+
+        <p>
+          Prueba y compara los parámetros de confianza del modelo
+          para identificar elementos de protección personal:
+          casco, chaleco, lentes, guantes y botas.
+        </p>
+
+        <span class="module-status">
+          Módulo funcional
+        </span>
+
+        <span class="module-action">
+          Ingresar al módulo →
+        </span>
+      </a>
+
+      <!-- INSPECCIÓN -->
+      <a
+        href="inspeccion.html"
+        class="module-card"
+      >
+        <span class="module-icon" aria-hidden="true">▧</span>
+
+        <h3>Inspección de evidencia</h3>
+
+        <p>
+          Accede al módulo existente de carga de evidencia,
+          visualización, configuración del contexto y registro
+          de sesiones de inspección.
+        </p>
+
+        <span class="module-status">
+          Módulo disponible
+        </span>
+
+        <span class="module-action">
+          Ingresar al módulo →
+        </span>
+      </a>
+
+      <!-- ADMINISTRACIÓN -->
+      <a
+        href="admin.html"
+        class="module-card"
+      >
+        <span class="module-icon" aria-hidden="true">⚙</span>
+
+        <h3>Administración</h3>
+
+        <p>
+          Administra los catálogos generales de VisionEPP,
+          tipos de obra, especialidades y futuras configuraciones
+          de seguridad.
+        </p>
+
+        <span class="module-status">
+          Módulo disponible
+        </span>
+
+        <span class="module-action">
+          Ingresar al módulo →
+        </span>
+      </a>
+
+      <!-- ANÁLISIS POR LOTES -->
+      <div class="module-card disabled">
+        <span class="module-icon" aria-hidden="true">▦</span>
+
+        <h3>Análisis de imágenes por lotes</h3>
+
+        <p>
+          Preparación de análisis de múltiples fotografías
+          organizadas por obra, zona y actividad.
+        </p>
+
+        <span class="module-status">
+          Próximamente
+        </span>
+      </div>
+
+      <!-- VIDEO -->
+      <div class="module-card disabled">
+        <span class="module-icon" aria-hidden="true">▶</span>
+
+        <h3>Análisis de video</h3>
+
+        <p>
+          Revisión de grabaciones de obra y análisis de
+          elementos de protección personal durante las actividades.
+        </p>
+
+        <span class="module-status">
+          Próximamente
+        </span>
+      </div>
+
+      <!-- NORMATIVA -->
+      <div class="module-card disabled">
+        <span class="module-icon" aria-hidden="true">§</span>
+
+        <h3>Normativa y cumplimiento SST</h3>
+
+        <p>
+          Consulta de normas mexicanas, requisitos de seguridad
+          y referencias aplicables a las actividades de construcción.
+        </p>
+
+        <span class="module-status">
+          Próximamente
+        </span>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="dashboard-notice" role="note">
+    <strong>Nota importante:</strong>
+    VisionEPP es un proyecto en desarrollo. Las detecciones y
+    resultados experimentales requieren validación humana.
+    La plataforma no sustituye la evaluación de riesgos ni la
+    aprobación del responsable de Seguridad y Salud en el Trabajo.
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <p>
+    <strong>VisionEPP</strong> · Plataforma experimental de seguridad en obra.
+  </p>
+
+  <p>
+    Análisis visual de equipo de protección personal y apoyo a la
+    gestión de Seguridad y Salud en el Trabajo.
+  </p>
+</footer>
+
+</body>
+</html>
