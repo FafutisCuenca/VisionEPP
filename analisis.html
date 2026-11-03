@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-MX">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +11,8 @@
     name="description"
     content="Módulo de análisis de evidencia de VisionEPP. Análisis de imágenes individuales, lotes de imágenes y video."
   >
+
+  <meta name="theme-color" content="#102a43">
 
   <link rel="stylesheet" href="css/styles.css">
 
@@ -24,19 +26,6 @@
       width: min(1180px, 92%);
       margin: 0 auto;
       padding: 32px 0 55px;
-    }
-
-    .analysis-intro {
-      margin-bottom: 30px;
-    }
-
-    .analysis-intro h1 {
-      margin-bottom: 12px;
-    }
-
-    .analysis-intro p {
-      max-width: 850px;
-      line-height: 1.7;
     }
 
     .analysis-notice {
@@ -194,39 +183,21 @@
   <!-- ENCABEZADO CENTRALIZADO VisionEPP -->
   <div id="visionEPP-header" data-page="analisis"></div>
 
-
-  <!-- =====================================================
-       CONTENIDO PRINCIPAL
-       ===================================================== -->
-
   <main class="analysis-main">
 
-    <section class="analysis-intro">
+    <!-- TITULO CENTRALIZADO -->
+    <div id="visionEPP-page-title" data-page="analisis"></div>
 
-      <h1>Análisis de evidencia</h1>
+    <!-- AVISO INFORMATIVO -->
+    <div class="analysis-notice">
+      <strong>Información importante:</strong>
+      Los análisis de este módulo son herramientas experimentales
+      de apoyo para la identificación visual de elementos de
+      protección personal. Sus resultados requieren revisión y
+      validación humana.
+    </div>
 
-      <p>
-        Selecciona la modalidad de análisis que necesitas utilizar.
-        VisionEPP permite trabajar con imágenes individuales, conjuntos
-        de imágenes y archivos de video mediante herramientas
-        independientes de procesamiento.
-      </p>
-
-      <div class="analysis-notice">
-        <strong>Información importante:</strong>
-        Los análisis de este módulo son herramientas experimentales
-        de apoyo para la identificación visual de elementos de
-        protección personal. Sus resultados requieren revisión y
-        validación humana.
-      </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         MODALIDADES DE ANÁLISIS
-         ===================================================== -->
-
+    <!-- MODALIDADES DE ANÁLISIS -->
     <section aria-labelledby="modalidadesTitle">
 
       <h2 class="analysis-section-title" id="modalidadesTitle">
@@ -236,7 +207,6 @@
       <div class="analysis-grid">
 
         <!-- IMAGEN INDIVIDUAL -->
-
         <article class="analysis-card">
 
           <div class="analysis-card-icon" aria-hidden="true">
@@ -267,9 +237,7 @@
 
         </article>
 
-
         <!-- LOTE DE IMÁGENES -->
-
         <article class="analysis-card">
 
           <div class="analysis-card-icon" aria-hidden="true">
@@ -300,9 +268,7 @@
 
         </article>
 
-
         <!-- VIDEO -->
-
         <article class="analysis-card">
 
           <div class="analysis-card-icon" aria-hidden="true">
@@ -334,14 +300,9 @@
         </article>
 
       </div>
-
     </section>
 
-
-    <!-- =====================================================
-         RELACIÓN CON INSPECCIÓN Y ADMINISTRACIÓN
-         ===================================================== -->
-
+    <!-- RELACIÓN CON INSPECCIÓN Y ADMINISTRACIÓN -->
     <section class="analysis-secondary">
 
       <h2>Complementa el análisis con una inspección</h2>
@@ -367,11 +328,7 @@
 
     </section>
 
-
-    <!-- =====================================================
-         ADVERTENCIA TÉCNICA Y DE SEGURIDAD
-         ===================================================== -->
-
+    <!-- ADVERTENCIA TÉCNICA Y DE SEGURIDAD -->
     <section class="analysis-disclaimer">
 
       <strong>Alcance y limitaciones del análisis</strong>
@@ -399,12 +356,7 @@
 
     </section>
 
-
-    <!-- =====================================================
-         PIE DE PÁGINA ACTUAL
-         Se centralizará en una etapa posterior
-         ===================================================== -->
-
+    <!-- PIE DE PÁGINA ACTUAL: SE CONSERVA -->
     <footer class="analysis-footer">
       <p>
         VisionEPP · Herramienta de apoyo para la revisión de
@@ -417,8 +369,11 @@
 
   </main>
 
-  <!-- ENCABEZADO CENTRALIZADO VisionEPP -->
+  <!-- ENCABEZADO CENTRALIZADO -->
   <script src="./js/header.js"></script>
+
+  <!-- TITULO CENTRALIZADO -->
+  <script src="./js/layout.js"></script>
 
 </body>
 </html>
