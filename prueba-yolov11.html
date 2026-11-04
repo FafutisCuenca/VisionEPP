@@ -396,20 +396,25 @@
 
 .comparison-summary {
   display: grid;
-  gap: 14px;
+  gap: 8px;
 }
 
 .comparison-highlight {
   background: #eef4fa;
   border: 1px solid #d7e0e8;
-  border-radius: 8px;
-  padding: 14px;
+  border-radius: 6px;
+  padding: 9px 12px;
 }
 
-.comparison-highlight strong {
-  color: #173b68;
+.comparison-highlight p {
+  margin: 4px 0;
+  font-size: .85rem;
 }
 
+.comparison-summary .summary-group {
+  padding-top: 7px;
+}
+    
 .difference-positive {
   color: #176b3a;
   font-weight: 700;
@@ -445,11 +450,15 @@
 
 @media (max-width: 420px) {
   .summary-metrics {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .metric-value {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+  }
+
+  .metric-label {
+    font-size: .7rem;
   }
 }
     @media (max-width: 760px) {
