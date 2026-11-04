@@ -297,7 +297,152 @@
       text-align: center;
       font-size: .9rem;
     }
+/* =====================================================
+   RESÚMENES GRÁFICOS DEL COMPARATIVO
+   ===================================================== */
 
+.visual-summary {
+  margin-top: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.summary-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.metric-box {
+  background: #f3f6f9;
+  border: 1px solid #d7e0e8;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.metric-label {
+  display: block;
+  color: #526575;
+  font-size: .82rem;
+  margin-bottom: 5px;
+}
+
+.metric-value {
+  display: block;
+  color: #173b68;
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+
+.summary-group {
+  border-top: 1px solid #e2e8ef;
+  padding-top: 10px;
+}
+
+.summary-group h3 {
+  margin: 0 0 9px;
+  font-size: .95rem;
+  color: #173b68;
+}
+
+.class-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  margin: 8px 0;
+  font-size: .88rem;
+}
+
+.class-count {
+  font-weight: 700;
+  color: #172b3a;
+}
+
+.bar-track {
+  grid-column: 1 / -1;
+  height: 9px;
+  background: #e8edf2;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  background: #16803c;
+}
+
+.bar-fill.absent {
+  background: #d92d20;
+}
+
+.summary-note,
+.empty-summary {
+  color: #526575;
+  font-size: .88rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.comparison-summary {
+  display: grid;
+  gap: 14px;
+}
+
+.comparison-highlight {
+  background: #eef4fa;
+  border: 1px solid #d7e0e8;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.comparison-highlight strong {
+  color: #173b68;
+}
+
+.difference-positive {
+  color: #176b3a;
+  font-weight: 700;
+}
+
+.difference-neutral {
+  color: #526575;
+  font-weight: 700;
+}
+
+.difference-negative {
+  color: #b42318;
+  font-weight: 700;
+}
+
+.technical-details {
+  margin-top: 14px;
+  border: 1px solid #d7e0e8;
+  border-radius: 8px;
+  padding: 12px;
+  background: #f8fafc;
+}
+
+.technical-details summary {
+  cursor: pointer;
+  color: #173b68;
+  font-weight: 700;
+}
+
+.technical-details textarea {
+  margin-top: 12px;
+}
+
+@media (max-width: 420px) {
+  .summary-metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .metric-value {
+    font-size: 1.2rem;
+  }
+}
     @media (max-width: 760px) {
       body { padding: 0 12px 20px; }
       .comparison { grid-template-columns: 1fr; }
@@ -457,19 +602,26 @@
 
     <section class="panel">
       <h2>4. Comparación de conteos</h2>
-      <pre id="comparisonSummary">Ejecuta la comparación para ver los conteos.</pre>
+<div id="comparisonSummary" class="comparison-summary">
+  <p class="empty-summary">Ejecuta la comparación para ver los conteos.</p>
+</div>
     </section>
 
     <section class="panel">
-      <h2>5. Reporte técnico JSON</h2>
-      <p class="note">
-        Este reporte conserva los datos técnicos completos de la inferencia
-        para su revisión y diagnóstico.
-      </p>
-      <button id="downloadButton" disabled>Descargar reporte JSON</button>
-      <button id="selectButton" disabled>Seleccionar reporte</button>
-      <textarea id="report" readonly placeholder="El reporte completo aparecerá aquí."></textarea>
-    </section>
+  <h2>5. Reporte técnico</h2>
+  <p class="note">
+    El reporte completo conserva los datos técnicos de la inferencia.
+    Puedes consultarlo o descargarlo cuando necesites revisar el diagnóstico.
+  </p>
+
+  <button id="downloadButton" disabled>Descargar reporte JSON</button>
+  <button id="selectButton" disabled>Seleccionar reporte</button>
+
+  <details class="technical-details">
+    <summary>Ver detalle técnico de la inferencia (JSON)</summary>
+    <textarea id="report" readonly placeholder="El reporte completo aparecerá aquí."></textarea>
+  </details>
+</section>
 
   </main>
 
@@ -859,17 +1011,167 @@
     })).filter(item => item.count > 0);
   }
 
-  function renderThresholdSummary(elementId, threshold, decoded, detections) {
-    $(elementId).textContent = JSON.stringify({
-      threshold,
-      nmsIouThreshold: NMS_IOU_THRESHOLD,
-      candidatesAfterThreshold: decoded.beforeNms,
-      detectionsAfterNMS: decoded.detections.length,
-      detectionsByClass: classCounts(decoded.detections),
-      detections
-    }, null, 2);
-  }
+  function renderThresholdSummary(elementId, threshold, decoded) {
+  const container = $(elementId);
+  const detections = decoded.detections;
+  const total = detections.length;
 
+  const absentCount = detections.filter(d =>
+    d.label.startsWith('Sin ')
+  ).length;
+
+  const presentCount = total - absentCount;
+
+  const averageConfidence = total
+    ? detections.reduce((sum, d) => sum + d.score, 0) / total
+    : 0;
+
+  const counts = classCounts(detections);
+  const maxCount = Math.max(1, ...counts.map(item => item.count));
+
+  const classRows = counts.length
+    ? counts.map(item => {
+        const absent = item.className.startsWith('Sin ');
+        const percentage = (item.count / maxCount) * 100;
+
+        return `
+          <div class="class-row">
+            <span>${item.className}</span>
+            <span class="class-count">${item.count}</span>
+            <div class="bar-track">
+              <div
+                class="bar-fill ${absent ? 'absent' : ''}"
+                style="width:${percentage}%"
+              ></div>
+            </div>
+          </div>
+        `;
+      }).join('')
+    : '<p class="summary-note">No se detectaron clases con este umbral.</p>';
+
+  container.innerHTML = `
+    <div class="summary-metrics">
+      <div class="metric-box">
+        <span class="metric-label">Total de detecciones</span>
+        <strong class="metric-value">${total}</strong>
+      </div>
+
+      <div class="metric-box">
+        <span class="metric-label">Confianza promedio</span>
+        <strong class="metric-value">${(averageConfidence * 100).toFixed(1)}%</strong>
+      </div>
+
+      <div class="metric-box">
+        <span class="metric-label">Clases EPP</span>
+        <strong class="metric-value">${presentCount}</strong>
+      </div>
+
+      <div class="metric-box">
+        <span class="metric-label">Clases «Sin EPP»</span>
+        <strong class="metric-value">${absentCount}</strong>
+      </div>
+    </div>
+
+    <div class="summary-group">
+      <h3>Detecciones por clase</h3>
+      ${classRows}
+    </div>
+
+    <p class="summary-note">
+      Candidatos después del umbral: ${decoded.beforeNms}.
+      Cajas después de NMS: ${total}.
+    </p>
+  `;
+}
+
+  function renderComparisonSummary(decoded45, decoded25) {
+  const container = $('comparisonSummary');
+
+  const total45 = decoded45.detections.length;
+  const total25 = decoded25.detections.length;
+  const difference = total25 - total45;
+
+  const counts45 = classCounts(decoded45.detections);
+  const counts25 = classCounts(decoded25.detections);
+
+  const getCount = (list, classId) => {
+    const item = list.find(entry => entry.classId === classId);
+    return item ? item.count : 0;
+  };
+
+  const differences = PPE_CLASSES.map((className, classId) => {
+    const count45 = getCount(counts45, classId);
+    const count25 = getCount(counts25, classId);
+
+    return {
+      className,
+      count45,
+      count25,
+      difference: count25 - count45
+    };
+  }).filter(item =>
+    item.count45 !== 0 || item.count25 !== 0
+  );
+
+  const differenceRows = differences.map(item => {
+    const value = item.difference;
+
+    const differenceClass =
+      value > 0 ? 'difference-positive' :
+      value < 0 ? 'difference-negative' :
+      'difference-neutral';
+
+    const sign = value > 0 ? '+' : '';
+
+    return `
+      <div class="class-row">
+        <span>${item.className}</span>
+        <span class="${differenceClass}">
+          ${item.count45} → ${item.count25}
+          (${sign}${value})
+        </span>
+      </div>
+    `;
+  }).join('');
+
+  const additionalText = difference > 0
+    ? `El umbral 0.25 produjo ${difference} detección(es) más.`
+    : difference < 0
+      ? `El umbral 0.25 produjo ${Math.abs(difference)} detección(es) menos.`
+      : 'Ambos umbrales produjeron el mismo número de detecciones.';
+
+  container.innerHTML = `
+    <div class="summary-metrics">
+      <div class="metric-box">
+        <span class="metric-label">Detecciones con 0.45</span>
+        <strong class="metric-value">${total45}</strong>
+      </div>
+
+      <div class="metric-box">
+        <span class="metric-label">Detecciones con 0.25</span>
+        <strong class="metric-value">${total25}</strong>
+      </div>
+    </div>
+
+    <div class="comparison-highlight">
+      <strong>Resultado del comparativo</strong>
+      <p>${additionalText}</p>
+      <p class="summary-note">
+        La diferencia representa cajas detectadas, no aciertos
+        adicionales confirmados.
+      </p>
+    </div>
+
+    <div class="summary-group">
+      <h3>Variación por clase</h3>
+      ${
+        differenceRows ||
+        '<p class="summary-note">No hubo detecciones en ninguno de los umbrales.</p>'
+      }
+    </div>
+  `;
+}
+  
   async function runComparison() {
     if (busy) return;
 
@@ -1035,18 +1337,7 @@
       result.status =
         'INFERENCE_EXECUTED_THRESHOLD_COMPARISON_PRELIMINARY';
 
-      $('comparisonSummary').textContent = JSON.stringify({
-        sameInference: true,
-        detectionsAt045: decoded45.detections.length,
-        detectionsAt025: decoded25.detections.length,
-        additionalBoxesAt025: Math.max(
-          0,
-          decoded25.detections.length-decoded45.detections.length
-        ),
-        countsAt045: classCounts(decoded45.detections),
-        countsAt025: classCounts(decoded25.detections),
-        note: 'Las cajas adicionales requieren inspección visual; no se consideran aciertos automáticamente.'
-      },null,2);
+renderComparisonSummary(decoded45, decoded25);
 
       setStatus(
         `Comparación completada. Umbral 0.45: ${decoded45.detections.length} cajas; umbral 0.25: ${decoded25.detections.length} cajas.`,
