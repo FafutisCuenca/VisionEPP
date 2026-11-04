@@ -297,20 +297,16 @@
       text-align: center;
       font-size: .9rem;
     }
+
 /* =====================================================
    RESÚMENES GRÁFICOS DEL COMPARATIVO
+   Diseño compacto
    ===================================================== */
 
 .visual-summary {
-  margin-top: 8px;
+  margin-top: 6px;
   display: grid;
-  gap: 7px;
-}
-
-.summary-metrics {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 6px;
 }
 
 .summary-metrics {
@@ -320,61 +316,62 @@
 }
 
 .metric-box {
+  min-width: 0;
   background: #f3f6f9;
   border: 1px solid #d7e0e8;
   border-radius: 6px;
-  padding: 7px 8px;
+  padding: 6px 5px;
   text-align: center;
 }
 
 .metric-label {
   display: block;
   color: #526575;
-  font-size: .72rem;
-  line-height: 1.2;
-  margin-bottom: 3px;
+  font-size: .68rem;
+  line-height: 1.15;
+  margin-bottom: 2px;
 }
 
 .metric-value {
   display: block;
   color: #173b68;
-  font-size: 1.15rem;
-  line-height: 1.2;
+  font-size: 1rem;
+  line-height: 1.15;
   font-weight: 800;
 }
+
 .summary-group {
   border-top: 1px solid #e2e8ef;
-  padding-top: 6px;
+  padding-top: 5px;
 }
 
 .summary-group h3 {
-  margin: 0 0 5px;
-  font-size: .85rem;
+  margin: 0 0 4px;
+  font-size: .82rem;
   color: #173b68;
 }
 
 .class-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 4px 8px;
+  gap: 3px 8px;
   align-items: center;
-  margin: 5px 0;
-  font-size: .8rem;
+  margin: 3px 0;
+  font-size: .76rem;
+}
+
+.class-count {
+  font-weight: 700;
+  color: #172b3a;
 }
 
 .bar-track {
   grid-column: 1 / -1;
-  height: 6px;
+  height: 5px;
   background: #e8edf2;
   border-radius: 10px;
   overflow: hidden;
-}    
-
-/*.class-count {
-  font-weight: 700;
-  color: #172b3a;
-}*/
-
+}
 
 .bar-fill {
   height: 100%;
@@ -389,32 +386,32 @@
 .summary-note,
 .empty-summary {
   color: #526575;
-  font-size: .88rem;
-  line-height: 1.5;
-  margin: 0;
+  font-size: .78rem;
+  line-height: 1.35;
+  margin: 3px 0;
 }
 
 .comparison-summary {
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 
 .comparison-highlight {
   background: #eef4fa;
   border: 1px solid #d7e0e8;
   border-radius: 6px;
-  padding: 9px 12px;
+  padding: 7px 9px;
 }
 
 .comparison-highlight p {
-  margin: 4px 0;
-  font-size: .85rem;
+  margin: 3px 0;
+  font-size: .8rem;
 }
 
 .comparison-summary .summary-group {
-  padding-top: 7px;
+  padding-top: 5px;
 }
-    
+
 .difference-positive {
   color: #176b3a;
   font-weight: 700;
@@ -431,10 +428,10 @@
 }
 
 .technical-details {
-  margin-top: 14px;
+  margin-top: 10px;
   border: 1px solid #d7e0e8;
   border-radius: 8px;
-  padding: 12px;
+  padding: 10px;
   background: #f8fafc;
 }
 
@@ -445,7 +442,21 @@
 }
 
 .technical-details textarea {
-  margin-top: 12px;
+  margin-top: 10px;
+}
+
+@media (max-width: 420px) {
+  .summary-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .metric-value {
+    font-size: .95rem;
+  }
+
+  .metric-label {
+    font-size: .68rem;
+  }
 }
 
 @media (max-width: 420px) {
